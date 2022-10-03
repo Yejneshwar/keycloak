@@ -169,6 +169,11 @@ public class AccountRestService {
         setIfReadable(UserModel.EMAIL, readableAttributes, rep::setEmail, user::getEmail);
         // emailVerified is readable when email is readable
         setIfReadable(UserModel.EMAIL, readableAttributes, rep::setEmailVerified, user::isEmailVerified);
+
+        setIfReadable(UserModel.PHONE_NUMBER_LOCALE, readableAttributes, rep::setPhoneNumberLocale, user::getPhoneNumberLocale);
+        setIfReadable(UserModel.PHONE_NUMBER, readableAttributes, rep::setPhoneNumber, user::getPhoneNumber);
+        // phoneNumberVerified is readable when phoneNumber is readable
+        setIfReadable(UserModel.PHONE_NUMBER, readableAttributes, rep::setPhoneNumberVerified, user::isPhoneNumberVerified);
     }
 
     private <T> void setIfReadable(String attributeName, Set<String> readableAttributes, Consumer<T> setter, Supplier<T> getter) {

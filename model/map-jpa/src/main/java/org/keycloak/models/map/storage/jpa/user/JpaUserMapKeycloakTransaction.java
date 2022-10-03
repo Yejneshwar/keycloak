@@ -59,6 +59,9 @@ public class JpaUserMapKeycloakTransaction extends JpaMapKeycloakTransaction<Jpa
                 root.get("federationLink"),
                 root.get("enabled"),
                 root.get("emailVerified"),
+                root.get("phoneNumberLocale"),
+                root.get("phoneNumber"),
+                root.get("phoneNumberVerified"),
                 root.get("timestamp")
         );
     }

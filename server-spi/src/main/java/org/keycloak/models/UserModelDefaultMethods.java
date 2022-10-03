@@ -57,6 +57,28 @@ public abstract class UserModelDefaultMethods implements UserModel {
     }
 
     @Override
+    public String getPhoneNumberLocale() {
+        return getFirstAttribute(PHONE_NUMBER_LOCALE);
+    }
+
+    @Override
+    public void setPhoneNumberLocale(String phoneNumberLocale) {
+        phoneNumberLocale = phoneNumberLocale == null ? null : phoneNumberLocale.toUpperCase();
+        setSingleAttribute(PHONE_NUMBER_LOCALE, phoneNumberLocale);
+    }
+
+    @Override
+    public String getPhoneNumber() {
+        return getFirstAttribute(PHONE_NUMBER);
+    }
+
+    @Override
+    public void setPhoneNumber(String phoneNumber) {
+        phoneNumber = phoneNumber == null ? null : phoneNumber;
+        setSingleAttribute(PHONE_NUMBER, phoneNumber);
+    }
+    
+    @Override
     public String toString() {
         return getClass().getName() + "@" + getId();
     }

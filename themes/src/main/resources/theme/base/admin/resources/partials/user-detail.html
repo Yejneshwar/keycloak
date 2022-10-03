@@ -43,6 +43,20 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-md-2 control-label" for="phoneNumberLocale">{{:: 'phone-number-locale' | translate}}</label>
+                <div class="col-md-6">
+                    <input class="form-control" type="text" name="phoneNumberLocale" id="phoneNumberLocale"
+                           data-ng-model="user.phoneNumberLocale">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="phoneNumber">{{:: 'phone-number' | translate}}</label>
+                <div class="col-md-6">
+                    <input class="form-control" type="text" name="phoneNumber" id="phoneNumber"
+                           data-ng-model="user.phoneNumber">
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="col-md-2 control-label" for="firstName">{{:: 'first-name' | translate}}</label>
 
                 <div class="col-md-6">
@@ -96,6 +110,13 @@
                     <input ng-model="user.emailVerified" name="emailVerified" id="emailVerified" ng-disabled="!create && !user.access.manage" onoffswitch on-text="{{:: 'onText' | translate}}" off-text="{{:: 'offText' | translate}}"/>
                 </div>
                 <kc-tooltip>{{:: 'email-verified.tooltip' | translate}}</kc-tooltip>
+            </div>
+            <div class="form-group clearfix block">
+                <label class="col-md-2 control-label" for="phoneNumberVerified">{{:: 'phone-number-verified' | translate}}</label>
+                <div class="col-md-6">
+                    <input ng-model="user.phoneNumberVerified" name="phoneNumberVerified" id="phoneNumberVerified" ng-disabled="!create && !user.access.manage" onoffswitch on-text="{{:: 'onText' | translate}}" off-text="{{:: 'offText' | translate}}"/>
+                </div>
+                <kc-tooltip>{{:: 'phone-number-verified.tooltip' | translate}}</kc-tooltip>
             </div>
             <div class="form-group clearfix block" data-ng-if="create">
                 <label class="col-md-2 control-label" for="selected-groups">{{:: 'groups-joining' | translate}}</label>

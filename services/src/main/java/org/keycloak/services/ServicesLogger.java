@@ -467,4 +467,8 @@ public interface ServicesLogger extends BasicLogger {
     @Message(id=106, value="Created script engine '%s', version '%s' for the mime type '%s'")
     @Once
     void scriptEngineCreated(String engineName, String engineVersion, String mimeType);
+
+    @LogMessage(level = ERROR)
+    @Message(id=107, value="Failed to send sms")
+    void failedToSendSms(@Cause Exception e);
 }

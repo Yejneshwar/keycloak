@@ -328,6 +328,18 @@ public class RealmAdapter implements CachedRealmModel {
     }
 
     @Override
+    public boolean isVerifyPhoneNumber() {
+        if (isUpdated()) return updated.isVerifyPhoneNumber();
+        return cached.isVerifyPhoneNumber();
+    }
+
+    @Override
+    public void setVerifyPhoneNumber(boolean verifyPhoneNumber) {
+        getDelegateForUpdate();
+        updated.setVerifyPhoneNumber(verifyPhoneNumber);
+    }
+
+    @Override
     public boolean isLoginWithEmailAllowed() {
         if (isUpdated()) return updated.isLoginWithEmailAllowed();
         return cached.isLoginWithEmailAllowed();
@@ -702,6 +714,30 @@ public class RealmAdapter implements CachedRealmModel {
         updated.setOTPPolicy(policy);
 
     }
+
+    @Override
+    public OTPPolicy getSmsOTPPolicy() {
+        if (isUpdated()) return updated.getSmsOTPPolicy();
+        return cached.getSmsOtpPolicy();
+    }
+
+    @Override
+    public void setSmsOTPPolicy(OTPPolicy policy) {
+        getDelegateForUpdate();
+        updated.setSmsOTPPolicy(policy);
+    }
+
+    // @Override
+    // public EmailPolicy getEmailPolicy(){
+    //     if (isUpdated()) return updated.getEmailPolicy();
+    //     return cached.getEmailPolicy();
+    // }
+
+    // @Override
+    // public void setEmailPolicy(EmailPolicy policy){
+    //     getDelegateForUpdate();
+    //     updated.setEmailPolicy(policy);
+    // }
 
     @Override
     public WebAuthnPolicy getWebAuthnPolicy() {

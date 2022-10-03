@@ -31,13 +31,21 @@ public class CredentialValidation {
                     credentialModel.getOTPCredentialData().getDigits(), credentialModel.getOTPCredentialData().getPeriod(),
                     lookAheadWindow);
             return validator.validateTOTP(token, credentialModel.getOTPSecretData().getValue().getBytes());
-        } else {
+        } else if (credentialModel.getOTPCredentialData().getSubType().equals(OTPCredentialModel.HOTP)) {
             HmacOTP validator = new HmacOTP(credentialModel.getOTPCredentialData().getDigits(),
                     credentialModel.getOTPCredentialData().getAlgorithm(), lookAheadWindow);
             int c = validator.validateHOTP(token, credentialModel.getOTPSecretData().getValue(),
                     credentialModel.getOTPCredentialData().getCounter());
             return c > -1;
+        } else if(credentialModel.getOTPCredentialData().getSubType().equals(OTPCredentialModel.SOTP)) {
+            System.out.println("VALIDATE SOTP AT CREDENTIAL VALIDATION");
+            return true; 
+        } else if(credentialModel.getOTPCredentialData().getSubType().equals(OTPCredentialModel.EOTP)) {
+            System.out.println("EOTP");
+            return false; 
         }
+        System.out.println("OTP SERVICE ERROR!!!!");
+        return false;
 
     }
 

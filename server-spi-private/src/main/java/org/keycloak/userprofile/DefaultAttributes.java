@@ -304,7 +304,7 @@ public class DefaultAttributes extends HashMap<String, List<String>> implements 
         }
 
         List<String> email = newAttributes.get(UserModel.EMAIL);
-
+        
         if (email != null && realm.isRegistrationEmailAsUsername()) {
             final List<String> lowerCaseEmailList = email.stream()
                     .filter(Objects::nonNull)

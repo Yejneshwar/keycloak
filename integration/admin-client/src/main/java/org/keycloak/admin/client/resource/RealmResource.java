@@ -99,6 +99,9 @@ public interface RealmResource {
     @Path("users")
     UsersResource users();
 
+    @Path("user-bulk-update")
+    UserBulkUpdateResource bulkUsers();
+
     @Path("roles")
     RolesResource roles();
 

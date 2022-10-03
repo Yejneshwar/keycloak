@@ -122,6 +122,12 @@ public class UserAdapter implements UserModel.Streams, JpaModel<UserEntity> {
         } else if (UserModel.EMAIL.equals(name)) {
             setEmail(value);
             return;
+        } else if (UserModel.PHONE_NUMBER_LOCALE.equals(name)) {
+            user.setPhoneNumberLocale(value);
+            return;
+        } else if (UserModel.PHONE_NUMBER.equals(name)) {
+            user.setPhoneNumber(value);
+            return;
         } else if (UserModel.USERNAME.equals(name)) {
             setUsername(value);
             return;
@@ -170,6 +176,12 @@ public class UserAdapter implements UserModel.Streams, JpaModel<UserEntity> {
             return;
         } else if (UserModel.EMAIL.equals(name)) {
             setEmail(valueToSet);
+            return;
+        } else if (UserModel.PHONE_NUMBER_LOCALE.equals(name)) {
+            user.setPhoneNumberLocale(valueToSet);
+            return;
+        } else if (UserModel.PHONE_NUMBER.equals(name)) {
+            user.setPhoneNumber(valueToSet);
             return;
         } else if (UserModel.USERNAME.equals(name)) {
             setUsername(valueToSet);
@@ -224,6 +236,10 @@ public class UserAdapter implements UserModel.Streams, JpaModel<UserEntity> {
             return user.getLastName();
         } else if (UserModel.EMAIL.equals(name)) {
             return user.getEmail();
+        } else if (UserModel.PHONE_NUMBER_LOCALE.equals(name)) {
+            return user.getPhoneNumberLocale();
+        }else if (UserModel.PHONE_NUMBER.equals(name)) {
+            return user.getPhoneNumber();
         } else if (UserModel.USERNAME.equals(name)) {
             return user.getUsername();
         }
@@ -243,6 +259,10 @@ public class UserAdapter implements UserModel.Streams, JpaModel<UserEntity> {
             return Stream.of(user.getLastName());
         } else if (UserModel.EMAIL.equals(name)) {
             return Stream.of(user.getEmail());
+        } else if (UserModel.PHONE_NUMBER_LOCALE.equals(name)) {
+            return Stream.of(user.getPhoneNumberLocale());
+        } else if (UserModel.PHONE_NUMBER.equals(name)) {
+            return Stream.of(user.getPhoneNumber());
         } else if (UserModel.USERNAME.equals(name)) {
             return Stream.of(user.getUsername());
         }
@@ -259,6 +279,8 @@ public class UserAdapter implements UserModel.Streams, JpaModel<UserEntity> {
         result.add(UserModel.FIRST_NAME, user.getFirstName());
         result.add(UserModel.LAST_NAME, user.getLastName());
         result.add(UserModel.EMAIL, user.getEmail());
+        result.add(UserModel.PHONE_NUMBER_LOCALE, user.getPhoneNumberLocale());
+        result.add(UserModel.PHONE_NUMBER, user.getPhoneNumber());
         result.add(UserModel.USERNAME, user.getUsername());
         return result;
     }
@@ -336,6 +358,38 @@ public class UserAdapter implements UserModel.Streams, JpaModel<UserEntity> {
     @Override
     public void setEmailVerified(boolean verified) {
         user.setEmailVerified(verified);
+    }
+
+    @Override
+    public String getPhoneNumberLocale() {
+        return user.getPhoneNumberLocale();
+    }
+
+    @Override
+    public void setPhoneNumberLocale(String phoneNumberLocale) {
+        phoneNumberLocale = KeycloakModelUtils.toUpperCaseSafe(phoneNumberLocale);
+        user.setPhoneNumberLocale(phoneNumberLocale);
+    }
+
+    @Override
+    public String getPhoneNumber() {
+        return user.getPhoneNumber();
+    }
+
+    @Override
+    public void setPhoneNumber(String phoneNumber) {
+        phoneNumber = KeycloakModelUtils.toUpperCaseSafe(phoneNumber);
+        user.setPhoneNumber(phoneNumber);
+    }
+
+    @Override
+    public boolean isPhoneNumberVerified() {
+        return user.isPhoneNumberVerified();
+    }
+
+    @Override
+    public void setPhoneNumberVerified(boolean verified) {
+        user.setPhoneNumberVerified(verified);
     }
 
     private TypedQuery<String> createGetGroupsQuery() {

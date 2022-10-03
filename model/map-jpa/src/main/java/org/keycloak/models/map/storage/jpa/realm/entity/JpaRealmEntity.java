@@ -61,6 +61,11 @@ import org.keycloak.models.map.storage.jpa.hibernate.jsonb.JsonbType;
 import static org.keycloak.models.map.storage.jpa.Constants.CURRENT_SCHEMA_VERSION_REALM;
 import static org.keycloak.models.map.storage.jpa.JpaMapStorageProviderFactory.CLONER;
 
+// import org.keycloak.models.map.realm.entity.MapEmailPolicyEntity;
+
+import org.keycloak.models.map.realm.entity.MapSmsOTPPolicyEntity;
+
+
 /**
  * JPA {@link MapRealmEntity} implementation. Some fields are annotated with {@code @Column(insertable = false, updatable = false)}
  * to indicate that they are automatically generated from json fields. As such, these fields are non-insertable and non-updatable.
@@ -252,6 +257,16 @@ public class JpaRealmEntity extends MapRealmEntity.AbstractRealmEntity implement
     @Override
     public void setVerifyEmail(Boolean verifyEmail) {
         this.metadata.setVerifyEmail(verifyEmail);
+    }
+
+    @Override
+    public Boolean isVerifyPhoneNumber() {
+        return this.metadata.isVerifyPhoneNumber();
+    }
+
+    @Override
+    public void setVerifyPhoneNumber(Boolean verifyPhoneNumber) {
+        this.metadata.setVerifyPhoneNumber(verifyPhoneNumber);
     }
 
     @Override
@@ -723,6 +738,26 @@ public class JpaRealmEntity extends MapRealmEntity.AbstractRealmEntity implement
     public void setOTPPolicy(MapOTPPolicyEntity otpPolicy) {
         this.metadata.setOTPPolicy(otpPolicy);
     }
+
+    @Override
+    public MapSmsOTPPolicyEntity getSmsOTPPolicy() {
+        return this.metadata.getSmsOTPPolicy();
+    }
+
+    @Override
+    public void setSmsOTPPolicy(MapSmsOTPPolicyEntity sotpPolicy) {
+        this.metadata.setSmsOTPPolicy(sotpPolicy);
+    }
+
+    // @Override
+    // public MapEmailPolicyEntity getEmailPolicy() {
+    //     return this.metadata.getEmailPolicy();
+    // }
+
+    // @Override
+    // public void setEmailPolicy(MapEmailPolicyEntity emailPolicy) {
+    //     this.metadata.setEmailPolicy(emailPolicy);
+    // }
 
     @Override
     public MapWebAuthnPolicyEntity getWebAuthnPolicy() {

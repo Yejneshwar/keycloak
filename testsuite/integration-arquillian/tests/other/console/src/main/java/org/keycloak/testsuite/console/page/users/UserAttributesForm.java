@@ -112,6 +112,30 @@ public class UserAttributesForm extends Form {
         emailVerifiedSwitch.setOn(emailVerified);
     }
 
+    public void setPhoneNumberLocale(String locale) {
+        UIUtils.setTextInputValue(phoneNumberLocaleInput, locale);
+    }
+
+    public String getPhoneNumberLocale() {
+        return UIUtils.getTextInputValue(phoneNumberLocaleInput);
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        UIUtils.setTextInputValue(phoneNumberInput, phoneNumber);
+    }
+
+    public String getPhoneNumber() {
+        return UIUtils.getTextInputValue(phoneNumberInput);
+    }
+
+    public boolean isPhoneNumberVerified() {
+        return phoneNumberVerifiedSwitch.isOn();
+    }
+
+    public void setPhoneNumberVerified(boolean Verified) {
+        phoneNumberVerifiedSwitch.setOn(Verified);
+    }
+
     public void setGroups(Set<String> groups) { groupsInput.update(groups); }
 
     public void addRequiredAction(String requiredAction) {

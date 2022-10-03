@@ -61,6 +61,8 @@ import java.util.List;
 import java.util.Optional;
 import org.keycloak.utils.ReservedCharValidator;
 
+import org.keycloak.models.EmailPolicy;
+
 /**
  * Per request object
  *
@@ -248,6 +250,8 @@ public class RealmManager {
         realm.setFailureFactor(30);
         realm.setSslRequired(SslRequired.EXTERNAL);
         realm.setOTPPolicy(OTPPolicy.DEFAULT_POLICY);
+        realm.setSmsOTPPolicy(OTPPolicy.DEFAULT_SOTP_POLICY);
+        // realm.setEmailPolicy(EmailPolicy.DEFAULT_POLICY);
         realm.setLoginWithEmailAllowed(true);
 
         realm.setEventsListeners(Collections.singleton("jboss-logging"));

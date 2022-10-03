@@ -66,6 +66,8 @@ public class UserAttributeMapper extends AbstractIdentityProviderMapper implemen
     public static final String ATTRIBUTE_NAME_FORMAT = "attribute.name.format";
     public static final String USER_ATTRIBUTE = "user.attribute";
     private static final String EMAIL = "email";
+    private static final String PHONE_NUMBER_LOCALE = "phoneNumberLocale";
+    private static final String PHONE_NUMBER = "phoneNumber";
     private static final String FIRST_NAME = "firstName";
     private static final String LAST_NAME = "lastName";
     private static final Set<IdentityProviderSyncMode> IDENTITY_PROVIDER_SYNC_MODES = new HashSet<>(Arrays.asList(IdentityProviderSyncMode.values()));
@@ -149,6 +151,10 @@ public class UserAttributeMapper extends AbstractIdentityProviderMapper implemen
                 setIfNotEmpty(context::setFirstName, attributeValuesInContext);
             } else if (attribute.equalsIgnoreCase(LAST_NAME)) {
                 setIfNotEmpty(context::setLastName, attributeValuesInContext);
+            } else if (attribute.equalsIgnoreCase(PHONE_NUMBER_LOCALE)) {
+                setIfNotEmpty(context::setPhoneNumberLocale, attributeValuesInContext);
+            } else if (attribute.equalsIgnoreCase(PHONE_NUMBER)) {
+                setIfNotEmpty(context::setPhoneNumber, attributeValuesInContext); 
             } else {
                 context.setUserAttribute(attribute, attributeValuesInContext);
             }
@@ -210,6 +216,10 @@ public class UserAttributeMapper extends AbstractIdentityProviderMapper implemen
             setIfNotEmptyAndDifferent(user::setFirstName, user::getFirstName, attributeValuesInContext);
         } else if (attribute.equalsIgnoreCase(LAST_NAME)) {
             setIfNotEmptyAndDifferent(user::setLastName, user::getLastName, attributeValuesInContext);
+        } else if (attribute.equalsIgnoreCase(PHONE_NUMBER_LOCALE)) {
+            setIfNotEmptyAndDifferent(user::setPhoneNumberLocale, user::getPhoneNumberLocale, attributeValuesInContext);
+        } else if (attribute.equalsIgnoreCase(PHONE_NUMBER)) {
+            setIfNotEmptyAndDifferent(user::setPhoneNumber, user::getPhoneNumber, attributeValuesInContext);
         } else {
             List<String> currentAttributeValues = user.getAttributes().get(attribute);
             if (attributeValuesInContext == null) {

@@ -357,6 +357,36 @@ public abstract class AbstractUserAdapter extends UserModelDefaultMethods {
     }
 
     @Override
+    public String getPhoneNumberLocale() {
+        return null;
+    }
+
+    @Override
+    public void setPhoneNumberLocale(String phoneNumberLocale) {
+        throw new ReadOnlyException("user is read only for this update");
+    }
+
+    @Override
+    public String getPhoneNumber() {
+        return null;
+    }
+
+    @Override
+    public void setPhoneNumber(String phoneNumber) {
+        throw new ReadOnlyException("user is read only for this update");
+    }
+
+    @Override
+    public boolean isPhoneNumberVerified() {
+        return false;
+    }
+
+    @Override
+    public void setPhoneNumberVerified(boolean phoneNumberVerified) {
+        throw new ReadOnlyException("user is read only for this update");
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || !(o instanceof UserModel)) return false;

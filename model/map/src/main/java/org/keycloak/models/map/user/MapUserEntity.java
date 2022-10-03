@@ -15,6 +15,9 @@
  * limitations under the License.
  */
 
+
+//TODO: CHECK THIS
+
 package org.keycloak.models.map.user;
 
 import org.jboss.logging.Logger;
@@ -197,6 +200,15 @@ public interface MapUserEntity extends UpdatableEntity, AbstractEntity, EntityWi
 
     Boolean isEmailVerified();
     void setEmailVerified(Boolean emailVerified);
+
+    String getPhoneNumberLocale();
+    void setPhoneNumberLocale(String phoneNumberLocale);
+
+    String getPhoneNumber();
+    void setPhoneNumber(String phoneNumber);
+
+    Boolean isPhoneNumberVerified();
+    void setPhoneNumberVerified(Boolean phoneNumberVerified);
 
     String getEmailConstraint();
     void setEmailConstraint(String emailConstraint);

@@ -179,6 +179,28 @@ public class HotRodUserEntity extends AbstractHotRodEntity {
     @ProtoField(number = 21)
     public Long notBefore;
 
+    @ProtoField(number = 23)
+    @ProtoDoc("@Field(index = Index.YES, store = Store.YES, analyze = Analyze.YES, analyzer = @Analyzer(definition = \"filename\"))")
+    public String phoneNumberLocale;
+
+    @ProtoField(number = 24)
+    @ProtoDoc("@Field(index = Index.YES, store = Store.YES, analyze = Analyze.YES, analyzer = @Analyzer(definition = \"filename\"))")
+    public String phoneNumber;
+
+    @ProtoField(number = 25)
+    /**
+     * TODO: Workaround for ISPN-8584
+     *
+     * When this index is missing Ickle queries like following:
+     *  FROM kc.HotRodUserEntity c WHERE (c.realmId = "admin-client-test" AND c.enabled = true AND c.email : "user*")
+     * fail with:
+     *  Error: {"error":{"message":"Error executing search","cause":"Unexpected condition type (FullTextTermExpr): PROP(email):'user*'"}}
+     *
+     * In other words it is not possible to combine searching for Analyzed field and non-indexed field in one Ickle query
+     */
+    @ProtoDoc("@Field(index = Index.YES, store = Store.YES)")
+    public Boolean phoneNumberVerified;
+
     public static abstract class AbstractHotRodUserEntityDelegate extends UpdatableHotRodEntityDelegateImpl<HotRodUserEntity> implements MapUserEntity {
 
         @Override

@@ -69,6 +69,11 @@ import java.util.stream.Collectors;
 
 import static org.keycloak.models.map.common.ExpirationUtils.isExpired;
 
+import org.keycloak.models.map.realm.entity.MapSmsOTPPolicyEntity;
+import org.keycloak.models.map.storage.hotRod.realm.entity.HotRodSmsOTPPolicyEntity;
+
+
+
 @GenerateHotRodEntityImplementation(
         implementInterface = "org.keycloak.models.map.realm.MapRealmEntity",
         inherits = "org.keycloak.models.map.storage.hotRod.realm.HotRodRealmEntity.AbstractHotRodRealmEntityDelegate",
@@ -95,6 +100,7 @@ public class HotRodRealmEntity extends AbstractHotRodEntity {
                     HotRodOTPPolicyEntity.class,
                     HotRodRequiredActionProviderEntity.class,
                     HotRodRequiredCredentialEntity.class,
+                    HotRodSmsOTPPolicyEntity.class,
                     HotRodWebAuthnPolicyEntity.class,
                     HotRodRealmEntity.class
             },
@@ -190,86 +196,91 @@ public class HotRodRealmEntity extends AbstractHotRodEntity {
     @ProtoField(number = 39)
     public HotRodOTPPolicyEntity oTPPolicy;
     @ProtoField(number = 40)
-    public HotRodWebAuthnPolicyEntity webAuthnPolicy;
+    public HotRodSmsOTPPolicyEntity sOTPPolicy;
     @ProtoField(number = 41)
-    public HotRodWebAuthnPolicyEntity webAuthnPolicyPasswordless;
+    public HotRodWebAuthnPolicyEntity webAuthnPolicy;
     @ProtoField(number = 42)
-    public String accountTheme;
+    public HotRodWebAuthnPolicyEntity webAuthnPolicyPasswordless;
     @ProtoField(number = 43)
-    public String adminTheme;
+    public String accountTheme;
     @ProtoField(number = 44)
-    public String browserFlow;
+    public String adminTheme;
     @ProtoField(number = 45)
-    public String clientAuthenticationFlow;
+    public String browserFlow;
     @ProtoField(number = 46)
-    public String defaultLocale;
+    public String clientAuthenticationFlow;
     @ProtoField(number = 47)
-    public String defaultRoleId;
+    public String defaultLocale;
     @ProtoField(number = 48)
-    public String directGrantFlow;
+    public String defaultRoleId;
     @ProtoField(number = 49)
-    public String displayName;
+    public String directGrantFlow;
     @ProtoField(number = 50)
-    public String displayNameHtml;
+    public String displayName;
     @ProtoField(number = 51)
-    public String dockerAuthenticationFlow;
+    public String displayNameHtml;
     @ProtoField(number = 52)
-    public String emailTheme;
+    public String dockerAuthenticationFlow;
     @ProtoField(number = 53)
-    public String loginTheme;
+    public String emailTheme;
     @ProtoField(number = 54)
-    public String masterAdminClient;
+    public String loginTheme;
     @ProtoField(number = 55)
-    public String passwordPolicy;
+    public String masterAdminClient;
     @ProtoField(number = 56)
-    public String registrationFlow;
+    public String passwordPolicy;
     @ProtoField(number = 57)
-    public String resetCredentialsFlow;
+    public String registrationFlow;
     @ProtoField(number = 58)
-    public String sslRequired;
+    public String resetCredentialsFlow;
     @ProtoField(number = 59)
-    public Set<HotRodAttributeEntityNonIndexed> attributes;
+    public String sslRequired;
     @ProtoField(number = 60)
-    public Set<HotRodLocalizationTexts> localizationTexts;
+    public Set<HotRodAttributeEntityNonIndexed> attributes;
     @ProtoField(number = 61)
-    public Set<HotRodPair<String, String>> browserSecurityHeaders;
+    public Set<HotRodLocalizationTexts> localizationTexts;
     @ProtoField(number = 62)
-    public Set<HotRodPair<String, String>> smtpConfig;
+    public Set<HotRodPair<String, String>> browserSecurityHeaders;
     @ProtoField(number = 63)
-    public Set<HotRodAuthenticationExecutionEntity> authenticationExecutions;
+    public Set<HotRodPair<String, String>> smtpConfig;
     @ProtoField(number = 64)
-    public Set<HotRodAuthenticationFlowEntity> authenticationFlows;
+    public Set<HotRodAuthenticationExecutionEntity> authenticationExecutions;
     @ProtoField(number = 65)
+    public Set<HotRodAuthenticationFlowEntity> authenticationFlows;
+    @ProtoField(number = 66)
     public Set<HotRodAuthenticatorConfigEntity> authenticatorConfigs;
 
     @ProtoDoc("@Field(index = Index.YES, store = Store.YES)")
-    @ProtoField(number = 66)
+    @ProtoField(number = 67)
     public Set<HotRodClientInitialAccessEntity> clientInitialAccesses;
 
     @ProtoDoc("@Field(index = Index.YES, store = Store.YES)")
-    @ProtoField(number = 67)
+    @ProtoField(number = 68)
     public Set<HotRodComponentEntity> components;
 
-    @ProtoField(number = 68)
-    public Set<HotRodIdentityProviderEntity> identityProviders;
     @ProtoField(number = 69)
-    public Set<HotRodIdentityProviderMapperEntity> identityProviderMappers;
+    public Set<HotRodIdentityProviderEntity> identityProviders;
     @ProtoField(number = 70)
-    public Set<HotRodRequiredActionProviderEntity> requiredActionProviders;
+    public Set<HotRodIdentityProviderMapperEntity> identityProviderMappers;
     @ProtoField(number = 71)
-    public Set<HotRodRequiredCredentialEntity> requiredCredentials;
+    public Set<HotRodRequiredActionProviderEntity> requiredActionProviders;
     @ProtoField(number = 72)
-    public Set<String> defaultClientScopeIds;
+    public Set<HotRodRequiredCredentialEntity> requiredCredentials;
     @ProtoField(number = 73)
-    public Set<String> defaultGroupIds;
+    public Set<String> defaultClientScopeIds;
     @ProtoField(number = 74)
-    public Set<String> enabledEventTypes;
+    public Set<String> defaultGroupIds;
     @ProtoField(number = 75)
-    public Set<String> eventsListeners;
+    public Set<String> enabledEventTypes;
     @ProtoField(number = 76)
-    public Set<String> optionalClientScopeIds;
+    public Set<String> eventsListeners;
     @ProtoField(number = 77)
+    public Set<String> optionalClientScopeIds;
+    @ProtoField(number = 78)
     public Set<String> supportedLocales;
+    @ProtoField(number = 79)
+    public Boolean verifyPhoneNumber;
+
 
 
     public static abstract class AbstractHotRodRealmEntityDelegate extends UpdatableHotRodEntityDelegateImpl<HotRodRealmEntity> implements MapRealmEntity {
@@ -300,6 +311,7 @@ public class HotRodRealmEntity extends AbstractHotRodEntity {
                     || Optional.ofNullable(getRequiredActionProviders()).orElseGet(Collections::emptySet).stream().anyMatch(MapRequiredActionProviderEntity::isUpdated)
                     || Optional.ofNullable(getRequiredCredentials()).orElseGet(Collections::emptySet).stream().anyMatch(MapRequiredCredentialEntity::isUpdated)
                     || Optional.ofNullable(getOTPPolicy()).map(MapOTPPolicyEntity::isUpdated).orElse(false)
+                    || Optional.ofNullable(getSmsOTPPolicy()).map(MapSmsOTPPolicyEntity::isUpdated).orElse(false)
                     || Optional.ofNullable(getWebAuthnPolicy()).map(MapWebAuthnPolicyEntity::isUpdated).orElse(false)
                     || Optional.ofNullable(getWebAuthnPolicyPasswordless()).map(MapWebAuthnPolicyEntity::isUpdated).orElse(false);
         }
@@ -317,6 +329,7 @@ public class HotRodRealmEntity extends AbstractHotRodEntity {
             Optional.ofNullable(getRequiredActionProviders()).orElseGet(Collections::emptySet).forEach(UpdatableEntity::clearUpdatedFlag);
             Optional.ofNullable(getRequiredCredentials()).orElseGet(Collections::emptySet).forEach(UpdatableEntity::clearUpdatedFlag);
             Optional.ofNullable(getOTPPolicy()).ifPresent(UpdatableEntity::clearUpdatedFlag);
+            Optional.ofNullable(getSmsOTPPolicy()).ifPresent(UpdatableEntity::clearUpdatedFlag);
             Optional.ofNullable(getWebAuthnPolicy()).ifPresent(UpdatableEntity::clearUpdatedFlag);
             Optional.ofNullable(getWebAuthnPolicyPasswordless()).ifPresent(UpdatableEntity::clearUpdatedFlag);
         }

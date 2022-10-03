@@ -240,6 +240,8 @@ public class UserResource {
 
         if (rep.isEnabled() != null) user.setEnabled(rep.isEnabled());
         if (rep.isEmailVerified() != null) user.setEmailVerified(rep.isEmailVerified());
+        if (rep.isPhoneNumberVerified() != null) user.setPhoneNumberVerified(rep.isPhoneNumberVerified());
+
 
         if (rep.getFederationLink() != null) user.setFederationLink(rep.getFederationLink());
 

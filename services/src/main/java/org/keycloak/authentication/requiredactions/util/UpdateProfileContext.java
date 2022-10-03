@@ -54,6 +54,14 @@ public interface UpdateProfileContext {
 
     void setLastName(String lastName);
 
+    String getPhoneNumberLocale();
+
+    void setPhoneNumberLocale(String phoneNumberLocale);
+
+    String getPhoneNumber();
+
+    void setPhoneNumber(String phoneNumber);
+
     Map<String, List<String>> getAttributes();
 
     void setSingleAttribute(String name, String value);

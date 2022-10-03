@@ -89,6 +89,9 @@ public class UserInfo {
     @JsonProperty("locale")
     protected String locale;
 
+    @JsonProperty("phone_number_locale")
+    protected String phoneNumberLocale;
+
     @JsonProperty("phone_number")
     protected String phoneNumber;
 
@@ -258,6 +261,14 @@ public class UserInfo {
 
     public void setLocale(String locale) {
         this.locale = locale;
+    }
+
+    public String getPhoneNumberLocale() {
+        return this.phoneNumberLocale;
+    }
+
+    public void setPhoneNumberLocale(String phoneNumberLocale) {
+        this.phoneNumberLocale = phoneNumberLocale;
     }
 
     public String getPhoneNumber() {

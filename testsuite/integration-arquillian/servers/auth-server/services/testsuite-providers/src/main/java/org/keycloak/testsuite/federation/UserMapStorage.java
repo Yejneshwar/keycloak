@@ -217,6 +217,11 @@ public class UserMapStorage implements UserLookupProvider.Streams, UserStoragePr
     }
 
     @Override
+    public UserModel getUserByPhoneNumber(String phoneNumber, RealmModel realm) {
+        return null;
+    }
+
+    @Override
     public UserModel addUser(RealmModel realm, String username) {
         if (editMode == EditMode.READ_ONLY) {
             throw new ReadOnlyException("Federated storage is not writable");

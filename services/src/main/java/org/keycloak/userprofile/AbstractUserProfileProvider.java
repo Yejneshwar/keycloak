@@ -26,6 +26,7 @@ import static org.keycloak.userprofile.UserProfileContext.IDP_REVIEW;
 import static org.keycloak.userprofile.UserProfileContext.REGISTRATION_PROFILE;
 import static org.keycloak.userprofile.UserProfileContext.REGISTRATION_USER_CREATION;
 import static org.keycloak.userprofile.UserProfileContext.UPDATE_EMAIL;
+import static org.keycloak.userprofile.UserProfileContext.UPDATE_PHONE_NUMBER;
 import static org.keycloak.userprofile.UserProfileContext.UPDATE_PROFILE;
 import static org.keycloak.userprofile.UserProfileContext.USER_API;
 
@@ -48,6 +49,7 @@ import org.keycloak.services.messages.Messages;
 import org.keycloak.userprofile.validator.BlankAttributeValidator;
 import org.keycloak.userprofile.validator.BrokeringFederatedUsernameHasValueValidator;
 import org.keycloak.userprofile.validator.DuplicateEmailValidator;
+// import org.keycloak.userprofile.validator.DuplicatePhoneNumberValidator;
 import org.keycloak.userprofile.validator.DuplicateUsernameValidator;
 import org.keycloak.userprofile.validator.EmailExistsAsUsernameValidator;
 import org.keycloak.userprofile.validator.ReadOnlyAttributeUnchangedValidator;
@@ -59,6 +61,7 @@ import org.keycloak.userprofile.validator.UsernameIDNHomographValidator;
 import org.keycloak.userprofile.validator.UsernameMutationValidator;
 import org.keycloak.validate.ValidatorConfig;
 import org.keycloak.validate.validators.EmailValidator;
+// import org.keycloak.validate.validators.PhoneNumberValidator;
 
 /**
  * <p>A base class for {@link UserProfileProvider} implementations providing the main hooks for customizations.
@@ -91,7 +94,7 @@ public abstract class AbstractUserProfileProvider<U extends UserProfileProvider>
         KeycloakSession session = c.getSession();
         KeycloakContext context = session.getContext();
         RealmModel realm = context.getRealm();
-
+        System.out.println("readUsernameCondition");
         switch (c.getContext()) {
             case REGISTRATION_PROFILE:
             case IDP_REVIEW:
@@ -134,7 +137,7 @@ public abstract class AbstractUserProfileProvider<U extends UserProfileProvider>
      * There are the declarations for creating the built-in validations for read-only attributes. Regardless of the context where
      * user profiles are used. They are related to internal attributes with hard conditions on them in terms of management.
      */
-    private static String[] DEFAULT_READ_ONLY_ATTRIBUTES = { "KERBEROS_PRINCIPAL", "LDAP_ID", "LDAP_ENTRY_DN", "CREATED_TIMESTAMP", "createTimestamp", "modifyTimestamp", "userCertificate", "saml.persistent.name.id.for.*", "ENABLED", "EMAIL_VERIFIED", "disabledReason" };
+    private static String[] DEFAULT_READ_ONLY_ATTRIBUTES = { "KERBEROS_PRINCIPAL", "LDAP_ID", "LDAP_ENTRY_DN", "CREATED_TIMESTAMP", "createTimestamp", "modifyTimestamp", "userCertificate", "saml.persistent.name.id.for.*", "ENABLED", "EMAIL_VERIFIED", "PHONE_NUMBER_VERIFIED", "disabledReason" };
     private static String[] DEFAULT_ADMIN_READ_ONLY_ATTRIBUTES = { "KERBEROS_PRINCIPAL", "LDAP_ID", "LDAP_ENTRY_DN", "CREATED_TIMESTAMP", "createTimestamp", "modifyTimestamp" };
     private static Pattern readOnlyAttributesPattern = getRegexPatternString(DEFAULT_READ_ONLY_ATTRIBUTES);
     private static Pattern adminReadOnlyAttributesPattern = getRegexPatternString(DEFAULT_ADMIN_READ_ONLY_ATTRIBUTES);

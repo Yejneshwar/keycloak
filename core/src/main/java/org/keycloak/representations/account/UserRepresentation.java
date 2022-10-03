@@ -38,6 +38,9 @@ public class UserRepresentation {
     private String lastName;
     private String email;
     private boolean emailVerified;
+    private String phoneNumberLocale;
+    private String phoneNumber;
+    private boolean phoneNumberVerified;
     private UserProfileMetadata userProfileMetadata;
 
     @JsonDeserialize(using = StringListMapDeserializer.class)
@@ -90,6 +93,31 @@ public class UserRepresentation {
     public void setEmailVerified(boolean emailVerified) {
         this.emailVerified = emailVerified;
     }
+
+    public String getPhoneNumberLocale() {
+        return phoneNumberLocale;
+    }
+
+    public void setPhoneNumberLocale(String phoneNumberLocale) {
+        this.phoneNumberLocale = phoneNumberLocale;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public boolean isPhoneNumberVerified() {
+        return phoneNumberVerified;
+    }
+
+    public void setPhoneNumberVerified(boolean phoneNumberVerified) {
+        this.phoneNumberVerified = phoneNumberVerified;
+    }
+
 
     public Map<String, List<String>> getAttributes() {
         return attributes;

@@ -44,6 +44,7 @@ import java.util.stream.Stream;
 public class InMemoryUserAdapter extends UserModelDefaultMethods.Streams {
     private Long createdTimestamp = Time.currentTimeMillis();
     private boolean emailVerified;
+    private boolean phoneNumberVerified;
     private boolean enabled;
 
     private Set<String> roleIds = new HashSet<>();
@@ -122,6 +123,9 @@ public class InMemoryUserAdapter extends UserModelDefaultMethods.Streams {
     public void setSingleAttribute(String name, String value) {
         checkReadonly();
         if (UserModel.USERNAME.equals(name) || UserModel.EMAIL.equals(name)) {
+            value = KeycloakModelUtils.toLowerCaseSafe(value);
+        }
+        if (UserModel.PHONE_NUMBER_LOCALE.equals(name)) {
             value = KeycloakModelUtils.toLowerCaseSafe(value);
         }
         attributes.putSingle(name, value);
@@ -203,6 +207,18 @@ public class InMemoryUserAdapter extends UserModelDefaultMethods.Streams {
     public void setEmailVerified(boolean verified) {
         checkReadonly();
         this.emailVerified = verified;
+
+    }
+
+    @Override
+    public boolean isPhoneNumberVerified() {
+        return phoneNumberVerified;
+    }
+
+    @Override
+    public void setPhoneNumberVerified(boolean verified) {
+        checkReadonly();
+        this.phoneNumberVerified = verified;
 
     }
 

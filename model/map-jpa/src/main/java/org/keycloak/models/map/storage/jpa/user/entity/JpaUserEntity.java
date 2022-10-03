@@ -110,6 +110,14 @@ public class JpaUserEntity extends MapUserEntity.AbstractUserEntity implements J
 
     @Column(insertable = false, updatable = false)
     @Basic(fetch = FetchType.LAZY)
+    private String phoneNumber;
+
+    @Column(insertable = false, updatable = false)
+    @Basic(fetch = FetchType.LAZY)
+    private String phoneNumberLocale;
+
+    @Column(insertable = false, updatable = false)
+    @Basic(fetch = FetchType.LAZY)
     private String emailConstraint;
 
     @Column(insertable = false, updatable = false)
@@ -123,6 +131,10 @@ public class JpaUserEntity extends MapUserEntity.AbstractUserEntity implements J
     @Column(insertable = false, updatable = false)
     @Basic(fetch = FetchType.LAZY)
     private Boolean emailVerified;
+
+    @Column(insertable = false, updatable = false)
+    @Basic(fetch = FetchType.LAZY)
+    private Boolean phoneNumberVerified;
 
     @Column(insertable = false, updatable = false)
     @Basic(fetch = FetchType.LAZY)
@@ -164,7 +176,8 @@ public class JpaUserEntity extends MapUserEntity.AbstractUserEntity implements J
      */
     public JpaUserEntity(final UUID id, final int version, final Integer entityVersion, final String realmId, final String username,
                          final String firstName, final String lastName, final String email, final String emailConstraint,
-                         final String federationLink, final Boolean enabled, final Boolean emailVerified, final Long timestamp) {
+                         final String federationLink, final Boolean enabled, final Boolean emailVerified,
+                         final String phoneNumberLocale, final String phoneNumber, final Boolean phoneNumberVerified, final Long timestamp) {
         this.id = id;
         this.version = version;
         this.entityVersion = entityVersion;
@@ -173,10 +186,13 @@ public class JpaUserEntity extends MapUserEntity.AbstractUserEntity implements J
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.phoneNumberLocale = phoneNumberLocale;
+        this.phoneNumber = phoneNumber;
         this.emailConstraint = emailConstraint;
         this.federationLink = federationLink;
         this.enabled = enabled;
         this.emailVerified = emailVerified;
+        this.phoneNumberVerified = phoneNumberVerified;
         this.timestamp = timestamp;
         this.metadata = null;
     }
@@ -314,6 +330,39 @@ public class JpaUserEntity extends MapUserEntity.AbstractUserEntity implements J
     @Override
     public void setEmailConstraint(String emailConstraint) {
         this.metadata.setEmailConstraint(emailConstraint);
+    }
+
+    @Override
+    public String getPhoneNumberLocale() {
+        if (this.isMetadataInitialized()) return this.metadata.getPhoneNumberLocale();
+        return this.phoneNumberLocale;
+    }
+
+    @Override
+    public void setPhoneNumberLocale(String phoneNumberLocale) {
+        this.metadata.setPhoneNumberLocale(phoneNumberLocale);
+    }
+
+    @Override
+    public String getPhoneNumber() {
+        if (this.isMetadataInitialized()) return this.metadata.getPhoneNumber();
+        return this.phoneNumber;
+    }
+
+    @Override
+    public void setPhoneNumber(String phoneNumber) {
+        this.metadata.setPhoneNumber(phoneNumber);
+    }
+
+    @Override
+    public Boolean isPhoneNumberVerified() {
+        if (this.isMetadataInitialized()) return this.metadata.isPhoneNumberVerified();
+        return this.phoneNumberVerified;
+    }
+
+    @Override
+    public void setPhoneNumberVerified(Boolean phoneNumberVerified) {
+        this.metadata.setPhoneNumberVerified(phoneNumberVerified);
     }
 
     @Override

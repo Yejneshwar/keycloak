@@ -232,6 +232,7 @@ public class LegacyExportImportManager implements ExportImportManager {
             newRealm.setRegistrationEmailAsUsername(rep.isRegistrationEmailAsUsername());
         if (rep.isRememberMe() != null) newRealm.setRememberMe(rep.isRememberMe());
         if (rep.isVerifyEmail() != null) newRealm.setVerifyEmail(rep.isVerifyEmail());
+        if (rep.isVerifyPhoneNumber() != null) newRealm.setVerifyPhoneNumber(rep.isVerifyPhoneNumber());
         if (rep.isLoginWithEmailAllowed() != null) newRealm.setLoginWithEmailAllowed(rep.isLoginWithEmailAllowed());
         if (rep.isDuplicateEmailsAllowed() != null) newRealm.setDuplicateEmailsAllowed(rep.isDuplicateEmailsAllowed());
         if (rep.isResetPasswordAllowed() != null) newRealm.setResetPasswordAllowed(rep.isResetPasswordAllowed());
@@ -254,6 +255,9 @@ public class LegacyExportImportManager implements ExportImportManager {
             newRealm.setPasswordPolicy(PasswordPolicy.parse(session, rep.getPasswordPolicy()));
         if (rep.getOtpPolicyType() != null) newRealm.setOTPPolicy(toPolicy(rep));
         else newRealm.setOTPPolicy(OTPPolicy.DEFAULT_POLICY);
+
+        if (rep.getSmsOtpPolicyType() != null) newRealm.setSmsOTPPolicy(toSOTPPolicy(rep));
+        else newRealm.setSmsOTPPolicy(OTPPolicy.DEFAULT_SOTP_POLICY);
 
         WebAuthnPolicy webAuthnPolicy = getWebAuthnPolicyTwoFactor(rep);
         newRealm.setWebAuthnPolicy(webAuthnPolicy);
@@ -681,6 +685,7 @@ public class LegacyExportImportManager implements ExportImportManager {
             realm.setRegistrationEmailAsUsername(rep.isRegistrationEmailAsUsername());
         if (rep.isRememberMe() != null) realm.setRememberMe(rep.isRememberMe());
         if (rep.isVerifyEmail() != null) realm.setVerifyEmail(rep.isVerifyEmail());
+        if (rep.isVerifyPhoneNumber() != null) realm.setVerifyPhoneNumber(rep.isVerifyPhoneNumber());
         if (rep.isLoginWithEmailAllowed() != null) realm.setLoginWithEmailAllowed(rep.isLoginWithEmailAllowed());
         if (rep.isDuplicateEmailsAllowed() != null) realm.setDuplicateEmailsAllowed(rep.isDuplicateEmailsAllowed());
         if (rep.isResetPasswordAllowed() != null) realm.setResetPasswordAllowed(rep.isResetPasswordAllowed());
@@ -747,6 +752,8 @@ public class LegacyExportImportManager implements ExportImportManager {
         if (rep.getPasswordPolicy() != null)
             realm.setPasswordPolicy(PasswordPolicy.parse(session, rep.getPasswordPolicy()));
         if (rep.getOtpPolicyType() != null) realm.setOTPPolicy(toPolicy(rep));
+
+        if (rep.getSmsOtpPolicyType() != null) realm.setSmsOTPPolicy(toSOTPPolicy(rep));
 
         WebAuthnPolicy webAuthnPolicy = getWebAuthnPolicyTwoFactor(rep);
         realm.setWebAuthnPolicy(webAuthnPolicy);
@@ -1374,6 +1381,18 @@ public class LegacyExportImportManager implements ExportImportManager {
         if (rep.getOtpPolicyAlgorithm() != null) policy.setAlgorithm(rep.getOtpPolicyAlgorithm());
         if (rep.getOtpPolicyDigits() != null) policy.setDigits(rep.getOtpPolicyDigits());
         if (rep.getOtpPolicyPeriod() != null) policy.setPeriod(rep.getOtpPolicyPeriod());
+        return policy;
+
+    }
+
+    public static OTPPolicy toSOTPPolicy(RealmRepresentation rep) {
+        OTPPolicy policy = new OTPPolicy();
+        if (rep.getSmsOtpPolicyType() != null) policy.setType(rep.getSmsOtpPolicyType());
+        if (rep.getSmsOtpPolicyLookAheadWindow() != null) policy.setLookAheadWindow(rep.getSmsOtpPolicyLookAheadWindow());
+        if (rep.getSmsOtpPolicyInitialCounter() != null) policy.setInitialCounter(rep.getSmsOtpPolicyInitialCounter());
+        if (rep.getSmsOtpPolicyAlgorithm() != null) policy.setAlgorithm(rep.getSmsOtpPolicyAlgorithm());
+        if (rep.getSmsOtpPolicyDigits() != null) policy.setDigits(rep.getSmsOtpPolicyDigits());
+        if (rep.getSmsOtpPolicyPeriod() != null) policy.setPeriod(rep.getSmsOtpPolicyPeriod());
         return policy;
 
     }

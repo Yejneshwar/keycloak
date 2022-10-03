@@ -39,6 +39,13 @@
                 <kc-tooltip>{{:: 'rememberMe.tooltip' | translate}}</kc-tooltip>
             </div>
             <div class="form-group">
+                <label for="verifyPhoneNumber" class="col-md-2 control-label">{{:: 'verifyPhoneNumber' | translate}}</label>
+                <div class="col-md-6">
+                    <input ng-model="realm.verifyPhoneNumber" name="verifyPhoneNumber" id="verifyPhoneNumber" onoffswitch on-text="{{:: 'onText' | translate}}" off-text="{{:: 'offText' | translate}}" />
+                </div>
+                <kc-tooltip>{{:: 'verifyPhoneNumber.tooltip' | translate}}</kc-tooltip>
+            </div>
+            <div class="form-group">
                 <label for="verifyEmail" class="col-md-2 control-label">{{:: 'verifyEmail' | translate}}</label>
                 <div class="col-md-6">
                     <input ng-model="realm.verifyEmail" name="verifyEmail" id="verifyEmail" onoffswitch on-text="{{:: 'onText' | translate}}" off-text="{{:: 'offText' | translate}}" />

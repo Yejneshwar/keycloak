@@ -98,6 +98,27 @@ public class UserAdapter implements CachedUserModel.Streams {
     }
 
     @Override
+    public void setPhoneNumberLocale(String phoneNumberLocale){
+        phoneNumberLocale = phoneNumberLocale == null ? null : phoneNumberLocale.toUpperCase();
+        setSingleAttribute(PHONE_NUMBER_LOCALE, phoneNumberLocale);
+    }
+
+    @Override
+    public String getPhoneNumberLocale() {
+        return getFirstAttribute(PHONE_NUMBER_LOCALE);
+    }
+
+    @Override
+    public String getPhoneNumber() {
+        return getFirstAttribute(PHONE_NUMBER);
+    }
+
+    @Override
+    public void setPhoneNumber(String phoneNumber) {
+        setSingleAttribute(PHONE_NUMBER, phoneNumber);
+    }
+
+    @Override
     public UserModel getDelegateForUpdate() {
         if (updated == null) {
             userProviderCache.registerUserInvalidation(realm, cached);
@@ -256,6 +277,18 @@ public class UserAdapter implements CachedUserModel.Streams {
     public void setEmailVerified(boolean verified) {
         getDelegateForUpdate();
         updated.setEmailVerified(verified);
+    }
+
+    @Override
+    public boolean isPhoneNumberVerified() {
+        if (updated != null) return updated.isPhoneNumberVerified();
+        return cached.isPhoneNumberVerified(); 
+    }
+
+    @Override
+    public void setPhoneNumberVerified(boolean verified) {
+        getDelegateForUpdate();
+        updated.setPhoneNumberVerified(verified);
     }
 
     @Override

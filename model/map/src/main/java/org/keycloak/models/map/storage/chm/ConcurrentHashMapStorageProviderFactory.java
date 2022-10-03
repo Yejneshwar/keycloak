@@ -136,6 +136,8 @@ public class ConcurrentHashMapStorageProviderFactory implements AmphibianProvide
       .constructor(MapIdentityProviderEntity.class,                 MapIdentityProviderEntityImpl::new)
       .constructor(MapIdentityProviderMapperEntity.class,           MapIdentityProviderMapperEntityImpl::new)
       .constructor(MapOTPPolicyEntity.class,                        MapOTPPolicyEntityImpl::new)
+      .constructor(MapSmsOTPPolicyEntity.class,                     MapSmsOTPPolicyEntityImpl::new)
+    //   .constructor(MapEmailPolicyEntity.class,                      MapEmailPolicyEntityImpl::new)
       .constructor(MapRequiredActionProviderEntity.class,           MapRequiredActionProviderEntityImpl::new)
       .constructor(MapRequiredCredentialEntity.class,               MapRequiredCredentialEntityImpl::new)
       .constructor(MapWebAuthnPolicyEntity.class,                   MapWebAuthnPolicyEntityImpl::new)

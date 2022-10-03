@@ -1,0 +1,87 @@
+/*
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates
+ * and other contributors as indicated by the @author tags.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.keycloak.models.map.realm.entity;
+
+import org.keycloak.models.EmailPolicy;
+import org.keycloak.models.map.annotations.GenerateEntityImplementations;
+import org.keycloak.models.map.common.DeepCloner;
+import org.keycloak.models.map.common.UpdatableEntity;
+import java.util.List;
+import java.util.ArrayList;
+
+
+@GenerateEntityImplementations
+@DeepCloner.Root
+public interface MapEmailPolicyEntity extends UpdatableEntity {
+    
+    static MapEmailPolicyEntity fromModel(EmailPolicy model) {
+        if (model == null) return null;
+        MapEmailPolicyEntity entity = new MapEmailPolicyEntityImpl();
+        entity.setEnableEmailPolicies(model.getEnabled());
+        entity.setEmailDomainsAllowed(model.getAllowedDomains());
+        entity.setEmailDomainsBlocked(model.getBlockedDomains());
+        entity.setTopLevelDomainsAllowed(model.getAllowedTopLevelDomains());
+        entity.setTopLevelDomainsBlocked(model.getBlockedTopLevelDomains());
+        entity.setEmailPolicyDisableUsers(model.getDisableUsers());
+        return entity;
+    }
+
+    static EmailPolicy toModel(MapEmailPolicyEntity entity) {
+        if (entity == null) return null;
+        EmailPolicy model = new EmailPolicy();
+        boolean enabled = entity.getEnableEmailPolicies();
+        List<String> allowedDomains = entity.getEmailDomainsAllowed();
+        List<String> blockedDomains = entity.getEmailDomainsBlocked();
+        List<String> allowedTopLevelDomains = entity.getTopLevelDomainsAllowed();
+        List<String> blockedTopLevelDomains = entity.getTopLevelDomainsBlocked();
+        boolean disableUsers = entity.getEmailPolicyDisableUsers();
+
+        model.setEnabled(enabled);
+        model.setAllowedDomains( allowedDomains == null ? new ArrayList<String>() : allowedDomains);
+        model.setBlockedDomains( blockedDomains == null ? new ArrayList<String>() : blockedDomains);
+        model.setAllowedTopLevelDomains( allowedTopLevelDomains == null ? new ArrayList<String>() : allowedTopLevelDomains);
+        model.setBlockedTopLevelDomains( blockedTopLevelDomains == null ? new ArrayList<String>() : blockedTopLevelDomains);
+        model.setDisableUsers(disableUsers);
+
+        // model.setEnabled(entity.getEnabled());
+        // model.setAllowedDomains(entity.getAllowedDomains());
+        // model.setBlockedDomains(entity.getBlockedDomains());
+        // model.setAllowedTopLevelDomains(entity.getAllowedTopLevelDomains());
+        // model.setBlockedTopLevelDomains(entity.getBlockedTopLevelDomains());
+        // model.setDisableUsers(entity.getDisableUsers());
+        return model;
+    }
+
+    boolean getEnableEmailPolicies();
+    void setEnableEmailPolicies(boolean enableEmailPolicies);
+
+    List<String> getEmailDomainsAllowed();
+    void setEmailDomainsAllowed(List<String> emailDomainsAllowed);
+
+    List<String> getEmailDomainsBlocked();
+    void setEmailDomainsBlocked(List<String> emailDomainsBlocked);
+
+    List<String> getTopLevelDomainsAllowed();
+    void setTopLevelDomainsAllowed(List<String> topLevelDomainsAllowed);
+
+    List<String> getTopLevelDomainsBlocked();
+    void setTopLevelDomainsBlocked(List<String> topLevelDomainsBlocked);
+
+    boolean getEmailPolicyDisableUsers();
+    void setEmailPolicyDisableUsers(boolean emailPolicyDisableUsers);
+}

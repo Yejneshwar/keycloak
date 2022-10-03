@@ -29,6 +29,12 @@ public interface Details {
     String EMAIL = "email";
     String PREVIOUS_EMAIL = PREF_PREVIOUS + "email";
     String UPDATED_EMAIL = PREF_UPDATED + "email";
+    String PHONE_NUMBER = "phone_number";
+    String PREVIOUS_PHONE_NUMBER =  PREF_PREVIOUS + "phone_number";
+    String UPDATED_PHONE_NUMBER = PREF_UPDATED + "phone_number";
+    String PHONE_NUMBER_LOCALE = "phone_number_locale";
+    String UPDATED_PHONE_NUMBER_LOCALE = PREF_UPDATED + "phone_number_locale";
+    String PREVIOUS_PHONE_NUMBER_LOCALE = PREF_PREVIOUS + "phone_number_locale";
     String ACTION = "action";
     String CODE_ID = "code_id";
     String REDIRECT_URI = "redirect_uri";

@@ -89,6 +89,14 @@ public class HardcodedAttributeMapper extends AbstractLDAPStorageMapper {
             }
 
             @Override
+            public boolean isPhoneNumberVerified() {
+                if(userModelAttrName.equals("phoneNumberVerified")){
+                    return Boolean.valueOf(attributeValue);
+                }
+                return super.isPhoneNumberVerified();
+            }
+
+            @Override
             public boolean isEnabled() {
                 if(userModelAttrName.equals("enabled")){
                     return Boolean.valueOf(attributeValue);

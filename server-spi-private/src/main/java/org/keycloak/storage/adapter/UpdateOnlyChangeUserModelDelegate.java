@@ -134,6 +134,27 @@ public class UpdateOnlyChangeUserModelDelegate extends UserModelDelegate {
     }
 
     @Override
+    public void setPhoneNumberLocale(String phoneNumberLocale) {
+        if (!isEqualOrBothNull(getPhoneNumberLocale(), phoneNumberLocale)) {
+            delegate.setPhoneNumberLocale(phoneNumberLocale);
+        }
+    }
+
+    @Override
+    public void setPhoneNumber(String phoneNumber) {
+        if (!isEqualOrBothNull(getPhoneNumber(), phoneNumber)) {
+            delegate.setPhoneNumber(phoneNumber);
+        }
+    }
+
+    @Override
+    public void setPhoneNumberVerified(boolean verified) {
+        if (!isEqualOrBothNull(isPhoneNumberVerified(), verified)) {
+            delegate.setPhoneNumberVerified(verified);
+        }
+    }
+
+    @Override
     public void grantRole(RoleModel role) {
         if (!hasDirectRole(role)) {
             delegate.grantRole(role);

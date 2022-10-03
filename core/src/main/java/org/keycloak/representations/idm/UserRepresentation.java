@@ -47,6 +47,9 @@ public class UserRepresentation {
     protected String email;
     protected String federationLink;
     protected String serviceAccountClientId; // For rep, it points to clientId (not DB ID)
+    protected String phoneNumberLocale;
+    protected String phoneNumber;
+    protected Boolean phoneNumberVerified;
 
     @JsonDeserialize(using = StringListMapDeserializer.class)
     protected Map<String, List<String>> attributes;
@@ -148,6 +151,31 @@ public class UserRepresentation {
     public void setEmailVerified(Boolean emailVerified) {
         this.emailVerified = emailVerified;
     }
+
+    public String getPhoneNumberLocale() {
+        return phoneNumberLocale;
+    }
+
+    public void setPhoneNumberLocale(String phoneNumberLocale) {
+        this.phoneNumberLocale = phoneNumberLocale;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Boolean isPhoneNumberVerified() {
+        return phoneNumberVerified;
+    }
+
+    public void setPhoneNumberVerified(boolean phoneNumberVerified) {
+        this.phoneNumberVerified = phoneNumberVerified;
+    }
+
 
     public Map<String, List<String>> getAttributes() {
         return attributes;

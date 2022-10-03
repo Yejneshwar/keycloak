@@ -82,6 +82,10 @@ import org.keycloak.models.map.realm.entity.MapIdentityProviderMapperEntity;
 import org.keycloak.models.map.realm.entity.MapIdentityProviderMapperEntityImpl;
 import org.keycloak.models.map.realm.entity.MapOTPPolicyEntity;
 import org.keycloak.models.map.realm.entity.MapOTPPolicyEntityImpl;
+import org.keycloak.models.map.realm.entity.MapSmsOTPPolicyEntity;
+import org.keycloak.models.map.realm.entity.MapSmsOTPPolicyEntityImpl;
+// import org.keycloak.models.map.realm.entity.MapEmailPolicyEntity;
+// import org.keycloak.models.map.realm.entity.MapEmailPolicyEntityImpl;
 import org.keycloak.models.map.realm.entity.MapRequiredActionProviderEntity;
 import org.keycloak.models.map.realm.entity.MapRequiredActionProviderEntityImpl;
 import org.keycloak.models.map.realm.entity.MapRequiredCredentialEntity;
@@ -192,6 +196,8 @@ public class JpaMapStorageProviderFactory implements
         .constructor(MapIdentityProviderEntity.class,           MapIdentityProviderEntityImpl::new)
         .constructor(MapIdentityProviderMapperEntity.class,     MapIdentityProviderMapperEntityImpl::new)
         .constructor(MapOTPPolicyEntity.class,                  MapOTPPolicyEntityImpl::new)
+        .constructor(MapSmsOTPPolicyEntity.class,               MapSmsOTPPolicyEntityImpl::new)
+        // .constructor(MapEmailPolicyEntity.class,                MapEmailPolicyEntityImpl::new)
         .constructor(MapRequiredActionProviderEntity.class,     MapRequiredActionProviderEntityImpl::new)
         .constructor(MapRequiredCredentialEntity.class,         MapRequiredCredentialEntityImpl::new)
         .constructor(MapWebAuthnPolicyEntity.class,             MapWebAuthnPolicyEntityImpl::new)

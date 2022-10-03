@@ -56,6 +56,8 @@ public class RealmAdapter implements LegacyRealmModel, JpaModel<RealmEntity> {
 
     private PasswordPolicy passwordPolicy;
     private OTPPolicy otpPolicy;
+    private OTPPolicy smsOtpPolicy;
+    private EmailPolicy emailPolicy;
 
     public RealmAdapter(KeycloakSession session, EntityManager em, RealmEntity realm) {
         this.session = session;
@@ -316,6 +318,17 @@ public class RealmAdapter implements LegacyRealmModel, JpaModel<RealmEntity> {
     @Override
     public void setVerifyEmail(boolean verifyEmail) {
         realm.setVerifyEmail(verifyEmail);
+        em.flush();
+    }
+
+    @Override
+    public boolean isVerifyPhoneNumber() {
+        return realm.isVerifyPhoneNumber();
+    }
+
+    @Override
+    public void setVerifyPhoneNumber(boolean verifyPhoneNumber) {
+        realm.setVerifyPhoneNumber(verifyPhoneNumber);
         em.flush();
     }
 
@@ -909,7 +922,57 @@ public class RealmAdapter implements LegacyRealmModel, JpaModel<RealmEntity> {
         em.flush();
     }
 
+    @Override
+    public OTPPolicy getSmsOTPPolicy() {
+        if (smsOtpPolicy == null) {
+            smsOtpPolicy = new OTPPolicy();
+            smsOtpPolicy.setDigits(realm.getSmsOtpPolicyDigits());
+            smsOtpPolicy.setAlgorithm(realm.getSmsOtpPolicyAlgorithm());
+            smsOtpPolicy.setInitialCounter(realm.getSmsOtpPolicyInitialCounter());
+            smsOtpPolicy.setLookAheadWindow(realm.getSmsOtpPolicyLookAheadWindow());
+            smsOtpPolicy.setType(realm.getSmsOtpPolicyType());
+            smsOtpPolicy.setPeriod(realm.getSmsOtpPolicyPeriod());
+        }
+        return smsOtpPolicy;
+    }
 
+    @Override
+    public void setSmsOTPPolicy(OTPPolicy policy) {
+        realm.setSmsOtpPolicyAlgorithm(policy.getAlgorithm());
+        realm.setSmsOtpPolicyDigits(policy.getDigits());
+        realm.setSmsOtpPolicyInitialCounter(policy.getInitialCounter());
+        realm.setSmsOtpPolicyLookAheadWindow(policy.getLookAheadWindow());
+        realm.setSmsOtpPolicyType(policy.getType());
+        realm.setSmsOtpPolicyPeriod(policy.getPeriod());
+        em.flush();
+    }
+
+    // email
+    // @Override 
+    // public EmailPolicy getEmailPolicy() {
+    //     if (emailPolicy == null) {
+    //         emailPolicy = new EmailPolicy();
+    //         emailPolicy.setEnabled(realm.getEnableEmailPolicies());                        
+    //         emailPolicy.setAllowedDomains(realm.getEmailDomainsAllowed());                    
+    //         emailPolicy.setBlockedDomains(realm.getEmailDomainsBlocked());                    
+    //         emailPolicy.setAllowedTopLevelDomains(realm.getTopLevelDomainsAllowed());                    
+    //         emailPolicy.setBlockedTopLevelDomains(realm.getTopLevelDomainsBlocked());                    
+    //         emailPolicy.setDisableUsers(realm.getEmailPolicyDisableUsers());                        
+    //     }
+    //     return emailPolicy;
+    // }
+
+    // @Override
+    // public void setEmailPolicy(EmailPolicy policy) {
+    //     realm.setEnableEmailPolicies(policy.getEnabled());
+    //     realm.setEmailDomainsAllowed(policy.getAllowedDomains());
+    //     realm.setEmailDomainsBlocked(policy.getBlockedDomains());
+    //     realm.setTopLevelDomainsAllowed(policy.getAllowedTopLevelDomains());
+    //     realm.setTopLevelDomainsBlocked(policy.getBlockedTopLevelDomains());
+    //     realm.setEmailPolicyDisableUsers(policy.getDisableUsers());
+    //     em.flush();
+    // }
+ 
     // WebAuthn
 
     @Override

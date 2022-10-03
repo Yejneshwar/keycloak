@@ -1,0 +1,154 @@
+<div class="col-sm-9 col-md-10 col-sm-push-3 col-md-push-2">
+    <h1>{{:: 'authentication' | translate}}</h1>
+
+    <kc-tabs-authentication></kc-tabs-authentication>
+
+    <form class="form-horizontal" name="realmForm" novalidate kc-read-only="!access.manageRealm">
+        <div class="form-group clearfix block">
+            <label class="col-md-2 control-label" for="enableEmailPolicies">{{:: 'email-policy-enabled' | translate}}</label>
+            <div class="col-md-6">
+                <input ng-model="realm.enableEmailPolicies" name="enableEmailPolicies" id="enableEmailPolicies" onoffswitch on-text="{{:: 'onText' | translate}}" off-text="{{:: 'offText' | translate}}"/>
+            </div>
+            <kc-tooltip>{{:: 'enable-email-policies.tooltip' | translate}}</kc-tooltip>
+        </div>
+
+        <div class="form-group clearfix block">
+            <label class="col-md-2 control-label" for="emailPolicyDisableUsers">{{:: 'email-policy-disable-users' | translate}}</label>
+            <div class="col-md-6">
+                <input ng-model="realm.emailPolicyDisableUsers" name="emailPolicyDisableUsers" id="emailPolicyDisableUsers" onoffswitch on-text="{{:: 'onText' | translate}}" off-text="{{:: 'offText' | translate}}"/>
+            </div>
+            <kc-tooltip>{{:: 'email-policy-disable-users.tooltip' | translate}}</kc-tooltip>
+        </div>
+
+        <div class="form-group" data-ng-show="access.manageRealm">
+            <div class="col-md-10 col-md-offset-2">
+                <button data-ng-click="disableUsers()">{{:: 'save' | translate}}</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label" class="control-label">{{:: 'email-domains' | translate}}</label>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                    <label class="control-label" for="emailDomainsAllowed">{{:: 'email-domains-allowed' | translate}}</label>
+                    <kc-tooltip>{{:: 'email-domains-allowed.tooltip' | translate}}</kc-tooltip>
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th>{{:: 'value' | translate}}</th>
+                            <th>{{:: 'actions' | translate}}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        
+                        <tr ng-repeat="r in realm.emailDomainsAllowed track by $index">
+                            <td>{{r}}</td>
+                            <td class="kc-action-cell" data-ng-click="removeDomain($index,'allow')">{{:: 'delete' | translate}}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td><input ng-model="newDomain.value" class="form-control" type="text" id="newDomainValue" /></td>
+                            <td class="kc-action-cell" data-ng-click="addDomain('allow')" data-ng-disabled="!newDomain.value.length">{{:: 'add' | translate}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label" for="emailDomainsBlocked">{{:: 'email-domains-blocked' | translate}}</label>
+                        <kc-tooltip>{{:: 'email-domains-blocked.tooltip' | translate}}</kc-tooltip>
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>{{:: 'value' | translate}}</th>
+                                <th>{{:: 'actions' | translate}}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            
+                            <tr ng-repeat="r in realm.emailDomainsBlocked track by $index">
+                                <td>{{r}}</td>
+                                <td class="kc-action-cell" data-ng-click="removeDomain($index,'block')">{{:: 'delete' | translate}}</td>
+                            </tr>
+
+                            <tr>
+                                <td><input ng-model="newDomain.value" class="form-control" type="text" id="newDomainValue" /></td>
+                                <td class="kc-action-cell" data-ng-click="addDomain('block')" data-ng-disabled="!newDomain.value.length">{{:: 'add' | translate}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
+        <div class="form-group">
+            <label class="col-md-2 control-label" class="control-label">{{:: 'top-level-email-domains' | translate}}</label>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                    <label class="control-label" for="topLevelDomainsAllowed">{{:: 'top-level-email-domains-allowed' | translate}}</label>
+                    <kc-tooltip>{{:: 'top-level-email-domains-allowed.tooltip' | translate}}</kc-tooltip>
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th>{{:: 'value' | translate}}</th>
+                            <th>{{:: 'actions' | translate}}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        
+                        <tr ng-repeat="r in realm.topLevelDomainsAllowed track by $index">
+                            <td>{{r}}</td>
+                            <td class="kc-action-cell" data-ng-click="removeTopLevelDomain($index,'allow')">{{:: 'delete' | translate}}</td>
+                        </tr>
+                        
+                        <tr>
+                            <td><input ng-model="newDomain.value" class="form-control" type="text" id="newDomainValue" /></td>
+                            <td class="kc-action-cell" data-ng-click="addTopLevelDomain('allow')" data-ng-disabled="!newDomain.value.length">{{:: 'add' | translate}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label" for="assigned">{{:: 'top-level-email-domains-blocked' | translate}}</label>
+                        <kc-tooltip>{{:: 'top-level-email-domains-blocked.tooltip' | translate}}</kc-tooltip>
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>{{:: 'value' | translate}}</th>
+                                <th>{{:: 'actions' | translate}}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            
+                            <tr ng-repeat="r in realm.topLevelDomainsBlocked track by $index">
+                                <td>{{r}}</td>
+                                <td class="kc-action-cell" data-ng-click="removeTopLevelDomain($index,'block')">{{:: 'delete' | translate}}</td>
+                            </tr>
+                            
+                            <tr>
+                                <td><input ng-model="newDomain.value" class="form-control" type="text" id="newDomainValue" /></td>
+                                <td class="kc-action-cell" data-ng-click="addTopLevelDomain('block')" data-ng-disabled="!newDomain.value.length">{{:: 'add' | translate}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group" data-ng-show="access.manageRealm">
+            <div class="col-md-10 col-md-offset-2">
+                <button kc-save data-ng-disabled="!changed">{{:: 'save' | translate}}</button>
+                <button kc-reset data-ng-disabled="!changed">{{:: 'cancel' | translate}}</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+
+<kc-menu></kc-menu>

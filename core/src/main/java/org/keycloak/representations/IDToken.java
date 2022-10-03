@@ -47,6 +47,7 @@ public class IDToken extends JsonWebToken {
     public static final String BIRTHDATE = "birthdate";
     public static final String ZONEINFO = "zoneinfo";
     public static final String LOCALE = "locale";
+    public static final String PHONE_NUMBER_LOCALE = "phone_number_locale";
     public static final String PHONE_NUMBER = "phone_number";
     public static final String PHONE_NUMBER_VERIFIED = "phone_number_verified";
     public static final String ADDRESS = "address";
@@ -121,6 +122,9 @@ public class IDToken extends JsonWebToken {
 
     @JsonProperty(LOCALE)
     protected String locale;
+
+    @JsonProperty(PHONE_NUMBER_LOCALE)
+    protected String phoneNumberLocale;
 
     @JsonProperty(PHONE_NUMBER)
     protected String phoneNumber;
@@ -316,6 +320,14 @@ public class IDToken extends JsonWebToken {
 
     public void setZoneinfo(String zoneinfo) {
         this.zoneinfo = zoneinfo;
+    }
+    
+    public String getPhoneNumberLocale() {
+        return this.phoneNumberLocale;
+    }
+
+    public void setPhoneNumberLocale(String phoneNumberLocale) {
+        this.phoneNumberLocale = phoneNumberLocale;
     }
 
     public String getLocale() {

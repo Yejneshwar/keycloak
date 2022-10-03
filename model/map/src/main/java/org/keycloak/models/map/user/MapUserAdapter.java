@@ -232,8 +232,37 @@ public abstract class MapUserAdapter extends AbstractUserModel<MapUserEntity> {
         entity.setEmail(email, duplicatesAllowed);
     }
     
+    @Override
+    public String getPhoneNumberLocale() {
+        return entity.getPhoneNumberLocale();
+    }
+
+    @Override
+    public void setPhoneNumberLocale(String phoneNumberLocale) {
+        phoneNumberLocale = KeycloakModelUtils.toUpperCaseSafe(phoneNumberLocale);
+        if (phoneNumberLocale != null && phoneNumberLocale.equals(entity.getPhoneNumberLocale())) return;
+        entity.setPhoneNumberLocale(phoneNumberLocale);
+    }
+
+    @Override
+    public String getPhoneNumber() {
+        return entity.getPhoneNumber();
+    }
+
+    @Override
+    public void setPhoneNumber(String phoneNumber) {
+        phoneNumber = KeycloakModelUtils.toUpperCaseSafe(phoneNumber);
+        if (phoneNumber != null && phoneNumber.equals(entity.getPhoneNumber())) return;
+        if (phoneNumber != null && checkPhoneNumberUniqueness(realm, phoneNumber)) {
+            throw new ModelDuplicateException("A user with phone number " + phoneNumber + " already exists");
+        }
+        entity.setPhoneNumber(phoneNumber);
+    }
+
     public abstract boolean checkEmailUniqueness(RealmModel realm, String email);
     public abstract boolean checkUsernameUniqueness(RealmModel realm, String username);
+    public abstract boolean checkPhoneNumberUniqueness(RealmModel realm, String phoneNumber);
+
 
     @Override
     public boolean isEmailVerified() {
@@ -244,6 +273,16 @@ public abstract class MapUserAdapter extends AbstractUserModel<MapUserEntity> {
     @Override
     public void setEmailVerified(boolean verified) {
         entity.setEmailVerified(verified);
+    }
+
+    @Override
+    public boolean isPhoneNumberVerified() {
+        return entity.isPhoneNumberVerified();
+    }
+
+    @Override
+    public void setPhoneNumberVerified(boolean verified) {
+        entity.setPhoneNumberVerified(verified);
     }
 
     @Override

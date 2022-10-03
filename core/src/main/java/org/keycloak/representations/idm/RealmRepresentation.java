@@ -78,6 +78,7 @@ public class RealmRepresentation {
     protected Boolean registrationEmailAsUsername;
     protected Boolean rememberMe;
     protected Boolean verifyEmail;
+    protected Boolean verifyPhoneNumber;
     protected Boolean loginWithEmailAllowed;
     protected Boolean duplicateEmailsAllowed;
     protected Boolean resetPasswordAllowed;
@@ -123,6 +124,30 @@ public class RealmRepresentation {
     protected Integer otpPolicyLookAheadWindow;
     protected Integer otpPolicyPeriod;
     protected List<String> otpSupportedApplications;
+
+    protected String smsOtpPolicyType;
+    protected String smsOtpPolicyAlgorithm;
+    protected Integer smsOtpPolicyInitialCounter;
+    protected Integer smsOtpPolicyDigits;
+    protected Integer smsOtpPolicyLookAheadWindow;
+    protected Integer smsOtpPolicyPeriod;
+    protected List<String> smsOtpSupportedApplications;
+
+    // Email Policies below
+
+    // protected boolean enableEmailPolicies;
+    // protected List<String> emailDomainsAllowed;
+    // protected List<String> emailDomainsBlocked;
+    // protected List<String> topLevelDomainsAllowed;
+    // protected List<String> topLevelDomainsBlocked;
+    // protected boolean emailPolicyDisableUsers;
+
+    // Phone number policied below
+    
+    protected List<String> phoneNumberLocalesAllowed;
+    protected List<String> phoneNumberLocalesBlocked;
+    protected List<String> phoneNumbersBlocked;
+    protected boolean phoneNumberPolicyDisableUsers;
 
     // WebAuthn 2-factor properties below
 
@@ -613,6 +638,14 @@ public class RealmRepresentation {
         this.verifyEmail = verifyEmail;
     }
     
+    public Boolean isVerifyPhoneNumber() {
+        return verifyPhoneNumber;
+    }
+
+    public void setVerifyPhoneNumber(Boolean verifyPhoneNumber) {
+        this.verifyPhoneNumber = verifyPhoneNumber;
+    }
+ 
     public Boolean isLoginWithEmailAllowed() {
         return loginWithEmailAllowed;
     }
@@ -1024,6 +1057,114 @@ public class RealmRepresentation {
     public void setOtpSupportedApplications(List<String> otpSupportedApplications) {
         this.otpSupportedApplications = otpSupportedApplications;
     }
+
+    
+    //SMS OTP policies below
+    public String getSmsOtpPolicyType() {
+        return smsOtpPolicyType;
+    }
+
+    public void setSmsOtpPolicyType(String smsOtpPolicyType) {
+        this.smsOtpPolicyType = smsOtpPolicyType;
+    }
+
+    public String getSmsOtpPolicyAlgorithm() {
+        return smsOtpPolicyAlgorithm;
+    }
+
+    public void setSmsOtpPolicyAlgorithm(String smsOtpPolicyAlgorithm) {
+        this.smsOtpPolicyAlgorithm = smsOtpPolicyAlgorithm;
+    }
+
+    public Integer getSmsOtpPolicyInitialCounter() {
+        return smsOtpPolicyInitialCounter;
+    }
+
+    public void setSmsOtpPolicyInitialCounter(Integer smsOtpPolicyInitialCounter) {
+        this.smsOtpPolicyInitialCounter = smsOtpPolicyInitialCounter;
+    }
+
+    public Integer getSmsOtpPolicyDigits() {
+        return smsOtpPolicyDigits;
+    }
+
+    public void setSmsOtpPolicyDigits(Integer smsOtpPolicyDigits) {
+        this.smsOtpPolicyDigits = smsOtpPolicyDigits;
+    }
+
+    public Integer getSmsOtpPolicyLookAheadWindow() {
+        return smsOtpPolicyLookAheadWindow;
+    }
+
+    public void setSmsOtpPolicyLookAheadWindow(Integer smsOtpPolicyLookAheadWindow) {
+        this.smsOtpPolicyLookAheadWindow = smsOtpPolicyLookAheadWindow;
+    }
+
+    public Integer getSmsOtpPolicyPeriod() {
+        return smsOtpPolicyPeriod;
+    }
+
+    public void setSmsOtpPolicyPeriod(Integer smsOtpPolicyPeriod) {
+        this.smsOtpPolicyPeriod = smsOtpPolicyPeriod;
+    }
+
+    public List<String> getSmsOtpSupportedApplications() {
+        return smsOtpSupportedApplications;
+    }
+
+    public void setSmsOtpSupportedApplications(List<String> smsOtpSupportedApplications) {
+        this.smsOtpSupportedApplications = smsOtpSupportedApplications;
+    }
+
+
+    // Email policies below
+
+    // public Boolean getEnableEmailPolicies(){
+    //     return enableEmailPolicies;
+    // }
+
+    // public void setEnableEmailPolicies(Boolean enableEmailPolicies){
+    //     this.enableEmailPolicies = enableEmailPolicies;
+    // }
+
+    // public List<String> getEmailDomainsAllowed(){
+    //     return emailDomainsAllowed;
+    // }
+
+    // public void setEmailDomainsAllowed(List<String> emailDomainsAllowed){
+    //     this.emailDomainsAllowed = emailDomainsAllowed;
+    // }
+
+    // public List<String> getEmailDomainsBlocked(){
+    //     return emailDomainsBlocked;
+    // }
+
+    // public void setEmailDomainsBlocked(List<String> emailDomainsBlocked){
+    //     this.emailDomainsBlocked = emailDomainsBlocked;
+    // }
+
+    // public List<String> getTopLevelDomainsAllowed(){
+    //     return topLevelDomainsAllowed;
+    // }
+
+    // public void setTopLevelDomainsAllowed(List<String> topLevelDomainsAllowed){
+    //     this.topLevelDomainsAllowed = topLevelDomainsAllowed;
+    // }
+
+    // public List<String> getTopLevelDomainsBlocked(){
+    //     return topLevelDomainsBlocked;
+    // }
+    // public void setTopLevelDomainsBlocked(List<String> topLevelDomainsBlocked){
+    //     this.topLevelDomainsBlocked = topLevelDomainsBlocked;
+    // }
+    // public Boolean getEmailPolicyDisableUsers(){
+    //     return emailPolicyDisableUsers;
+    // }
+
+    // public void setEmailPolicyDisableUsers(Boolean emailPolicyDisableUsers){
+    //     this.emailPolicyDisableUsers = emailPolicyDisableUsers;
+    // }
+
 
     // WebAuthn 2-factor properties below
 

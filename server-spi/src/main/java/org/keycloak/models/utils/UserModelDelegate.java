@@ -161,6 +161,36 @@ public class UserModelDelegate implements UserModel.Streams {
     }
 
     @Override
+    public String getPhoneNumberLocale() {
+        return delegate.getPhoneNumberLocale();
+    }
+
+    @Override
+    public void setPhoneNumberLocale(String phoneNumberLocale) {
+        delegate.setPhoneNumberLocale(phoneNumberLocale);
+    }
+
+    @Override
+    public String getPhoneNumber() {
+        return delegate.getPhoneNumber();
+    }
+
+    @Override
+    public void setPhoneNumber(String phoneNumber) {
+        delegate.setPhoneNumber(phoneNumber);
+    }
+
+    @Override
+    public boolean isPhoneNumberVerified() {
+        return delegate.isPhoneNumberVerified();
+    }
+
+    @Override
+    public void setPhoneNumberVerified(boolean verified) {
+        delegate.setPhoneNumberVerified(verified);
+    }
+
+    @Override
     public Stream<RoleModel> getRealmRoleMappingsStream() {
         return delegate.getRealmRoleMappingsStream();
     }

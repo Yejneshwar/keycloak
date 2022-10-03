@@ -154,6 +154,14 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
                 actionMessage = Messages.CONFIGURE_TOTP;
                 page = LoginFormsPages.LOGIN_CONFIG_TOTP;
                 break;
+            case CONFIGURE_SOTP:
+                actionMessage = Messages.CONFIGURE_SOTP;
+                page = LoginFormsPages.LOGIN_CONFIG_SOTP;
+                break;
+            case CONFIGURE_EOTP:
+                actionMessage = Messages.CONFIGURE_EOTP;
+                page = LoginFormsPages.LOGIN_CONFIG_EOTP;
+                break;
             case CONFIGURE_RECOVERY_AUTHN_CODES:
                 actionMessage = Messages.CONFIGURE_BACKUP_CODES;
                 page = LoginFormsPages.LOGIN_RECOVERY_AUTHN_CODES_CONFIG;
@@ -167,6 +175,13 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
                 } else {
                     page = LoginFormsPages.LOGIN_UPDATE_PROFILE;
                 }
+                break;
+            case UPDATE_PHONE_NUMBER:
+                UpdateProfileContext userBasedContextForPhoneNumber = new UserUpdateProfileContext(realm, user);
+                this.attributes.put(UPDATE_PROFILE_CONTEXT_ATTR, userBasedContextForPhoneNumber);
+
+                actionMessage = Messages.UPDATE_PHONE_NUMBER;
+                page = LoginFormsPages.LOGIN_UPDATE_PHONE_NUMBER;
                 break;
             case UPDATE_EMAIL:
                 actionMessage = Messages.UPDATE_EMAIL;
@@ -182,6 +197,10 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
                 attributes.put("user",new ProfileBean(userBasedContext1,formData));
                 actionMessage = Messages.VERIFY_EMAIL;
                 page = LoginFormsPages.LOGIN_VERIFY_EMAIL;
+                break;
+            case VERIFY_PHONE_NUMBER:
+                actionMessage = Messages.VERIFY_PHONE_NUMBER;
+                page = LoginFormsPages.LOGIN_TOTP;
                 break;
             case VERIFY_PROFILE:
                 UpdateProfileContext verifyProfile = new UserUpdateProfileContext(realm, user);
@@ -230,6 +249,12 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
             case LOGIN_CONFIG_TOTP:
                 attributes.put("totp", new TotpBean(session, realm, user, uriInfo.getRequestUriBuilder()));
                 break;
+            case LOGIN_CONFIG_SOTP:
+                System.out.println("CONFIG SOTP");
+                break;
+            case LOGIN_CONFIG_EOTP:
+                System.out.println("CONFIG EOTP");
+                break;
             case LOGIN_RECOVERY_AUTHN_CODES_CONFIG:
                 attributes.put("recoveryAuthnCodesConfigBean", new RecoveryAuthnCodesBean());
                 break;
@@ -239,6 +264,10 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
             case LOGIN_UPDATE_PROFILE:
                 UpdateProfileContext userCtx = (UpdateProfileContext) attributes.get(LoginFormsProvider.UPDATE_PROFILE_CONTEXT_ATTR);
                 attributes.put("user", new ProfileBean(userCtx, formData));
+                break;
+            case LOGIN_UPDATE_PHONE_NUMBER:
+                UpdateProfileContext userCtxForPhoneNumber = (UpdateProfileContext) attributes.get(LoginFormsProvider.UPDATE_PROFILE_CONTEXT_ATTR);
+                attributes.put("user", new ProfileBean(userCtxForPhoneNumber, formData));
                 break;
             case UPDATE_EMAIL:
                 attributes.put("email", new EmailBean(user, formData));
@@ -259,6 +288,12 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
                 break;
             case LOGIN_TOTP:
                 attributes.put("otpLogin", new TotpLoginBean(session, realm, user, (String) this.attributes.get(OTPFormAuthenticator.SELECTED_OTP_CREDENTIAL_ID)));
+                break;
+            case LOGIN_SOTP:
+                System.out.println("LOGIN SOTP");
+                break;
+            case LOGIN_EOTP:
+                System.out.println("LOGIN EOTP");
                 break;
             case REGISTER:
                 if(isDynamicUserProfile()) {
@@ -561,6 +596,15 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
     }
 
     @Override
+    public Response createLoginSotp() {
+        return createResponse(LoginFormsPages.LOGIN_SOTP);
+    }
+    @Override
+    public Response createLoginEotp() {
+        return createResponse(LoginFormsPages.LOGIN_EOTP);
+    }
+
+    @Override
     public Response createLoginRecoveryAuthnCode() {
         return createResponse(LoginFormsPages.LOGIN_RECOVERY_AUTHN_CODES_INPUT);
     }
@@ -606,6 +650,16 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
         } else {
             return createResponse(LoginFormsPages.LOGIN_UPDATE_PROFILE);
         }
+    }
+
+    @Override
+    public Response createUpdatePhoneNumberPage() {
+        // Don't display initial message if we already have some errors
+        if (messageType != MessageType.ERROR) {
+            setMessage(MessageType.WARNING, Messages.UPDATE_PHONE_NUMBER);
+        }
+
+        return createResponse(LoginFormsPages.LOGIN_UPDATE_PHONE_NUMBER);
     }
 
     @Override

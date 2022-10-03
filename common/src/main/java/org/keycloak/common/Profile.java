@@ -169,7 +169,8 @@ public class Profile {
         CLIENT_SECRET_ROTATION("Client Secret Rotation", Type.PREVIEW),
         STEP_UP_AUTHENTICATION("Step-up Authentication", Type.DEFAULT),
         RECOVERY_CODES("Recovery codes", Type.PREVIEW),
-        UPDATE_EMAIL("Update Email Action", Type.PREVIEW);
+        UPDATE_EMAIL("Update Email Action", Type.PREVIEW),
+        UPDATE_PHONE_NUMBER("Update Phone Number Action", Type.PREVIEW);
 
 
         private final Type typeProject;

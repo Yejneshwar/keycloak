@@ -173,6 +173,14 @@ public class Urls {
         return loginActionsBase(baseUri).path(LoginActionsService.class, "updateTotp").build(realmName);
     }
 
+    public static URI loginActionUpdateSotp(URI baseUri, String realmName) {
+        return loginActionsBase(baseUri).path(LoginActionsService.class, "updateSotp").build(realmName);
+    }
+    
+    public static URI loginActionUpdateEotp(URI baseUri, String realmName) {
+        return loginActionsBase(baseUri).path(LoginActionsService.class, "updateEotp").build(realmName);
+    }
+
     public static UriBuilder requiredActionBase(URI baseUri) {
         return loginActionsBase(baseUri).path(LoginActionsService.class, "requiredAction");
     }

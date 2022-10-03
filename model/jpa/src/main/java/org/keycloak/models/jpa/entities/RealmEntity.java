@@ -41,6 +41,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import java.util.ArrayList;
+
 /**
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
@@ -71,6 +73,8 @@ public class RealmEntity {
     protected boolean registrationEmailAsUsername;
     @Column(name="VERIFY_EMAIL")
     protected boolean verifyEmail;
+    @Column(name="VERIFY_PHONE_NUMBER")
+    protected boolean verifyPhoneNumber;
     @Column(name="RESET_PASSWORD_ALLOWED")
     protected boolean resetPasswordAllowed;
     @Column(name="LOGIN_WITH_EMAIL_ALLOWED")
@@ -95,6 +99,47 @@ public class RealmEntity {
     protected int otpPolicyLookAheadWindow;
     @Column(name="OTP_POLICY_PERIOD")
     protected int otpPolicyPeriod;
+      
+    @Column(name="SOTP_POLICY_TYPE")
+    protected String smsOtpPolicyType;
+    @Column(name="SOTP_POLICY_ALG")
+    protected String smsOtpPolicyAlgorithm;
+    @Column(name="SOTP_POLICY_COUNTER")
+    protected int smsOtpPolicyInitialCounter;
+    @Column(name="SOTP_POLICY_DIGITS")
+    protected int smsOtpPolicyDigits;
+    @Column(name="SOTP_POLICY_WINDOW")
+    protected int smsOtpPolicyLookAheadWindow;
+    @Column(name="SOTP_POLICY_PERIOD")
+    protected int smsOtpPolicyPeriod;
+
+
+    // @Column(name="ENABLE_EMAIL_POLICIES")
+    // protected boolean enableEmailPolicies;
+    
+    
+    // @ElementCollection
+    // @Column(name="EMAIL_DOMAINS_ALLOWED")
+    // @CollectionTable(name="REALM_EMAIL_DOMAINS_ALLOWED", joinColumns = { @JoinColumn(name="REALM_ID")})
+    // protected List<String> emailDomainsAllowed;
+    
+    // @ElementCollection
+    // @Column(name="EMAIL_DOMAINS_BLOCKED")
+    // @CollectionTable(name="REALM_EMAIL_DOMAINS_BLOCKED", joinColumns = { @JoinColumn(name="REALM_ID")})
+    // protected List<String> emailDomainsBlocked;
+
+    // @ElementCollection
+    // @Column(name="TOP_LEVEL_DOMAINS_ALLOWED")
+    // @CollectionTable(name="REALM_EMAIL_TOP_LEVEL_DOMAINS_ALLOWED", joinColumns = { @JoinColumn(name="REALM_ID")})
+    // protected List<String> topLevelDomainsAllowed;
+    
+    // @ElementCollection
+    // @Column(name="TOP_LEVEL_DOMAINS_BLOCKED")
+    // @CollectionTable(name="REALM_EMAIL_TOP_LEVEL_DOMAINS_BLOCKED", joinColumns = { @JoinColumn(name="REALM_ID")})
+    // protected List<String> topLevelDomainsBlocked;
+
+    // @Column(name="EMAIL_POLICY_DISABLE_USERS")
+    // protected boolean emailPolicyDisableUsers;
 
 
     @Column(name="EDIT_USERNAME_ALLOWED")
@@ -305,6 +350,14 @@ public class RealmEntity {
         this.verifyEmail = verifyEmail;
     }
     
+    public boolean isVerifyPhoneNumber() {
+        return verifyPhoneNumber;
+    }
+
+    public void setVerifyPhoneNumber(boolean verifyPhoneNumber) {
+        this.verifyPhoneNumber = verifyPhoneNumber;
+    }
+ 
     public boolean isLoginWithEmailAllowed() {
         return loginWithEmailAllowed;
     }
@@ -760,6 +813,114 @@ public class RealmEntity {
     public void setOtpPolicyPeriod(int otpPolicyPeriod) {
         this.otpPolicyPeriod = otpPolicyPeriod;
     }
+
+    public String getSmsOtpPolicyType() {
+        return smsOtpPolicyType;
+    }
+
+    public void setSmsOtpPolicyType(String smsOtpPolicyType) {
+        this.smsOtpPolicyType = smsOtpPolicyType;
+    }
+
+    public String getSmsOtpPolicyAlgorithm() {
+        return smsOtpPolicyAlgorithm;
+    }
+
+    public void setSmsOtpPolicyAlgorithm(String smsOtpPolicyAlgorithm) {
+        this.smsOtpPolicyAlgorithm = smsOtpPolicyAlgorithm;
+    }
+
+    public int getSmsOtpPolicyInitialCounter() {
+        return smsOtpPolicyInitialCounter;
+    }
+
+    public void setSmsOtpPolicyInitialCounter(int smsOtpPolicyInitialCounter) {
+        this.smsOtpPolicyInitialCounter = smsOtpPolicyInitialCounter;
+    }
+
+    public int getSmsOtpPolicyDigits() {
+        return smsOtpPolicyDigits;
+    }
+
+    public void setSmsOtpPolicyDigits(int smsOtpPolicyDigits) {
+        this.smsOtpPolicyDigits = smsOtpPolicyDigits;
+    }
+
+    public int getSmsOtpPolicyLookAheadWindow() {
+        return smsOtpPolicyLookAheadWindow;
+    }
+
+    public void setSmsOtpPolicyLookAheadWindow(int smsOtpPolicyLookAheadWindow) {
+        this.smsOtpPolicyLookAheadWindow = smsOtpPolicyLookAheadWindow;
+    }
+
+    public int getSmsOtpPolicyPeriod() {
+        return smsOtpPolicyPeriod;
+    }
+
+    public void setSmsOtpPolicyPeriod(int smsOtpPolicyPeriod) {
+        this.smsOtpPolicyPeriod = smsOtpPolicyPeriod;
+    }
+
+    // public Boolean getEnableEmailPolicies(){
+    //     return enableEmailPolicies;                                                                                                          
+    // }
+
+    // public void setEnableEmailPolicies(Boolean enableEmailPolicies){
+    //     this.enableEmailPolicies = enableEmailPolicies;
+    // }
+
+    // public List<String> getEmailDomainsAllowed(){
+    //     if (emailDomainsAllowed == null || emailDomainsAllowed.isEmpty()){
+    //         emailDomainsAllowed = new ArrayList<String>();
+    //     }
+    //     // System.out.print(emailDomainsAllowed);
+    //     return emailDomainsAllowed;
+    // }
+
+    // public void setEmailDomainsAllowed(List<String> emailDomainsAllowed){
+    //     this.emailDomainsAllowed = emailDomainsAllowed;
+    // }
+
+    // public List<String> getEmailDomainsBlocked(){
+    //     if (emailDomainsBlocked == null || emailDomainsBlocked.isEmpty()){
+    //         emailDomainsBlocked = new ArrayList<String>();
+    //     }
+    //     // System.out.print(emailDomainsBlocked); 
+    //     return emailDomainsBlocked;
+    // }
+
+    // public void setEmailDomainsBlocked(List<String> emailDomainsBlocked){
+    //     this.emailDomainsBlocked = emailDomainsBlocked;
+    // }
+
+    // public List<String> getTopLevelDomainsAllowed(){
+    //     if (topLevelDomainsAllowed == null || topLevelDomainsAllowed.isEmpty()){
+    //         topLevelDomainsAllowed = new ArrayList<String>();
+    //     }
+    //     return topLevelDomainsAllowed;
+    // }
+
+    // public void setTopLevelDomainsAllowed(List<String> topLevelDomainsAllowed){
+    //     this.topLevelDomainsAllowed = topLevelDomainsAllowed;
+    // }
+
+    // public List<String> getTopLevelDomainsBlocked(){
+    //     if (topLevelDomainsBlocked == null || topLevelDomainsBlocked.isEmpty()){
+    //         topLevelDomainsBlocked = new ArrayList<String>();
+    //     }
+    //     return topLevelDomainsBlocked;
+    // }
+    // public void setTopLevelDomainsBlocked(List<String> topLevelDomainsBlocked){
+    //     this.topLevelDomainsBlocked = topLevelDomainsBlocked;
+    // }
+    // public Boolean getEmailPolicyDisableUsers(){
+    //     return emailPolicyDisableUsers;
+    // }
+
+    // public void setEmailPolicyDisableUsers(Boolean emailPolicyDisableUsers){
+    //     this.emailPolicyDisableUsers = emailPolicyDisableUsers;
+    // }
 
     public String getBrowserFlow() {
         return browserFlow;

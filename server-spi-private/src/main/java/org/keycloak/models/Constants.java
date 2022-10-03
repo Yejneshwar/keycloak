@@ -78,6 +78,13 @@ public final class Constants {
     public static final String TAB_ID = "tab_id";
     public static final String KEY = "key";
 
+    public static final String VERIFY_PHONE_NUMBER_LOCALE_KEY = "VERIFY_PHONE_NUMBER_LOCALE_KEY";
+    public static final String VERIFY_PHONE_NUMBER_KEY = "VERIFY_PHONE_NUMBER_KEY";
+    public static final String VERIFY_PHONE_NUMBER_CODE = "VERIFY_PHONE_NUMBER_CODE";
+    public static final String VERIFY_PHONE_NUMBER_LOCALE_UPDATE_KEY = "VERIFY_PHONE_NUMBER_LOCALE_UPDATE_KEY";
+    public static final String VERIFY_PHONE_NUMBER_UPDATE_KEY = "VERIFY_PHONE_NUMBER_UPDATE_KEY";
+    public static final String VERIFY_PHONE_NUMBER_TIME_SET_KEY = "VERIFY_PHONE_NUMBER_TIME_SET_KEY";
+
     public static final String KC_ACTION = "kc_action";
     public static final String KC_ACTION_STATUS = "kc_action_status";
     public static final String KC_ACTION_EXECUTING = "kc_action_executing";

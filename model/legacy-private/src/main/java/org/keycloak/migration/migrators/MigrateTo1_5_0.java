@@ -25,6 +25,8 @@ import org.keycloak.models.RealmModel;
 import org.keycloak.models.utils.DefaultAuthenticationFlows;
 import org.keycloak.representations.idm.RealmRepresentation;
 
+import org.keycloak.models.EmailPolicy;
+
 /**
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
@@ -48,6 +50,7 @@ public class MigrateTo1_5_0 implements Migration {
     protected void migrateRealm(KeycloakSession session, RealmModel realm) {
         DefaultAuthenticationFlows.migrateFlows(realm); // add reset credentials flo
         realm.setOTPPolicy(OTPPolicy.DEFAULT_POLICY);
+        // realm.setEmailPolicy(EmailPolicy.DEFAULT_POLICY);
         realm.setBrowserFlow(realm.getFlowByAlias(DefaultAuthenticationFlows.BROWSER_FLOW));
         realm.setRegistrationFlow(realm.getFlowByAlias(DefaultAuthenticationFlows.REGISTRATION_FLOW));
         realm.setDirectGrantFlow(realm.getFlowByAlias(DefaultAuthenticationFlows.DIRECT_GRANT_FLOW));

@@ -349,6 +349,21 @@ public class UserStorageManager extends AbstractStorageManager<UserStorageProvid
                 provider -> provider.getUserByEmail(realm, email)).findFirst().orElse(null);
     }
 
+    @Override
+    public UserModel getUserByPhoneNumber(RealmModel realm, String phoneNumber) {
+        UserModel user = localStorage().getUserByPhoneNumber(phoneNumber, realm);
+        if (user != null) {
+            user = importValidation(realm, user);
+            // Case when phonenumber was changed directly in the userStorage and doesn't correspond anymore to the phonenumber from local DB
+            if (phoneNumber.equalsIgnoreCase(user.getPhoneNumber())) {
+                return user;
+            }
+        }
+
+        return mapEnabledStorageProvidersWithTimeout(realm, UserLookupProvider.class,
+                provider -> provider.getUserByPhoneNumber(phoneNumber, realm)).findFirst().orElse(null);
+    }
+
     /** {@link UserLookupProvider} methods implementations end here
         {@link UserQueryProvider} methods implementation start here */
 

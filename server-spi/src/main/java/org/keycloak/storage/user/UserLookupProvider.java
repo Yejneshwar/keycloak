@@ -89,7 +89,26 @@ public interface UserLookupProvider {
      */
     @Deprecated
     UserModel getUserByEmail(String email, RealmModel realm);
+
+    /**
+     * Returns a user with the given phoneNumber belonging to the realm
+     *
+     * @param phoneNumber case insensitive phoneNumber address (case-sensitivity is controlled by storage)
+     * @param realm the realm model
+     * @return found user model, or {@code null} if no such user exists
+     *
+     * @throws org.keycloak.models.ModelDuplicateException when there are more users with same phoneNumber
+     */
+    default UserModel getUserByPhoneNumber(RealmModel realm, String phoneNumber) {
+        return getUserByPhoneNumber(phoneNumber, realm);
+    }
+    /**
+     * @deprecated Use {@link #getUserByPhoneNumber(RealmModel, String) getUserByPhoneNumber} instead.
+     */
+    @Deprecated
+    UserModel getUserByPhoneNumber(String phoneNumber, RealmModel realm);
     
+
     interface Streams extends UserLookupProvider {
         @Override
         UserModel getUserById(RealmModel realm, String id);
@@ -115,5 +134,12 @@ public interface UserLookupProvider {
             return getUserByEmail(realm, email);
         }
 
+        @Override
+        UserModel getUserByPhoneNumber(RealmModel realm, String phoneNumber);
+
+        @Override
+        default UserModel getUserByPhoneNumber(String phoneNumber, RealmModel realm) {
+            return getUserByPhoneNumber(realm, phoneNumber);
+        }
     }
 }

@@ -68,6 +68,8 @@ public class OTPPolicy implements Serializable {
     }
 
     public static OTPPolicy DEFAULT_POLICY = new OTPPolicy(OTPCredentialModel.TOTP, HmacOTP.HMAC_SHA1, 0, 6, 1, 30);
+    public static OTPPolicy DEFAULT_SOTP_POLICY = new OTPPolicy(OTPCredentialModel.SOTP, HmacOTP.HMAC_SHA1, 0, 6, 1, 30);
+
 
     public String getAlgorithmKey() {
         return algToKeyUriAlg.containsKey(algorithm) ? algToKeyUriAlg.get(algorithm) : algorithm;
@@ -208,7 +210,7 @@ public class OTPPolicy implements Serializable {
 
         @Override
         public boolean supports(OTPPolicy policy) {
-            return true;
+            return (policy.getType().equals("totp") || policy.getType().equals("hotp")) && policy.getPeriod() == 30;
         }
     }
 

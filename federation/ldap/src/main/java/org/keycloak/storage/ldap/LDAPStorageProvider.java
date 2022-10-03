@@ -508,6 +508,11 @@ public class LDAPStorageProvider implements UserStorageProvider,
             return null;
         }
     }
+    
+    @Override
+    public UserModel getUserByPhoneNumber(RealmModel realm, String phoneNumber) {
+        return null;
+    }
 
     @Override
     public UserModel getUserByUsername(RealmModel realm, String username) {

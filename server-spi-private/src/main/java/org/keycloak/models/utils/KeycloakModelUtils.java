@@ -430,6 +430,10 @@ public final class KeycloakModelUtils {
         return str == null ? null : str.toLowerCase();
     }
 
+    public static String toUpperCaseSafe(String str) {
+        return str==null ? null : str.toUpperCase();
+    }
+
     /**
      * Creates default role for particular realm with the given name.
      *

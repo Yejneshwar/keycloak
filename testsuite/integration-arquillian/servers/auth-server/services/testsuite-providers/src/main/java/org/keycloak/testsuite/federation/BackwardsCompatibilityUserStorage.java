@@ -303,6 +303,11 @@ public class BackwardsCompatibilityUserStorage implements UserLookupProvider, Us
     }
 
     @Override
+    public UserModel getUserByPhoneNumber(String phoneNumber, RealmModel realm) {
+        throw new RuntimeException("!!!!!UNSUPPORTED");
+    }
+
+    @Override
     public UserModel addUser(RealmModel realm, String username) {
         users.put(translateUserName(username), new MyUser(username));
         return createUser(realm, username);

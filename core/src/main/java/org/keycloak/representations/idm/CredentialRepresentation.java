@@ -28,6 +28,8 @@ public class CredentialRepresentation {
     public static final String PASSWORD = "password";
     public static final String TOTP = "totp";
     public static final String HOTP = "hotp";
+    public static final String SOTP = "sotp";
+    public static final String EOTP = "eotp";
     public static final String KERBEROS = "kerberos";
 
     private String id;

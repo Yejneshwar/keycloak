@@ -83,6 +83,10 @@ public interface Errors {
     String IDENTITY_PROVIDER_LOGIN_FAILURE = "identity_provider_login_failure";
     String IDENTITY_PROVIDER_ERROR = "identity_provider_error";
 
+    String SMS_SEND_FAILED = "sms_send_failed";
+    String INVALID_PHONE_NUMBER = "invalid_phone_number";
+
+
     String PASSWORD_CONFIRM_ERROR = "password_confirm_error";
     String PASSWORD_MISSING = "password_missing";
     String PASSWORD_REJECTED = "password_rejected";

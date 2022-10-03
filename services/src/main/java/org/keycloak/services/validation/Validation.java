@@ -32,9 +32,13 @@ public class Validation {
     public static final String FIELD_USERNAME = "username";
     public static final String FIELD_OTP_CODE = "totp";
     public static final String FIELD_OTP_LABEL = "userLabel";
+    public static final String FIELD_PHONE_NUMBER_LOCALE = "phoneNumberLocale";
+    public static final String FIELD_PHONE_NUMBER = "phoneNumber";
 
     // Actually allow same emails like angular. See ValidationTest.testEmailValidation()
     private static final Pattern EMAIL_PATTERN = Pattern.compile("[a-zA-Z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*");
+    private static final Pattern EMAIL_DOMAIN_PATTERN = Pattern.compile("(?<=@)[a-z.]+(?<!\\.com|\\.org|\\.co\\.[a-z]{2}|\\.gov\\.[a-z]{2}|\\.edu\\.[a-z]{2}|\\.com\\.[a-z]{2})(?=\\.com$|\\.org$|\\.co\\.[a-z]{2}$|\\.edu\\.[a-z]{2}$|\\.gov\\.[a-z]{2}$|\\.com\\.[a-z]{2}$)");
+    // private static final Pattern TOP_LEVEL_DOMAIN_PATTERN = Pattern.compile("((?<!(\\.org|\\.com))(\\.co\\.[a-z]{2}$)|(\\.gov\\.[a-z]{2}$)|(\\.edu\\.[a-z]{2}$))|((?<!(\\.co.[a-z]{2})|(\\.gov.[a-z]{2})|(\\.edu.[a-z]{2})|(\\.co))((?<!\\.org)\\.com$|(?<!\\.com)\\.org$))");
     private static final Pattern USERNAME_PATTERN = Pattern.compile("^[\\p{IsLatin}|\\p{IsCommon}]+$");
 
     private static void addError(List<FormMessage> errors, String field, String message, Object... parameters){

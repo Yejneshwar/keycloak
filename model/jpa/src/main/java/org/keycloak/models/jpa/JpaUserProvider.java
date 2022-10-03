@@ -539,6 +539,16 @@ public class JpaUserProvider implements UserProvider.Streams, UserCredentialStor
         return new UserAdapter(session, realm, em, results.get(0));
     }
 
+    @Override
+    public UserModel getUserByPhoneNumber(RealmModel realm, String phoneNumber) {
+        TypedQuery<UserEntity> query = em.createNamedQuery("getRealmUserByPhoneNumber", UserEntity.class);
+        query.setParameter("phoneNumber", phoneNumber.toUpperCase());
+        query.setParameter("realmId", realm.getId());
+        List<UserEntity> results = query.getResultList();
+        if (results.size() == 0) return null;
+        return new UserAdapter(session, realm, em, results.get(0));
+    }
+
      @Override
     public void close() {
     }

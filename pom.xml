@@ -287,6 +287,7 @@
         <module>adapters</module>
         <module>authz</module>
         <module>misc</module>
+        <module>validation-utils</module>
     </modules>
 
     <dependencyManagement>
@@ -1387,6 +1388,7 @@
                 <version>${project.version}</version>
             </dependency>
 
+
             <!-- Authorization -->
             <dependency>
                 <groupId>org.keycloak</groupId>
@@ -1624,6 +1626,22 @@
                 <artifactId>keycloak-client-cli-dist</artifactId>
                 <version>${project.version}</version>
                 <type>zip</type>
+            </dependency>
+            <!--validation-utils-->
+            <!-- <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-validation-utils</artifactId>
+                <version>${project.version}</version>
+            </dependency> -->
+            <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-validation-utils-libphonenumber</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-validation-utils-phone-region-mapper</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <!-- webauthn support -->
             <dependency>

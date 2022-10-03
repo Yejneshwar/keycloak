@@ -166,6 +166,9 @@ public interface RealmModel extends RoleContainerModel {
     void setFailureFactor(int failureFactor);
     //--- end brute force settings
 
+    boolean isVerifyPhoneNumber();
+
+    void setVerifyPhoneNumber(boolean verifyPhoneNumber);
 
     boolean isVerifyEmail();
 
@@ -289,6 +292,12 @@ public interface RealmModel extends RoleContainerModel {
 
     OTPPolicy getOTPPolicy();
     void setOTPPolicy(OTPPolicy policy);
+
+    OTPPolicy getSmsOTPPolicy();
+    void setSmsOTPPolicy(OTPPolicy policy);
+
+    // EmailPolicy getEmailPolicy();
+    // void setEmailPolicy(EmailPolicy policy);
 
     /**
      * @return  WebAuthn policy for 2-factor authentication

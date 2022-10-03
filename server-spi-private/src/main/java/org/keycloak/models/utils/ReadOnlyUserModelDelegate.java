@@ -107,6 +107,21 @@ public class ReadOnlyUserModelDelegate extends UserModelDelegate {
     }
 
     @Override
+    public void setPhoneNumberLocale(String phoneNumberLocale) {
+        throw readOnlyException("phoneNumberLocale");
+    }
+
+    @Override
+    public void setPhoneNumber(String phoneNumber) {
+        throw readOnlyException("phoneNumber");
+    }
+
+    @Override
+    public void setPhoneNumberVerified(boolean phoneNumberVerified) {
+        throw readOnlyException("phoneNumberVerified");
+    }    
+
+    @Override
     public void deleteRoleMapping(RoleModel role) {
         throw readOnlyException("role mapping for role " + role.getName());
     }

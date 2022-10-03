@@ -15,6 +15,12 @@
  * limitations under the License.
  */
 
+
+/*TODO:
+* @param phoneNumberLocale a value conained on phone number country code
+* @param phoneNumber a value contained in phone number
+* @param phoneNumberVerified whether the phone number has been verified
+*/
 package org.keycloak.admin.client.resource;
 
 import org.keycloak.representations.idm.UserRepresentation;

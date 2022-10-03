@@ -143,6 +143,25 @@ public class SerializedBrokeredIdentityContext implements UpdateProfileContext {
     public void setLastName(String lastName) {
         setSingleAttribute(UserModel.LAST_NAME, lastName);
     }
+    
+    @Override
+    public String getPhoneNumberLocale() {
+        return getFirstAttribute(UserModel.PHONE_NUMBER_LOCALE);
+    }
+
+    @Override
+    public void setPhoneNumberLocale(String phoneNumberLocale) {
+        setSingleAttribute(UserModel.PHONE_NUMBER_LOCALE, phoneNumberLocale);
+    }
+    @Override
+    public String getPhoneNumber() {
+        return getFirstAttribute(UserModel.PHONE_NUMBER);
+    }
+
+    @Override
+    public void setPhoneNumber(String phoneNumber) {
+        setSingleAttribute(UserModel.PHONE_NUMBER, phoneNumber);
+    }
 
     public String getBrokerSessionId() {
         return brokerSessionId;

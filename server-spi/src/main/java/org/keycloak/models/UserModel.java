@@ -38,6 +38,9 @@ public interface UserModel extends RoleMapperModel {
     String LAST_NAME = "lastName";
     String EMAIL = "email";
     String EMAIL_VERIFIED = "emailVerified";
+    String PHONE_NUMBER_LOCALE = "phoneNumberLocale";   
+    String PHONE_NUMBER = "phoneNumber";
+    String PHONE_NUMBER_VERIFIED = "phoneNumberVerified";
     String LOCALE = "locale";
     String ENABLED = "enabled";
     String IDP_ALIAS = "keycloak.session.realm.users.query.idp_alias";
@@ -51,15 +54,18 @@ public interface UserModel extends RoleMapperModel {
     Comparator<UserModel> COMPARE_BY_USERNAME = Comparator.comparing(UserModel::getUsername, String.CASE_INSENSITIVE_ORDER);
 
     public static class SearchableFields {
-        public static final SearchableModelField<UserModel> ID              = new SearchableModelField<>("id", String.class);
-        public static final SearchableModelField<UserModel> REALM_ID        = new SearchableModelField<>("realmId", String.class);
-        public static final SearchableModelField<UserModel> USERNAME        = new SearchableModelField<>("username", String.class);
-        public static final SearchableModelField<UserModel> FIRST_NAME      = new SearchableModelField<>("firstName", String.class);
-        public static final SearchableModelField<UserModel> LAST_NAME       = new SearchableModelField<>("lastName", String.class);
-        public static final SearchableModelField<UserModel> EMAIL           = new SearchableModelField<>("email", String.class);
-        public static final SearchableModelField<UserModel> ENABLED         = new SearchableModelField<>("enabled", Boolean.class);
-        public static final SearchableModelField<UserModel> EMAIL_VERIFIED  = new SearchableModelField<>("emailVerified", Boolean.class);
-        public static final SearchableModelField<UserModel> FEDERATION_LINK = new SearchableModelField<>("federationLink", String.class);
+        public static final SearchableModelField<UserModel> ID                      = new SearchableModelField<>("id", String.class);
+        public static final SearchableModelField<UserModel> REALM_ID                = new SearchableModelField<>("realmId", String.class);
+        public static final SearchableModelField<UserModel> USERNAME                = new SearchableModelField<>("username", String.class);
+        public static final SearchableModelField<UserModel> FIRST_NAME              = new SearchableModelField<>("firstName", String.class);
+        public static final SearchableModelField<UserModel> LAST_NAME               = new SearchableModelField<>("lastName", String.class);
+        public static final SearchableModelField<UserModel> EMAIL                   = new SearchableModelField<>("email", String.class);
+        public static final SearchableModelField<UserModel> PHONE_NUMBER            = new SearchableModelField<>("phoneNumber", String.class);
+        public static final SearchableModelField<UserModel> PHONE_NUMBER_LOCALE     = new SearchableModelField<>("phoneNumberLocale", String.class);
+        public static final SearchableModelField<UserModel> ENABLED                 = new SearchableModelField<>("enabled", Boolean.class);
+        public static final SearchableModelField<UserModel> EMAIL_VERIFIED          = new SearchableModelField<>("emailVerified", Boolean.class);
+        public static final SearchableModelField<UserModel> PHONE_NUMBER_VERIFIED   = new SearchableModelField<>("phoneNumberVerified", Boolean.class);
+        public static final SearchableModelField<UserModel> FEDERATION_LINK         = new SearchableModelField<>("federationLink", String.class);
 
         /**
          * This field can only searched either for users coming from an IDP, then the operand is (idp_alias),
@@ -217,6 +223,18 @@ public interface UserModel extends RoleMapperModel {
 
     void setEmailVerified(boolean verified);
 
+    String getPhoneNumberLocale();
+
+    void setPhoneNumberLocale(String phoneNumberLocale);
+
+    String getPhoneNumber();
+
+    void setPhoneNumber(String phoneNumber);
+
+    boolean isPhoneNumberVerified();
+
+    void setPhoneNumberVerified(boolean verified);
+
     /**
      * @deprecated Use {@link #getGroupsStream() getGroupsStream} instead.
      */
@@ -311,7 +329,11 @@ public interface UserModel extends RoleMapperModel {
         UPDATE_PASSWORD,
         TERMS_AND_CONDITIONS,
         VERIFY_PROFILE,
-        UPDATE_EMAIL
+        UPDATE_EMAIL,
+        VERIFY_PHONE_NUMBER,
+        CONFIGURE_SOTP,
+        CONFIGURE_EOTP,
+        UPDATE_PHONE_NUMBER
     }
 
     /**

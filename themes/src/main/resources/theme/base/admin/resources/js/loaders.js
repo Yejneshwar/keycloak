@@ -152,6 +152,23 @@ module.factory('UserLoader', function(Loader, User, $route, $q) {
     });
 });
 
+module.factory('UserBulkUpdateLoader', function(Loader, UserBulkUpdate, $route, $q) {
+    console.log($route)
+    return Loader.get(UserBulkUpdate,function() {
+        return {
+            realm : $route.current.params.realm
+        }
+    });
+});
+
+module.factory('UserCountLoader', function(Loader, UserCount, $route, $q) {
+    return Loader.query(UserCount, function() {
+        return {
+            realm : $route.current.params.realm
+        }
+    });
+});
+
 module.factory('ComponentLoader', function(Loader, Components, $route, $q) {
     return Loader.get(Components, function() {
         return {

@@ -44,6 +44,9 @@ import javax.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.List;
 
+import org.keycloak.models.Constants;
+import org.keycloak.common.util.Time;
+
 /**
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
@@ -65,12 +68,37 @@ public class OTPFormAuthenticator extends AbstractUsernameFormAuthenticator impl
 
     @Override
     public void authenticate(AuthenticationFlowContext context) {
+        if (!Validation.isBlank(context.getAuthenticationSession().getAuthNote(Constants.VERIFY_PHONE_NUMBER_CODE))){
+            Response challengeResponse = challenge(context, null);
+            context.challenge(challengeResponse);
+            return;
+        }
+        System.out.println("otp auth");
+        Boolean config = context.getSession().userCredentialManager().getStoredCredentialsByTypeStream(context.getRealm(), context.getUser(), OTPCredentialModel.TYPE)
+                        .filter(storedCredential -> OTPCredentialModel.createFromCredentialModel(storedCredential).getOTPCredentialData().getSubType().equals(OTPCredentialModel.SOTP))
+                        .count() == 1;
+        if (config) sendVerifyPhoneNumber(context.getSession(),context.getUser(),context.getAuthenticationSession());
         Response challengeResponse = challenge(context, null);
         context.challenge(challengeResponse);
     }
 
 
     public void validateOTP(AuthenticationFlowContext context) {
+        System.out.println("otp action");
+        
+        MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
+        System.out.println(formData.getFirst("resend"));
+        if("resend".equals(formData.getFirst("resend"))){
+            context.getAuthenticationSession().removeAuthNote(Constants.VERIFY_PHONE_NUMBER_CODE);
+            authenticate(context);
+            return;
+        }
+        //this is to prevent from inserting false values somehow on the input field
+        else if(!Validation.isBlank(formData.getFirst("resend"))){
+            Response challengeResponse = challenge(context, null);
+            context.challenge(challengeResponse);
+            return;
+        }
         MultivaluedMap<String, String> inputData = context.getHttpRequest().getDecodedFormParameters();
 
         String otp = inputData.getFirst("otp");
@@ -92,9 +120,12 @@ public class OTPFormAuthenticator extends AbstractUsernameFormAuthenticator impl
             return;
         }
 
-        if (otp == null) {
-            Response challengeResponse = challenge(context,null);
-            context.challenge(challengeResponse);
+        if (Validation.isBlank(otp) || otp == null) {
+            System.out.println("null otp");
+            context.getEvent().user(userModel)
+                    .error(Errors.INVALID_USER_CREDENTIALS);
+            Response challengeResponse = challenge(context, Messages.INVALID_TOTP, Validation.FIELD_OTP_CODE);
+            context.failureChallenge(AuthenticationFlowError.INVALID_CREDENTIALS, challengeResponse);
             return;
         }
         boolean valid = context.getUser().credentialManager().isValid(new UserCredentialModel(credentialId, getCredentialProvider(context.getSession()).getType(), otp));
@@ -154,5 +185,21 @@ public class OTPFormAuthenticator extends AbstractUsernameFormAuthenticator impl
     public OTPCredentialProvider getCredentialProvider(KeycloakSession session) {
         return (OTPCredentialProvider)session.getProvider(CredentialProvider.class, OTPCredentialProviderFactory.PROVIDER_ID);
     }
+
+    private void sendVerifyPhoneNumber(KeycloakSession session, UserModel user, AuthenticationSessionModel authSession) throws IllegalArgumentException {
+        System.out.println("This one");
+        // List<CredentialModel> credentials = session.userCredentialManager().getStoredCredentialsByTypeStream(session.getContext().getRealm(), user, OTPCredentialModel.TYPE)
+        //                     .filter(storedCredential -> OTPCredentialModel.createFromCredentialModel(storedCredential).getOTPCredentialData().getSubType().equals(OTPCredentialModel.SOTP))
+        //                     .collect(Collectors.toList());
+        int validityInSecs = 30;
+        int absoluteExpirationInSecs = Time.currentTime() + validityInSecs;
+
+        // String code = RandomString.randomCode(6);
+        String code = "123456";
+        authSession.setAuthNote(Constants.VERIFY_PHONE_NUMBER_CODE, code);
+        authSession.setAuthNote(Constants.VERIFY_PHONE_NUMBER_TIME_SET_KEY, Integer.toString(absoluteExpirationInSecs));
+        System.out.println("CODE : " + code);
+    }
+
 
 }

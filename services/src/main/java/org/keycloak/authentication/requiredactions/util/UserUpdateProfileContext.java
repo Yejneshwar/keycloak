@@ -94,6 +94,26 @@ public class UserUpdateProfileContext implements UpdateProfileContext {
     }
 
     @Override
+    public String getPhoneNumberLocale() {
+        return user.getPhoneNumberLocale();
+    }
+
+    @Override
+    public void setPhoneNumberLocale(String phoneNumberLocale) {
+        user.setPhoneNumberLocale(phoneNumberLocale);
+    }
+
+    @Override
+    public String getPhoneNumber() {
+        return user.getPhoneNumber();
+    }
+
+    @Override
+    public void setPhoneNumber(String phoneNumber) {
+        user.setPhoneNumber(phoneNumber);
+    }
+
+    @Override
     public Map<String, List<String>> getAttributes() {
         return user.getAttributes();
     }

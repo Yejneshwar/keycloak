@@ -472,6 +472,115 @@ module.controller('RealmOtpPolicyCtrl', function($scope, Current, Realm, realm, 
     genericRealmUpdate($scope, Current, Realm, realm, serverInfo, $http, $route, Dialog, Notifications, "/realms/" + realm.realm + "/authentication/otp-policy");
 });
 
+module.controller('RealmEmailPolicyCtrl', function($scope, User,Current, Realm, realm, serverInfo, $http, $route, Dialog, Notifications,UserBulkUpdate) {
+    $scope.optionsDigits = [ 6, 8 ];
+    $scope.realm = realm;
+
+    $scope.addDomain = function(assign) {
+        if($scope.realm.emailDomainsAllowed.indexOf($scope.newDomain.value) === -1 && assign == "allow") {
+            index = $scope.realm.emailDomainsBlocked.indexOf($scope.newDomain.value)
+            if (index !== -1) {
+                $scope.realm.emailDomainsBlocked.splice(index,1)
+            }
+            $scope.realm.emailDomainsAllowed.push($scope.newDomain.value)
+        }
+        else if($scope.realm.emailDomainsBlocked.indexOf($scope.newDomain.value) === -1 && assign == "block") {
+            index = $scope.realm.emailDomainsAllowed.indexOf($scope.newDomain.value)
+            if (index !== -1) {
+                $scope.realm.emailDomainsAllowed.splice(index,1)
+            }
+            $scope.realm.emailDomainsBlocked.push($scope.newDomain.value)
+        }
+        delete $scope.newDomain;
+    }
+
+    $scope.removeDomain = function(index,assign) {
+        if (assign == "allow"){
+            $scope.realm.emailDomainsAllowed.splice(index,1)
+        }
+        else if (assign == "block"){
+            $scope.realm.emailDomainsBlocked.splice(index,1)
+        }
+    }
+
+    $scope.addTopLevelDomain = function(assign) {
+        if($scope.realm.topLevelDomainsAllowed.indexOf($scope.newDomain.value) === -1 && assign == "allow") {
+            index = $scope.realm.topLevelDomainsBlocked.indexOf($scope.newDomain.value)
+            if (index !== -1) {
+                $scope.realm.topLevelDomainsBlocked.splice(index,1)
+            }
+            $scope.realm.topLevelDomainsAllowed.push($scope.newDomain.value)
+        }
+        else if($scope.realm.topLevelDomainsBlocked.indexOf($scope.newDomain.value) === -1 && assign == "block") {
+            index = $scope.realm.topLevelDomainsAllowed.indexOf($scope.newDomain.value)
+            if (index !== -1) {
+                $scope.realm.topLevelDomainsAllowed.splice(index,1)
+            }
+            $scope.realm.topLevelDomainsBlocked.push($scope.newDomain.value)
+        }
+        delete $scope.newDomain;
+    }
+
+    $scope.removeTopLevelDomain = function(index,assign) {
+        if (assign == "allow"){
+            $scope.realm.topLevelDomainsAllowed.splice(index,1)
+        }
+        else if (assign == "block"){
+            $scope.realm.topLevelDomainsBlocked.splice(index,1)
+        }
+    }
+
+    // all of the code for the below function can be moved to server side, but better to tax the client than the server in this case.
+    // to do : reduce requests.
+     $scope.disableUsers =  function() {
+         console.log(realm)
+
+        //  UserCount.query({realm:realm.realm},function(data){
+        //      console.log(data)
+        //  })
+        // if ($scope.realm.enableEmailPolicies){
+            const regex = /(?<=@)[a-z.]+(?<!\.com|\.org|\.co\.[a-z]{2}|\.gov\.[a-z]{2}|\.edu\.[a-z]{2}|\.com\.[a-z]{2})(?=\.com$|\.org$|\.co\.[a-z]{2}$|\.edu\.[a-z]{2}$|\.gov\.[a-z]{2}$|\.com\.[a-z]{2}$)/gm;
+            $scope.realm.emailDomainsAllowed.forEach((domain)=>{
+                User.query({realm:realm.realm,min:0,max:-1,search:domain},(data)=>{
+                    // console.table(data)
+                    let m;
+                    let bulkUsers = new Array(0);
+                    data.forEach((user)=>{
+                        // console.log(user)
+                        while ((m = regex.exec(user.email)) !== null) {
+                            // This is necessary to avoid infinite loops with zero-width matches
+                            if (m.index === regex.lastIndex) {
+                                regex.lastIndex++;
+                            }
+                            //<-------THIS PLACE
+                            if(m.length == 0 || m.length == 2){
+                                Notifications.warn("SOMETHING IS WRONG!, Search for comment '<-------THIS PLACE' in source")
+                            }
+                            // The result can be accessed through the `m`-variable.
+                            m.forEach((match, groupIndex) => {
+                                // console.log(user.id)
+                                user.enabled = false
+                                // console.log(user.requiredActions)
+                                if (!user.requiredActions.includes("UPDATE_PROFILE",0)){
+                                    user.requiredActions.push("UPDATE_PROFILE")
+                                }
+                            bulkUsers.push(user)
+                            });
+                        }
+                    })
+                    UserBulkUpdate.update({realm:realm.realm},bulkUsers,function(){
+                        Notifications.warn("Done! existing users with matching policies have been disabled")
+                    });
+                })
+                
+            })
+        // }
+
+     }
+
+    genericRealmUpdate($scope, Current, Realm, realm, serverInfo, $http, $route, Dialog, Notifications, "/realms/" + realm.realm + "/authentication/email-policy");
+});
+
 module.controller('RealmWebAuthnPolicyCtrl', function ($scope, Current, Realm, realm, serverInfo, $http, $route, $location, Dialog, Notifications) {
 
     $scope.deleteAcceptableAaguid = function(index) {

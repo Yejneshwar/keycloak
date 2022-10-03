@@ -157,6 +157,8 @@ public abstract class AbstractResourceService {
             setFirstName(user.getFirstName());
             setLastName(user.getLastName());
             setEmail(user.getEmail());
+            setPhoneNumberLocale(user.getPhoneNumberLocale());
+            setPhoneNumber(user.getPhoneNumber());
         }
 
         Permission(PermissionTicket ticket, AuthorizationProvider provider) {

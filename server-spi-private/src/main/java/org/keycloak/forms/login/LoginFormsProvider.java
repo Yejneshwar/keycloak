@@ -66,6 +66,10 @@ public interface LoginFormsProvider extends Provider {
 
     Response createLoginTotp();
 
+    Response createLoginSotp();
+
+    Response createLoginEotp();
+
     Response createLoginRecoveryAuthnCode();
 
     Response createLoginWebAuthn();
@@ -75,6 +79,8 @@ public interface LoginFormsProvider extends Provider {
     Response createInfoPage();
 
     Response createUpdateProfilePage();
+
+    Response createUpdatePhoneNumberPage();
 
     Response createIdpLinkConfirmLinkPage();
 

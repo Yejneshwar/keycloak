@@ -31,6 +31,7 @@ import org.keycloak.models.IdentityProviderMapperModel;
 import org.keycloak.models.IdentityProviderModel;
 import org.keycloak.models.OAuth2DeviceConfig;
 import org.keycloak.models.OTPPolicy;
+import org.keycloak.models.EmailPolicy;
 import org.keycloak.models.ParConfig;
 import org.keycloak.models.PasswordPolicy;
 import org.keycloak.models.RealmModel;
@@ -66,6 +67,7 @@ public class CachedRealm extends AbstractExtendableRevisioned {
     protected boolean registrationEmailAsUsername;
     protected boolean rememberMe;
     protected boolean verifyEmail;
+    protected boolean verifyPhoneNumber;
     protected boolean loginWithEmailAllowed;
     protected boolean duplicateEmailsAllowed;
     protected boolean resetPasswordAllowed;
@@ -110,6 +112,8 @@ public class CachedRealm extends AbstractExtendableRevisioned {
     protected int notBefore;
     protected PasswordPolicy passwordPolicy;
     protected OTPPolicy otpPolicy;
+    protected OTPPolicy smsOtpPolicy;
+    protected EmailPolicy emailPolicy;
     protected WebAuthnPolicy webAuthnPolicy;
     protected WebAuthnPolicy webAuthnPasswordlessPolicy;
 
@@ -186,6 +190,7 @@ public class CachedRealm extends AbstractExtendableRevisioned {
         registrationEmailAsUsername = model.isRegistrationEmailAsUsername();
         rememberMe = model.isRememberMe();
         verifyEmail = model.isVerifyEmail();
+        verifyPhoneNumber = model.isVerifyPhoneNumber();
         loginWithEmailAllowed = model.isLoginWithEmailAllowed();
         duplicateEmailsAllowed = model.isDuplicateEmailsAllowed();
         resetPasswordAllowed = model.isResetPasswordAllowed();
@@ -230,6 +235,8 @@ public class CachedRealm extends AbstractExtendableRevisioned {
         notBefore = model.getNotBefore();
         passwordPolicy = model.getPasswordPolicy();
         otpPolicy = model.getOTPPolicy();
+        smsOtpPolicy = model.getSmsOTPPolicy();
+        // emailPolicy = model.getEmailPolicy();
         webAuthnPolicy = model.getWebAuthnPolicy();
         webAuthnPasswordlessPolicy = model.getWebAuthnPolicyPasswordless();
 
@@ -400,6 +407,10 @@ public class CachedRealm extends AbstractExtendableRevisioned {
 
     public boolean isVerifyEmail() {
         return verifyEmail;
+    }
+    
+    public boolean isVerifyPhoneNumber() {
+        return verifyPhoneNumber;
     }
     
     public boolean isLoginWithEmailAllowed() {
@@ -651,6 +662,14 @@ public class CachedRealm extends AbstractExtendableRevisioned {
         return otpPolicy;
     }
 
+    public OTPPolicy getSmsOtpPolicy() {
+        return smsOtpPolicy;
+    }
+
+    // public EmailPolicy getEmailPolicy() {
+    //     return emailPolicy;
+    // }
+    
     public WebAuthnPolicy getWebAuthnPolicy() {
         return webAuthnPolicy;
     }

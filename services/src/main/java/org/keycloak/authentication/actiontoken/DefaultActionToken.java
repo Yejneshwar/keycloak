@@ -42,9 +42,15 @@ public class DefaultActionToken extends DefaultActionTokenKey implements ActionT
 
     public static final String JSON_FIELD_AUTHENTICATION_SESSION_ID = "asid";
     public static final String JSON_FIELD_EMAIL = "eml";
+    public static final String JSON_FIELD_PHONE_NUMBER_LOCALE = "phl";
+    public static final String JSON_FIELD_PHONE_NUMBER = "ph";
 
     @JsonProperty(value = JSON_FIELD_EMAIL)
     private String email;
+    @JsonProperty(value = JSON_FIELD_PHONE_NUMBER_LOCALE)
+    private String phoneNumberLocale;
+    @JsonProperty(value = JSON_FIELD_PHONE_NUMBER)
+    private String phoneNumber;
 
     public static final Predicate<DefaultActionTokenKey> ACTION_TOKEN_BASIC_CHECKS = t -> {
         if (t.getActionVerificationNonce() == null) {
@@ -136,6 +142,22 @@ public class DefaultActionToken extends DefaultActionTokenKey implements ActionT
 
     public String getEmail() {
         return email;
+    }
+
+    public void setPhoneNumberLocale(String phoneNumberLocale) {
+        this.phoneNumberLocale = phoneNumberLocale;
+    }
+
+    public String getPhoneNumberLocale() {
+        return phoneNumberLocale;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     /**

@@ -34,6 +34,10 @@ public class Templates {
                 return "login-password.ftl";
             case LOGIN_TOTP:
                 return "login-otp.ftl";
+            case LOGIN_CONFIG_SOTP:
+                return "login-config-sotp.ftl";
+            case LOGIN_CONFIG_EOTP:
+                return "login-config-eotp.ftl";
             case LOGIN_CONFIG_TOTP:
                 return "login-config-totp.ftl";
             case LOGIN_RECOVERY_AUTHN_CODES_INPUT:
@@ -70,6 +74,8 @@ public class Templates {
                 return "webauthn-error.ftl";
             case LOGIN_UPDATE_PROFILE:
                 return "login-update-profile.ftl";
+            case LOGIN_UPDATE_PHONE_NUMBER:
+                return "login-update-phone-number.ftl";
             case UPDATE_EMAIL:
                 return "update-email.ftl";
             case CODE:

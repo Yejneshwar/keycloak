@@ -154,6 +154,11 @@ public class PassThroughFederatedUserStorageProvider implements
         return result.isPresent() ? getUserModel(realm) : null;
     }
 
+    @Override
+    public UserModel getUserByPhoneNumber(String phoneNumber, RealmModel realm) {
+        return null;
+    }
+
     private UserModel getUserModel(final RealmModel realm) {
         return new AbstractUserAdapterFederatedStorage.Streams(session, realm, component) {
             @Override

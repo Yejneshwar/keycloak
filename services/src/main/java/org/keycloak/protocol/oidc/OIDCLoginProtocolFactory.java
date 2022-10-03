@@ -80,6 +80,7 @@ public class OIDCLoginProtocolFactory extends AbstractLoginProtocolFactory {
     public static final String FULL_NAME = "full name";
     public static final String LOCALE = "locale";
     public static final String ADDRESS = "address";
+    public static final String PHONE_NUMBER_LOCALE = "phone number locale";
     public static final String PHONE_NUMBER = "phone number";
     public static final String PHONE_NUMBER_VERIFIED = "phone number verified";
     public static final String REALM_ROLES = "realm roles";
@@ -157,6 +158,18 @@ public class OIDCLoginProtocolFactory extends AbstractLoginProtocolFactory {
                 true, true);
         builtins.put(FAMILY_NAME, model);
 
+        model = UserPropertyMapper.createClaimMapper(PHONE_NUMBER_LOCALE,
+                "phoneNumberLocale",
+                "phone_number_locale", "String",
+                true, true);
+        builtins.put(PHONE_NUMBER_LOCALE, model);
+
+        model = UserPropertyMapper.createClaimMapper(PHONE_NUMBER,
+                "phoneNumber",
+                "phone_number", "String",
+                true, true);
+        builtins.put(PHONE_NUMBER, model);
+
         createUserAttributeMapper(MIDDLE_NAME, "middleName", IDToken.MIDDLE_NAME, "String");
         createUserAttributeMapper(NICKNAME, "nickname", IDToken.NICKNAME, "String");
         createUserAttributeMapper(PROFILE_CLAIM, "profile", IDToken.PROFILE, "String");
@@ -176,6 +189,12 @@ public class OIDCLoginProtocolFactory extends AbstractLoginProtocolFactory {
                 "email_verified", "boolean",
                 true, true);
         builtins.put(EMAIL_VERIFIED, model);
+
+        model = UserPropertyMapper.createClaimMapper(PHONE_NUMBER_VERIFIED,
+                "phoneNumberVerified",
+                "phone_number_verified", "boolean",
+                true, true);
+        builtins.put(PHONE_NUMBER_VERIFIED, model);
 
         ProtocolMapperModel fullName = FullNameMapper.create(FULL_NAME, true, true, true);
         builtins.put(FULL_NAME, fullName);

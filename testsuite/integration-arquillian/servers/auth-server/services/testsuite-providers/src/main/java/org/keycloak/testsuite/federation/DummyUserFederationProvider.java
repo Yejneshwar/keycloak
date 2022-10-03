@@ -96,6 +96,11 @@ public class DummyUserFederationProvider implements UserStorageProvider,
     }
 
     @Override
+    public UserModel getUserByPhoneNumber(String phoneNumber, RealmModel realm) {
+        return null;
+    }
+
+    @Override
     public void preRemove(RealmModel realm) {
 
     }

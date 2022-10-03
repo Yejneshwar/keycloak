@@ -603,6 +603,37 @@ module.factory('User', function($resource) {
     });
 });
 
+module.factory('UserBulkUpdate', function($resource) {
+    return $resource(authUrl + '/admin/realms/:realm/user-bulk-update', {
+        realm : '@realm'
+    },{
+        update : {
+            isArray: true,
+            method : 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    });
+});
+
+module.factory('UserCount', function($resource) {
+    return $resource(authUrl + '/admin/realms/:realm/users/count', {
+            realm : '@realm'
+        },
+        {
+            query: {
+                isArray: false,
+                method: 'GET',
+                params: {},
+                transformResponse: function (data) {
+                    // console.log(data)
+                    return {data}
+                }
+            }
+        });
+});
+
 module.service('UserSearchState', function() {
     this.isFirstSearch = true;
     this.query = {

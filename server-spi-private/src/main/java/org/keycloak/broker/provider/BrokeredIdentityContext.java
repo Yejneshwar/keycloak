@@ -40,6 +40,8 @@ public class BrokeredIdentityContext {
     private String username;
     private String modelUsername;
     private String email;
+    private String phoneNumberLocale;
+    private String phoneNumber;
     private String firstName;
     private String lastName;
     private String brokerSessionId;
@@ -200,6 +202,22 @@ public class BrokeredIdentityContext {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getPhoneNumberLocale() {
+        return phoneNumberLocale;
+    }
+
+    public void setPhoneNumberLocale(String phoneNumberLocale) {
+        this.phoneNumberLocale = phoneNumberLocale;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public AuthenticationSessionModel getAuthenticationSession() {

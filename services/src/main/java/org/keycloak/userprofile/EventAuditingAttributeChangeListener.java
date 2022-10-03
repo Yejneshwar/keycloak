@@ -55,6 +55,10 @@ public class EventAuditingAttributeChangeListener implements AttributeChangeList
             event.detail(Details.PREVIOUS_LAST_NAME, oldValue).detail(Details.UPDATED_LAST_NAME, userModel.getLastName());
         } else if (attributeName.equals(UserModel.EMAIL)) {
             event.detail(Details.PREVIOUS_EMAIL, oldValue).detail(Details.UPDATED_EMAIL, userModel.getEmail());
+        }else if (attributeName.equals(UserModel.PHONE_NUMBER_LOCALE)) {
+            event.detail(Details.PREVIOUS_PHONE_NUMBER_LOCALE, oldValue).detail(Details.UPDATED_PHONE_NUMBER_LOCALE, userModel.getPhoneNumberLocale());
+        }else if (attributeName.equals(UserModel.PHONE_NUMBER)) {
+            event.detail(Details.PREVIOUS_PHONE_NUMBER, oldValue).detail(Details.UPDATED_PHONE_NUMBER, userModel.getPhoneNumber());
         } else {
             event.detail(Details.PREF_PREVIOUS + attributeName, oldValue).detail(Details.PREF_UPDATED + attributeName, userModel.getAttributeStream(attributeName));
         }

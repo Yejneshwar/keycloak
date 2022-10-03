@@ -136,6 +136,27 @@ public class LDAPWritesOnlyUserModelDelegate extends UserModelDelegate {
         }
     }
 
+    @Override
+    public void setPhoneNumberLocale(String phoneNumberLocale) {
+        if (!isAttributeUpdatedInLDAP(UserModel.PHONE_NUMBER_LOCALE)) {
+            super.setPhoneNumberLocale(phoneNumberLocale);
+        }
+    }
+
+    @Override
+    public void setPhoneNumber(String phoneNumber) {
+        if (!isAttributeUpdatedInLDAP(UserModel.PHONE_NUMBER)) {
+            super.setPhoneNumber(phoneNumber);
+        }
+    }
+
+    @Override
+    public void setPhoneNumberVerified(boolean verified) {
+        if (!isAttributeUpdatedInLDAP("phoneNumberVerified")) {
+            super.setPhoneNumberVerified(verified);
+        }
+    }
+
     // Checks if attribute was updated in LDAP in this transaction
     protected boolean isAttributeUpdatedInLDAP(String attributeName) {
         LDAPTransaction transaction = provider.getUserManager().getTransaction(getId());

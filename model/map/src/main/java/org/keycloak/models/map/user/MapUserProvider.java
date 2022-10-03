@@ -72,6 +72,9 @@ import java.util.stream.Stream;
 import static org.keycloak.common.util.StackUtil.getShortStackTrace;
 import static org.keycloak.models.UserModel.EMAIL;
 import static org.keycloak.models.UserModel.EMAIL_VERIFIED;
+import static org.keycloak.models.UserModel.PHONE_NUMBER_LOCALE;
+import static org.keycloak.models.UserModel.PHONE_NUMBER;
+import static org.keycloak.models.UserModel.PHONE_NUMBER_VERIFIED;
 import static org.keycloak.models.UserModel.FIRST_NAME;
 import static org.keycloak.models.UserModel.LAST_NAME;
 import static org.keycloak.models.UserModel.USERNAME;
@@ -104,6 +107,11 @@ public class MapUserProvider implements UserProvider.Streams {
             @Override
             public boolean checkUsernameUniqueness(RealmModel realm, String username) {
                 return getUserByUsername(realm, username) != null;
+            }
+            
+            @Override
+            public boolean checkPhoneNumberUniqueness(RealmModel realm, String phoneNumber) {
+                return getUserByPhoneNumber(phoneNumber, realm) != null;
             }
 
             @Override
@@ -528,6 +536,37 @@ public class MapUserProvider implements UserProvider.Streams {
     }
 
     @Override
+    public UserModel getUserByPhoneNumber(RealmModel realm, String phoneNumber) {
+        LOG.tracef("getUserByPhoneNumber(%s, %s)%s", realm, phoneNumber, getShortStackTrace());
+        DefaultModelCriteria<UserModel> mcb = criteria();
+        mcb = mcb.compare(SearchableFields.REALM_ID, Operator.EQ, realm.getId())
+          .compare(SearchableFields.PHONE_NUMBER, Operator.EQ, phoneNumber);
+
+        List<MapUserEntity> usersWithPhoneNumber = tx.read(withCriteria(mcb))
+                .filter(userEntity -> Objects.equals(userEntity.getPhoneNumber(), phoneNumber))
+                .collect(Collectors.toList());
+        if (usersWithPhoneNumber.isEmpty()) return null;
+        
+        if (usersWithPhoneNumber.size() > 1) {
+            // Realm settings have been changed from allowing duplicate emails to not allowing them
+            // but duplicates haven't been removed.
+            throw new ModelDuplicateException("Multiple users with phone number '" + phoneNumber + "' exist in Keycloak.");
+        }
+
+        MapUserEntity userEntity = usersWithPhoneNumber.get(0);
+        
+        // if (!realm.isDuplicateEmailsAllowed()) {
+        //     if (userEntity.getEmail() != null && !userEntity.getEmail().equals(userEntity.getEmailConstraint())) {
+        //         // Realm settings have been changed from allowing duplicate emails to not allowing them.
+        //         // We need to update the email constraint to reflect this change in the user entities.
+        //         userEntity.setEmailConstraint(userEntity.getEmail());
+        //     }
+        // }
+        
+        return entityToAdapterFunc(realm).apply(userEntity);
+    }
+
+    @Override
     public int getUsersCount(RealmModel realm, boolean includeServiceAccount) {
         LOG.tracef("getUsersCount(%s, %s)%s", realm, includeServiceAccount, getShortStackTrace());
         DefaultModelCriteria<UserModel> mcb = criteria();
@@ -620,6 +659,19 @@ public class MapUserProvider implements UserProvider.Streams {
                 case EMAIL_VERIFIED: {
                     boolean booleanValue = Boolean.parseBoolean(value);
                     criteria = criteria.compare(SearchableFields.EMAIL_VERIFIED, Operator.EQ, booleanValue);
+                    break;
+                }
+                case PHONE_NUMBER_LOCALE: {
+                    criteria = criteria.compare(SearchableFields.PHONE_NUMBER_LOCALE, Operator.ILIKE, searchedString);
+                    break;
+                }
+                case PHONE_NUMBER: {
+                    criteria = criteria.compare(SearchableFields.PHONE_NUMBER, Operator.ILIKE, searchedString);
+                    break;
+                }
+                case PHONE_NUMBER_VERIFIED: {
+                    boolean booleanValue = Boolean.parseBoolean(searchedString);
+                    criteria = criteria.compare(SearchableFields.PHONE_NUMBER_VERIFIED, Operator.EQ, booleanValue);
                     break;
                 }
                 case UserModel.ENABLED: {

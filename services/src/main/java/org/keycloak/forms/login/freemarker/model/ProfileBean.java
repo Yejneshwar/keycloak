@@ -18,11 +18,15 @@ package org.keycloak.forms.login.freemarker.model;
 
 import org.jboss.logging.Logger;
 import org.keycloak.authentication.requiredactions.util.UpdateProfileContext;
+import org.keycloak.util.regionmapper.DataMap;
+import org.keycloak.util.regionmapper.RegionToFlagMapper;
 
 import javax.ws.rs.core.MultivaluedMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.stream.Collectors;
 
 /**
  * @author <a href="mailto:sthorger@redhat.com">Stian Thorgersen</a>
@@ -34,12 +38,18 @@ public class ProfileBean {
 
     private UpdateProfileContext user;
     private MultivaluedMap<String, String> formData;
+    private List<LocaleDataMap> localeData;
+    private String selectedLocale;
 
     private final Map<String, String> attributes = new HashMap<>();
 
     public ProfileBean(UpdateProfileContext user, MultivaluedMap<String, String> formData) {
+        this.selectedLocale = selectedLocale;
         this.user = user;
         this.formData = formData;
+        this.localeData = RegionToFlagMapper.getInstance().getList()
+        .map(LocaleDataMap::new)
+        .collect(Collectors.toList());
 
         Map<String, List<String>> modelAttrs = user.getAttributes();
         if (modelAttrs != null) {
@@ -65,6 +75,14 @@ public class ProfileBean {
 
     }
 
+    public String getSelectedLocale(){
+        return selectedLocale;
+    }
+
+    public List<LocaleDataMap> getLocaleData(){
+        return localeData;
+    }
+
     public boolean isEditUsernameAllowed() {
         return user.isEditUsernameAllowed();
     }
@@ -83,11 +101,52 @@ public class ProfileBean {
         return formData != null ? formData.getFirst("lastName") : user.getLastName();
     }
 
+    public String getPhoneNumberLocale() {
+        return formData != null ? formData.getFirst("phoneNumberLocale") : user.getPhoneNumberLocale();
+    }
+
+    public String getPhoneNumber() {
+        return formData != null ? formData.getFirst("phoneNumber") : user.getPhoneNumber();
+    }
+
     public String getEmail() {
         return formData != null ? formData.getFirst("email") : user.getEmail();
     }
 
     public Map<String, String> getAttributes() {
         return attributes;
+    }
+
+    public static class LocaleDataMap {
+
+        private final String name;
+        private final String ISOName;
+        private final String callingCode;
+        private final String flag;
+
+        public LocaleDataMap(DataMap data) {
+            // System.out.println("Name : " + data.getName());
+            // System.out.println("ISO : " + data.getISOName());
+            // System.out.println("calling : " + data.getCallingCode());
+            
+            this.name = data.getName();
+            this.ISOName = data.getISOName();
+            this.callingCode = data.getCallingCode();
+            this.flag = data.getFlag();
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getISOName() {
+            return ISOName;
+        }
+        public String getCallingCode() {
+            return callingCode;
+        }
+        public String getFlag() {
+            return flag;
+        }
     }
 }

@@ -29,6 +29,8 @@ import org.keycloak.models.UserCredentialModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.models.utils.HmacOTP;
 import org.keycloak.models.utils.TimeBasedOTP;
+import org.keycloak.models.utils.SmsBasedOTP;
+import org.keycloak.models.utils.EmailBasedOTP;
 
 import java.nio.charset.StandardCharsets;
 
@@ -44,6 +46,20 @@ public class OTPCredentialProvider implements CredentialProvider<OTPCredentialMo
     public OTPCredentialProvider(KeycloakSession session) {
         this.session = session;
     }
+
+    // public boolean configuredForAuthenticator(RealmModel realm, UserModel user, String credentialType){
+    //     return user.credentialManager().getStoredCredentialsByTypeStream(realm, user, credentialType).filter(storedCredential -> !OTPCredentialModel.createFromCredentialModel(storedCredential).getOTPCredentialData().getSubType().equals(OTPCredentialModel.SOTP)).count() > 0;
+    // }
+
+    // public boolean configuredForSOTP(RealmModel realm, UserModel user, String credentialType){
+    //     boolean userConfig = user.getPhoneNumber() != null && user.isPhoneNumberVerified();
+    //     return userConfig && user.credentialManager().getStoredCredentialsByTypeStream(realm, user, credentialType).filter(storedCredential -> OTPCredentialModel.createFromCredentialModel(storedCredential).getOTPCredentialData().getSubType().equals(OTPCredentialModel.SOTP)).count() == 1;
+    // }
+
+
+    // public boolean configuredForEOTP(RealmModel realm, UserModel user, String credentialType){
+    //     return user.getEmail() != null;
+    // }
 
     @Override
     public CredentialModel createCredential(RealmModel realm, UserModel user, OTPCredentialModel credentialModel) {
@@ -99,6 +115,7 @@ public class OTPCredentialProvider implements CredentialProvider<OTPCredentialMo
         OTPSecretData secretData = otpCredentialModel.getOTPSecretData();
         OTPCredentialData credentialData = otpCredentialModel.getOTPCredentialData();
         OTPPolicy policy = realm.getOTPPolicy();
+        OTPPolicy policySOTP = realm.getSmsOTPPolicy();
         if (OTPCredentialModel.HOTP.equals(credentialData.getSubType())) {
             HmacOTP validator = new HmacOTP(credentialData.getDigits(), credentialData.getAlgorithm(), policy.getLookAheadWindow());
             int counter = validator.validateHOTP(challengeResponse, secretData.getValue(), credentialData.getCounter());
@@ -111,6 +128,9 @@ public class OTPCredentialProvider implements CredentialProvider<OTPCredentialMo
         } else if (OTPCredentialModel.TOTP.equals(credentialData.getSubType())) {
             TimeBasedOTP validator = new TimeBasedOTP(credentialData.getAlgorithm(), credentialData.getDigits(), credentialData.getPeriod(), policy.getLookAheadWindow());
             return validator.validateTOTP(challengeResponse, secretData.getValue().getBytes(StandardCharsets.UTF_8));
+        } else if (OTPCredentialModel.SOTP.equals(credentialData.getSubType())){
+            SmsBasedOTP validator = new SmsBasedOTP(credentialData.getAlgorithm(), credentialData.getDigits(), credentialData.getPeriod(), policySOTP.getLookAheadWindow());
+            return validator.validateSOTP(challengeResponse, secretData.getValue().getBytes(StandardCharsets.UTF_8));
         }
         return false;
     }

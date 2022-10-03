@@ -39,6 +39,18 @@ public class DefaultRequiredActions {
             realm.addRequiredActionProvider(verifyEmail);
 
         }
+        
+        if (realm.getRequiredActionProviderByAlias(UserModel.RequiredAction.VERIFY_PHONE_NUMBER.name()) == null) {
+            RequiredActionProviderModel verifyPhoneNumber = new RequiredActionProviderModel();
+            verifyPhoneNumber.setEnabled(true);
+            verifyPhoneNumber.setAlias(UserModel.RequiredAction.VERIFY_PHONE_NUMBER.name());
+            verifyPhoneNumber.setName("Verify Phone Number");
+            verifyPhoneNumber.setProviderId(UserModel.RequiredAction.VERIFY_PHONE_NUMBER.name());
+            verifyPhoneNumber.setDefaultAction(false);
+            verifyPhoneNumber.setPriority(49);
+            realm.addRequiredActionProvider(verifyPhoneNumber);
+
+        }
 
         if (realm.getRequiredActionProviderByAlias(UserModel.RequiredAction.UPDATE_PROFILE.name()) == null) {
             RequiredActionProviderModel updateProfile = new RequiredActionProviderModel();
@@ -50,6 +62,18 @@ public class DefaultRequiredActions {
             updateProfile.setPriority(40);
             realm.addRequiredActionProvider(updateProfile);
         }
+
+        if (realm.getRequiredActionProviderByAlias(UserModel.RequiredAction.UPDATE_PHONE_NUMBER.name()) == null) {
+            RequiredActionProviderModel updatePhoneNumber = new RequiredActionProviderModel();
+            updatePhoneNumber.setEnabled(true);
+            updatePhoneNumber.setAlias(UserModel.RequiredAction.UPDATE_PHONE_NUMBER.name());
+            updatePhoneNumber.setName("Update Phone Number");
+            updatePhoneNumber.setProviderId(UserModel.RequiredAction.UPDATE_PHONE_NUMBER.name());
+            updatePhoneNumber.setDefaultAction(false);
+            updatePhoneNumber.setPriority(41);
+            realm.addRequiredActionProvider(updatePhoneNumber);
+        }
+
 
         if (realm.getRequiredActionProviderByAlias(UserModel.RequiredAction.CONFIGURE_TOTP.name()) == null) {
             RequiredActionProviderModel totp = new RequiredActionProviderModel();

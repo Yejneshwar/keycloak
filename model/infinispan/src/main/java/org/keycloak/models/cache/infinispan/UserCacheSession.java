@@ -234,6 +234,10 @@ public class UserCacheSession implements UserCache.Streams, OnCreateComponent, O
         return realmId + ".email." + email;
     }
 
+    static String getUserByPhoneNumberCacheKey(String realmId, String phoneNumber) {
+        return realmId + ".phoneNumber." + phoneNumber;
+    }
+
     private static String getUserByFederatedIdentityCacheKey(String realmId, FederatedIdentityModel socialLink) {
         return getUserByFederatedIdentityCacheKey(realmId, socialLink.getIdentityProvider(), socialLink.getUserId());
     }
@@ -295,6 +299,57 @@ public class UserCacheSession implements UserCache.Streams, OnCreateComponent, O
             return getUserById(realm, userId);
         }
     }
+
+    @Override
+    public UserModel getUserByPhoneNumber(RealmModel realm, String phoneNumber) {
+        logger.tracev("getUserByPhoneNumber: {0}", phoneNumber);
+        phoneNumber = phoneNumber.toUpperCase();
+        if (realmInvalidations.contains(realm.getId())) {
+            logger.tracev("realmInvalidations");
+            return getDelegate().getUserByPhoneNumber(phoneNumber, realm);
+        }
+        String cacheKey = getUserByPhoneNumberCacheKey(realm.getId(), phoneNumber);
+        if (invalidations.contains(cacheKey)) {
+            logger.tracev("invalidations");
+            return getDelegate().getUserByPhoneNumber(phoneNumber, realm);
+        }
+        UserListQuery query = cache.get(cacheKey, UserListQuery.class);
+
+        String userId = null;
+        if (query == null) {
+            logger.tracev("query null");
+            Long loaded = cache.getCurrentRevision(cacheKey);
+            UserModel model = getDelegate().getUserByPhoneNumber(phoneNumber, realm);
+            if (model == null) {
+                logger.tracev("model from delegate null");
+                return null;
+            }
+            userId = model.getId();
+            if (invalidations.contains(userId)) return model;
+            if (managedUsers.containsKey(userId)) {
+                logger.tracev("return managed user");
+                return managedUsers.get(userId);
+            }
+
+            UserModel adapter = getUserAdapter(realm, userId, loaded, model);
+            if (adapter instanceof UserAdapter) { // this was cached, so we can cache query too
+                query = new UserListQuery(loaded, cacheKey, realm, model.getId());
+                cache.addRevisioned(query, startupRevision);
+            }
+            managedUsers.put(userId, adapter);
+            return adapter;
+        } else {
+            userId = query.getUsers().iterator().next();
+            if (invalidations.contains(userId)) {
+                logger.tracev("invalidated cache return delegate");
+                return getDelegate().getUserByPhoneNumber(phoneNumber, realm);
+
+            }
+            logger.trace("return getUserById");
+            return getUserById(userId, realm);
+        }
+    }
+
 
     protected UserModel getUserAdapter(RealmModel realm, String userId, Long loaded, UserModel delegate) {
         CachedUser cached = cache.get(userId, CachedUser.class);

@@ -162,6 +162,11 @@ public class UserPropertyFileStorage implements UserLookupProvider.Streams, User
     }
 
     @Override
+    public UserModel getUserByPhoneNumber(String phoneNumber, RealmModel realm) {
+        return null;
+    }
+
+    @Override
     public void preRemove(RealmModel realm) {
 
     }

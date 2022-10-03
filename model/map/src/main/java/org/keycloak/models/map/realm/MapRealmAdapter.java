@@ -70,6 +70,13 @@ import org.keycloak.models.map.realm.entity.MapRequiredCredentialEntity;
 import org.keycloak.models.map.realm.entity.MapWebAuthnPolicyEntity;
 import org.keycloak.models.utils.ComponentUtil;
 
+// import org.keycloak.models.EmailPolicy;
+// import org.keycloak.models.map.realm.entity.MapEmailPolicyEntity;
+
+import org.keycloak.models.map.realm.entity.MapSmsOTPPolicyEntity;
+
+
+
 public class MapRealmAdapter extends AbstractRealmModel<MapRealmEntity> implements RealmModel {
 
     private static final Logger LOG = Logger.getLogger(MapRealmAdapter.class);
@@ -85,6 +92,7 @@ public class MapRealmAdapter extends AbstractRealmModel<MapRealmEntity> implemen
     private static final String FAILURE_FACTOR = "failureFactor";
 
     private PasswordPolicy passwordPolicy;
+//    private EmailPolicy emailPolicy;
 
     public MapRealmAdapter(KeycloakSession session, MapRealmEntity entity) {
         super(session, entity);
@@ -249,6 +257,17 @@ public class MapRealmAdapter extends AbstractRealmModel<MapRealmEntity> implemen
     @Override
     public void setVerifyEmail(boolean verifyEmail) {
         entity.setVerifyEmail(verifyEmail);
+    }
+
+    @Override
+    public boolean isVerifyPhoneNumber() {
+        Boolean is = entity.isVerifyPhoneNumber();
+        return is == null ? false : is;
+    }
+
+    @Override
+    public void setVerifyPhoneNumber(boolean verifyPhoneNumber) {
+        entity.setVerifyPhoneNumber(verifyPhoneNumber);
     }
 
     @Override
@@ -570,6 +589,32 @@ public class MapRealmAdapter extends AbstractRealmModel<MapRealmEntity> implemen
     public void setPasswordPolicy(PasswordPolicy policy) {
         this.passwordPolicy = policy;
         entity.setPasswordPolicy(policy.toString());
+    }
+
+
+    // @Override
+    // public EmailPolicy getEmailPolicy() {
+    //     // MapEmailPolicyEntity policy = entity.getEmailPolicy();
+    //     // return policy == null ? EmailPolicy.DEFAULT_POLICY : MapEmailPolicyEntity.toModel(policy);
+    //     //TODO: CHANGE THIS FOR THIS TO WORK
+    //     return EmailPolicy.DEFAULT_POLICY; 
+    // }
+
+    // @Override
+    // public void setEmailPolicy(EmailPolicy policy) {
+    //     // entity.setEmailPolicy(MapEmailPolicyEntity.fromModel(policy));
+    //     // entity.setEmailPolicy(EmailPolicy.DEFAULT_POLICY);
+    // }
+
+    @Override
+    public OTPPolicy getSmsOTPPolicy() {
+        MapSmsOTPPolicyEntity policy = entity.getSmsOTPPolicy();
+        return policy == null ? OTPPolicy.DEFAULT_SOTP_POLICY : MapSmsOTPPolicyEntity.toModel(policy);
+    }
+
+    @Override
+    public void setSmsOTPPolicy(OTPPolicy sotppolicy) {
+        entity.setSmsOTPPolicy(MapSmsOTPPolicyEntity.fromModel(sotppolicy));
     }
 
     @Override

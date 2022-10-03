@@ -97,6 +97,8 @@ import static org.keycloak.models.utils.RepresentationToModel.createRoleMappings
 import static org.keycloak.models.utils.RepresentationToModel.importGroup;
 import static org.keycloak.models.utils.RepresentationToModel.importRoles;
 
+import org.keycloak.models.EmailPolicy;
+
 /**
  * This wraps the functionality about export/import for legacy storage.
  *
@@ -225,6 +227,7 @@ public class MapExportImportManager implements ExportImportManager {
             newRealm.setRegistrationEmailAsUsername(rep.isRegistrationEmailAsUsername());
         if (rep.isRememberMe() != null) newRealm.setRememberMe(rep.isRememberMe());
         if (rep.isVerifyEmail() != null) newRealm.setVerifyEmail(rep.isVerifyEmail());
+        if (rep.isVerifyPhoneNumber() != null) newRealm.setVerifyPhoneNumber(rep.isVerifyPhoneNumber());
         if (rep.isLoginWithEmailAllowed() != null) newRealm.setLoginWithEmailAllowed(rep.isLoginWithEmailAllowed());
         if (rep.isDuplicateEmailsAllowed() != null) newRealm.setDuplicateEmailsAllowed(rep.isDuplicateEmailsAllowed());
         if (rep.isResetPasswordAllowed() != null) newRealm.setResetPasswordAllowed(rep.isResetPasswordAllowed());
@@ -247,6 +250,12 @@ public class MapExportImportManager implements ExportImportManager {
             newRealm.setPasswordPolicy(PasswordPolicy.parse(session, rep.getPasswordPolicy()));
         if (rep.getOtpPolicyType() != null) newRealm.setOTPPolicy(toPolicy(rep));
         else newRealm.setOTPPolicy(OTPPolicy.DEFAULT_POLICY);
+
+        if (rep.getSmsOtpPolicyType() != null) newRealm.setSmsOTPPolicy(toSOTPPolicy(rep));
+        else newRealm.setSmsOTPPolicy(OTPPolicy.DEFAULT_SOTP_POLICY);
+
+        // if (rep.getEnableEmailPolicies() != null) newRealm.setEmailPolicy(toEmailPolicy(rep));
+        // else newRealm.setEmailPolicy(EmailPolicy.DEFAULT_POLICY);
 
         WebAuthnPolicy webAuthnPolicy = getWebAuthnPolicyTwoFactor(rep);
         newRealm.setWebAuthnPolicy(webAuthnPolicy);
@@ -666,6 +675,7 @@ public class MapExportImportManager implements ExportImportManager {
             realm.setRegistrationEmailAsUsername(rep.isRegistrationEmailAsUsername());
         if (rep.isRememberMe() != null) realm.setRememberMe(rep.isRememberMe());
         if (rep.isVerifyEmail() != null) realm.setVerifyEmail(rep.isVerifyEmail());
+        if (rep.isVerifyPhoneNumber() != null) realm.setVerifyPhoneNumber(rep.isVerifyPhoneNumber());
         if (rep.isLoginWithEmailAllowed() != null) realm.setLoginWithEmailAllowed(rep.isLoginWithEmailAllowed());
         if (rep.isDuplicateEmailsAllowed() != null) realm.setDuplicateEmailsAllowed(rep.isDuplicateEmailsAllowed());
         if (rep.isResetPasswordAllowed() != null) realm.setResetPasswordAllowed(rep.isResetPasswordAllowed());
@@ -732,6 +742,9 @@ public class MapExportImportManager implements ExportImportManager {
         if (rep.getPasswordPolicy() != null)
             realm.setPasswordPolicy(PasswordPolicy.parse(session, rep.getPasswordPolicy()));
         if (rep.getOtpPolicyType() != null) realm.setOTPPolicy(toPolicy(rep));
+
+        if (rep.getSmsOtpPolicyType() != null) realm.setSmsOTPPolicy(toSOTPPolicy(rep));
+        // if (rep.getEnableEmailPolicies() != null) realm.setEmailPolicy(toEmailPolicy(rep));
 
         WebAuthnPolicy webAuthnPolicy = getWebAuthnPolicyTwoFactor(rep);
         realm.setWebAuthnPolicy(webAuthnPolicy);
@@ -1282,6 +1295,29 @@ public class MapExportImportManager implements ExportImportManager {
         if (rep.getOtpPolicyPeriod() != null) policy.setPeriod(rep.getOtpPolicyPeriod());
         return policy;
 
+    }
+
+    public static OTPPolicy toSOTPPolicy(RealmRepresentation rep) {
+        OTPPolicy policy = new OTPPolicy();
+        if (rep.getSmsOtpPolicyType() != null) policy.setType(rep.getSmsOtpPolicyType());
+        if (rep.getSmsOtpPolicyLookAheadWindow() != null) policy.setLookAheadWindow(rep.getSmsOtpPolicyLookAheadWindow());
+        if (rep.getSmsOtpPolicyInitialCounter() != null) policy.setInitialCounter(rep.getSmsOtpPolicyInitialCounter());
+        if (rep.getSmsOtpPolicyAlgorithm() != null) policy.setAlgorithm(rep.getSmsOtpPolicyAlgorithm());
+        if (rep.getSmsOtpPolicyDigits() != null) policy.setDigits(rep.getSmsOtpPolicyDigits());
+        if (rep.getSmsOtpPolicyPeriod() != null) policy.setPeriod(rep.getSmsOtpPolicyPeriod());
+        return policy;
+
+    }
+
+    public static EmailPolicy toEmailPolicy(RealmRepresentation rep) {
+        EmailPolicy policy = new EmailPolicy();
+        // if (rep.getEnableEmailPolicies() != null) policy.setEnabled(rep.getEnableEmailPolicies());
+        // if (rep.getEmailDomainsAllowed() != null) policy.setAllowedDomains(rep.getEmailDomainsAllowed());
+        // if (rep.getEmailDomainsBlocked() != null) policy.setBlockedDomains(rep.getEmailDomainsBlocked());
+        // if (rep.getTopLevelDomainsAllowed() != null) policy.setAllowedTopLevelDomains(rep.getTopLevelDomainsAllowed());
+        // if (rep.getTopLevelDomainsBlocked() != null) policy.setBlockedTopLevelDomains(rep.getTopLevelDomainsBlocked());
+        // if (rep.getEmailPolicyDisableUsers() != null) policy.setDisableUsers(rep.getEmailPolicyDisableUsers());
+        return policy;
     }
 
 

@@ -72,6 +72,10 @@ import org.keycloak.models.map.realm.entity.MapIdentityProviderMapperEntity;
 import org.keycloak.models.map.realm.entity.MapIdentityProviderMapperEntityImpl;
 import org.keycloak.models.map.realm.entity.MapOTPPolicyEntity;
 import org.keycloak.models.map.realm.entity.MapOTPPolicyEntityImpl;
+import org.keycloak.models.map.realm.entity.MapSmsOTPPolicyEntity;
+import org.keycloak.models.map.realm.entity.MapSmsOTPPolicyEntityImpl;
+// import org.keycloak.models.map.realm.entity.MapEmailPolicyEntity;
+// import org.keycloak.models.map.realm.entity.MapEmailPolicyEntityImpl;
 import org.keycloak.models.map.realm.entity.MapRequiredActionProviderEntity;
 import org.keycloak.models.map.realm.entity.MapRequiredActionProviderEntityImpl;
 import org.keycloak.models.map.realm.entity.MapRequiredCredentialEntity;
@@ -102,6 +106,8 @@ public class JsonbType extends AbstractSingleColumnStandardBasicType<Object> imp
                     .addAbstractTypeMapping(MapIdentityProviderEntity.class, MapIdentityProviderEntityImpl.class)
                     .addAbstractTypeMapping(MapIdentityProviderMapperEntity.class, MapIdentityProviderMapperEntityImpl.class)
                     .addAbstractTypeMapping(MapOTPPolicyEntity.class, MapOTPPolicyEntityImpl.class)
+                    .addAbstractTypeMapping(MapSmsOTPPolicyEntity.class, MapSmsOTPPolicyEntityImpl.class)
+                    // .addAbstractTypeMapping(MapEmailPolicyEntity.class, MapEmailPolicyEntityImpl.class)
                     .addAbstractTypeMapping(MapRequiredActionProviderEntity.class, MapRequiredActionProviderEntityImpl.class)
                     .addAbstractTypeMapping(MapRequiredCredentialEntity.class, MapRequiredCredentialEntityImpl.class)
                     .addAbstractTypeMapping(MapWebAuthnPolicyEntity.class, MapWebAuthnPolicyEntityImpl.class)

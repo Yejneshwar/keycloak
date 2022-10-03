@@ -46,6 +46,7 @@ import java.util.LinkedList;
         @NamedQuery(name="getAllUsersByRealmExcludeServiceAccount", query="select u from UserEntity u where u.realmId = :realmId and (u.serviceAccountClientLink is null) order by u.username"),
         @NamedQuery(name="getRealmUserByUsername", query="select u from UserEntity u where u.username = :username and u.realmId = :realmId"),
         @NamedQuery(name="getRealmUserByEmail", query="select u from UserEntity u where u.email = :email and u.realmId = :realmId"),
+        @NamedQuery(name="getRealmUserByPhoneNumber", query="select u from UserEntity u where u.phoneNumber = :phoneNumber and u.realmId = :realmId"),
         @NamedQuery(name="getRealmUserByLastName", query="select u from UserEntity u where u.lastName = :lastName and u.realmId = :realmId"),
         @NamedQuery(name="getRealmUserByFirstLastName", query="select u from UserEntity u where u.firstName = :first and u.lastName = :last and u.realmId = :realmId"),
         @NamedQuery(name="getRealmUserByServiceAccount", query="select u from UserEntity u where u.serviceAccountClientLink = :clientInternalId and u.realmId = :realmId"),
@@ -85,6 +86,12 @@ public class UserEntity {
     protected boolean enabled;
     @Column(name = "EMAIL_VERIFIED")
     protected boolean emailVerified;
+    @Column(name = "PHONE_NUMBER_LOCALE")
+    protected String phoneNumberLocale;
+    @Column(name = "PHONE_NUMBER")
+    protected String phoneNumber;
+    @Column(name = "PHONE_NUMBER_VERIFIED")
+    protected boolean phoneNumberVerified;
 
     // This is necessary to be able to dynamically switch unique email constraints on and off in the realm settings
     @Column(name = "EMAIL_CONSTRAINT")
@@ -169,6 +176,30 @@ public class UserEntity {
     public void setEmail(String email, boolean allowDuplicate) {
         this.email = email;
         this.emailConstraint = email == null || allowDuplicate ? KeycloakModelUtils.generateId() : email;
+    }
+
+    public String getPhoneNumberLocale() {
+        return phoneNumberLocale;
+    }
+
+    public void setPhoneNumberLocale(String phoneNumberLocale) {
+        this.phoneNumberLocale = phoneNumberLocale;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public boolean isPhoneNumberVerified() {
+        return phoneNumberVerified;
+    }
+
+    public void setPhoneNumberVerified(boolean phoneNumberVerified) {
+        this.phoneNumberVerified = phoneNumberVerified;
     }
 
     public boolean isEnabled() {

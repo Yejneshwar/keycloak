@@ -116,6 +116,10 @@ import org.keycloak.storage.SearchableModelField;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.keycloak.models.map.realm.entity.MapSmsOTPPolicyEntity;
+import org.keycloak.models.map.storage.hotRod.realm.entity.HotRodSmsOTPPolicyEntityDelegate;
+
+
 public class HotRodMapStorageProviderFactory implements AmphibianProviderFactory<MapStorageProvider>, MapStorageProviderFactory, EnvironmentDependentProviderFactory {
 
     public static final String PROVIDER_ID = "hotrod";
@@ -154,6 +158,7 @@ public class HotRodMapStorageProviderFactory implements AmphibianProviderFactory
             .constructor(MapIdentityProviderEntity.class,           HotRodIdentityProviderEntityDelegate::new)
             .constructor(MapIdentityProviderMapperEntity.class,     HotRodIdentityProviderMapperEntityDelegate::new)
             .constructor(MapOTPPolicyEntity.class,                  HotRodOTPPolicyEntityDelegate::new)
+            .constructor(MapSmsOTPPolicyEntity.class,               HotRodSmsOTPPolicyEntityDelegate::new)
             .constructor(MapRequiredActionProviderEntity.class,     HotRodRequiredActionProviderEntityDelegate::new)
             .constructor(MapRequiredCredentialEntity.class,         HotRodRequiredCredentialEntityDelegate::new)
             .constructor(MapWebAuthnPolicyEntity.class,             HotRodWebAuthnPolicyEntityDelegate::new)

@@ -45,6 +45,9 @@ public class CachedUser extends AbstractExtendableRevisioned implements InRealm 
     private final Long createdTimestamp;
     private final String email;
     private final boolean emailVerified;
+    private final String phoneNumberLocale;
+    private final String phoneNumber;
+    private final Boolean phoneNumberVerified;
     private final boolean enabled;
     private final String federationLink;
     private final String serviceAccountClientLink;
@@ -62,6 +65,9 @@ public class CachedUser extends AbstractExtendableRevisioned implements InRealm 
         this.createdTimestamp = user.getCreatedTimestamp();
         this.email = user.getEmail();
         this.emailVerified = user.isEmailVerified();
+        this.phoneNumberLocale = user.getPhoneNumberLocale();
+        this.phoneNumberVerified = user.isPhoneNumberVerified();
+        this.phoneNumber = user.getPhoneNumber();
         this.enabled = user.isEnabled();
         this.federationLink = user.getFederationLink();
         this.serviceAccountClientLink = user.getServiceAccountClientLink();
@@ -91,6 +97,18 @@ public class CachedUser extends AbstractExtendableRevisioned implements InRealm 
 
     public boolean isEmailVerified() {
         return emailVerified;
+    }
+
+    public String getPhoneNumberLocale() {
+        return phoneNumberLocale;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public boolean isPhoneNumberVerified() {
+        return phoneNumberVerified;
     }
 
     public boolean isEnabled() {

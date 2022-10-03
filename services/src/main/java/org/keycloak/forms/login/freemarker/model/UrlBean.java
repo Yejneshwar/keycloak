@@ -79,6 +79,13 @@ public class UrlBean {
         return Urls.loginActionUpdateTotp(baseURI, realm).toString();
     }
 
+    public String getLoginUpdateSotpUrl() {
+        return Urls.loginActionUpdateSotp(baseURI, realm).toString();
+    }
+    public String getLoginUpdateEotpUrl() {
+        return Urls.loginActionUpdateEotp(baseURI, realm).toString();
+    }
+    
     public String getLoginUpdateProfileUrl() {
         return Urls.loginActionUpdateProfile(baseURI, realm).toString();
     }

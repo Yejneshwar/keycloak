@@ -28,7 +28,7 @@ import java.util.Properties;
  */
 public interface Theme {
 
-    enum Type { LOGIN, ACCOUNT, ADMIN, EMAIL, WELCOME, COMMON };
+    enum Type { LOGIN, ACCOUNT, ADMIN, EMAIL, WELCOME, COMMON, SMS };
 
     String getName();
 

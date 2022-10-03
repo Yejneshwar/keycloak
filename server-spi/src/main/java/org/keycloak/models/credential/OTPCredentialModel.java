@@ -16,6 +16,8 @@ public class OTPCredentialModel extends CredentialModel {
 
     public static final String TOTP = "totp";
     public static final String HOTP = "hotp";
+    public static final String SOTP = "sotp";
+    public static final String EOTP = "eotp";
 
     private final OTPCredentialData credentialData;
     private final OTPSecretData secretData;
@@ -42,6 +44,18 @@ public class OTPCredentialModel extends CredentialModel {
         return credentialModel;
     }
 
+    public static OTPCredentialModel createSOTP(String secretValue, int digits, int period, String algorithm) {
+        OTPCredentialModel credentialModel = new OTPCredentialModel(secretValue, SOTP, digits, 0, period, algorithm);
+        credentialModel.fillCredentialModelFields();
+        return credentialModel;
+    }
+
+    public static OTPCredentialModel createEOTP(String secretValue, int digits, int period, String algorithm) {
+        OTPCredentialModel credentialModel = new OTPCredentialModel(secretValue, EOTP, digits, 0, period, algorithm);
+        credentialModel.fillCredentialModelFields();
+        return credentialModel;
+    }
+
     public static OTPCredentialModel createFromPolicy(RealmModel realm, String secretValue) {
         return createFromPolicy(realm, secretValue, "");
     }
@@ -50,6 +64,21 @@ public class OTPCredentialModel extends CredentialModel {
         OTPPolicy policy = realm.getOTPPolicy();
 
         OTPCredentialModel credentialModel = new OTPCredentialModel(secretValue, policy.getType(), policy.getDigits(),
+                policy.getInitialCounter(), policy.getPeriod(), policy.getAlgorithm());
+        credentialModel.fillCredentialModelFields();
+        credentialModel.setUserLabel(userLabel);
+        return credentialModel;
+    }
+
+
+    public static OTPCredentialModel createFromSOTPPolicy(RealmModel realm, String secretValue) {
+        return createFromPolicy(realm, secretValue, "SMS");
+    }
+
+    public static OTPCredentialModel createFromSOTPPolicy(RealmModel realm, String phoneNumber, String userLabel) {
+        OTPPolicy policy = realm.getSmsOTPPolicy();
+
+        OTPCredentialModel credentialModel = new OTPCredentialModel(phoneNumber, policy.getType(), policy.getDigits(),
                 policy.getInitialCounter(), policy.getPeriod(), policy.getAlgorithm());
         credentialModel.fillCredentialModelFields();
         credentialModel.setUserLabel(userLabel);

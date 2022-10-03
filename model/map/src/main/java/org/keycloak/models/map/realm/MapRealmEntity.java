@@ -44,6 +44,10 @@ import java.util.stream.Collectors;
 
 import static org.keycloak.models.map.common.ExpirationUtils.isExpired;
 
+import org.keycloak.models.map.realm.entity.MapSmsOTPPolicyEntity;
+
+// import org.keycloak.models.map.realm.entity.MapEmailPolicyEntity;
+
 @GenerateEntityImplementations(
         inherits = "org.keycloak.models.map.realm.MapRealmEntity.AbstractRealmEntity"
 )
@@ -79,6 +83,8 @@ public interface MapRealmEntity extends UpdatableEntity, AbstractEntity, EntityW
                     || Optional.ofNullable(getRequiredActionProviders()).orElseGet(Collections::emptySet).stream().anyMatch(MapRequiredActionProviderEntity::isUpdated)
                     || Optional.ofNullable(getRequiredCredentials()).orElseGet(Collections::emptySet).stream().anyMatch(MapRequiredCredentialEntity::isUpdated)
                     || Optional.ofNullable(getOTPPolicy()).map(MapOTPPolicyEntity::isUpdated).orElse(false)
+                    || Optional.ofNullable(getSmsOTPPolicy()).map(MapSmsOTPPolicyEntity::isUpdated).orElse(false)
+                    // || Optional.ofNullable(getEmailPolicy()).map(MapEmailPolicyEntity::isUpdated).orElse(false)
                     || Optional.ofNullable(getWebAuthnPolicy()).map(MapWebAuthnPolicyEntity::isUpdated).orElse(false)
                     || Optional.ofNullable(getWebAuthnPolicyPasswordless()).map(MapWebAuthnPolicyEntity::isUpdated).orElse(false);
         }
@@ -96,6 +102,8 @@ public interface MapRealmEntity extends UpdatableEntity, AbstractEntity, EntityW
             Optional.ofNullable(getRequiredActionProviders()).orElseGet(Collections::emptySet).forEach(UpdatableEntity::clearUpdatedFlag);
             Optional.ofNullable(getRequiredCredentials()).orElseGet(Collections::emptySet).forEach(UpdatableEntity::clearUpdatedFlag);
             Optional.ofNullable(getOTPPolicy()).ifPresent(UpdatableEntity::clearUpdatedFlag);
+            Optional.ofNullable(getSmsOTPPolicy()).ifPresent(UpdatableEntity::clearUpdatedFlag);
+            // Optional.ofNullable(getEmailPolicy()).ifPresent(UpdatableEntity::clearUpdatedFlag);
             Optional.ofNullable(getWebAuthnPolicy()).ifPresent(UpdatableEntity::clearUpdatedFlag);
             Optional.ofNullable(getWebAuthnPolicyPasswordless()).ifPresent(UpdatableEntity::clearUpdatedFlag);
         }
@@ -263,6 +271,9 @@ public interface MapRealmEntity extends UpdatableEntity, AbstractEntity, EntityW
     Boolean isVerifyEmail();
     void setVerifyEmail(Boolean verifyEmail);
 
+    Boolean isVerifyPhoneNumber();
+    void setVerifyPhoneNumber(Boolean verifyPhoneNumber);
+
     Boolean isResetPasswordAllowed();
     void setResetPasswordAllowed(Boolean resetPasswordAllowed);
 
@@ -403,6 +414,12 @@ public interface MapRealmEntity extends UpdatableEntity, AbstractEntity, EntityW
 
     MapOTPPolicyEntity getOTPPolicy();
     void setOTPPolicy(MapOTPPolicyEntity otpPolicy);
+
+    MapSmsOTPPolicyEntity getSmsOTPPolicy();
+    void setSmsOTPPolicy(MapSmsOTPPolicyEntity sotpPolicy);
+
+    // MapEmailPolicyEntity getEmailPolicy();
+    // void setEmailPolicy(MapEmailPolicyEntity emailPolicy);
 
     MapWebAuthnPolicyEntity getWebAuthnPolicy();
     void setWebAuthnPolicy(MapWebAuthnPolicyEntity webAuthnPolicy);

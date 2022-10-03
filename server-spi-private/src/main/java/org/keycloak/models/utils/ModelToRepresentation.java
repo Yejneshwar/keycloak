@@ -220,6 +220,9 @@ public class ModelToRepresentation {
         rep.setEmail(user.getEmail());
         rep.setEnabled(user.isEnabled());
         rep.setEmailVerified(user.isEmailVerified());
+        rep.setPhoneNumberLocale(user.getPhoneNumberLocale());
+        rep.setPhoneNumber(user.getPhoneNumber());
+        rep.setPhoneNumberVerified(user.isPhoneNumberVerified());
         rep.setTotp(user.credentialManager().isConfiguredFor(OTPCredentialModel.TYPE));
         rep.setDisableableCredentialTypes(user.credentialManager()
                 .getDisableableCredentialTypesStream().collect(Collectors.toSet()));
@@ -235,6 +238,8 @@ public class ModelToRepresentation {
             copy.remove(UserModel.LAST_NAME);
             copy.remove(UserModel.FIRST_NAME);
             copy.remove(UserModel.EMAIL);
+            copy.remove(UserModel.PHONE_NUMBER_LOCALE);
+            copy.remove(UserModel.PHONE_NUMBER);
             copy.remove(UserModel.USERNAME);
         }
         if (attributes != null && !copy.isEmpty()) {
@@ -255,6 +260,9 @@ public class ModelToRepresentation {
         rep.setEmail(user.getEmail());
         rep.setEnabled(user.isEnabled());
         rep.setEmailVerified(user.isEmailVerified());
+        rep.setPhoneNumberLocale(user.getPhoneNumberLocale());
+        rep.setPhoneNumber(user.getPhoneNumber());
+        rep.setPhoneNumberVerified(user.isPhoneNumberVerified());
         rep.setFederationLink(user.getFederationLink());
 
         return rep;
@@ -373,6 +381,7 @@ public class ModelToRepresentation {
         rep.setAdminEventsDetailsEnabled(realm.isAdminEventsDetailsEnabled());
 
         rep.setVerifyEmail(realm.isVerifyEmail());
+        rep.setVerifyPhoneNumber(realm.isVerifyPhoneNumber());
         rep.setLoginWithEmailAllowed(realm.isLoginWithEmailAllowed());
         rep.setDuplicateEmailsAllowed(realm.isDuplicateEmailsAllowed());
         rep.setResetPasswordAllowed(realm.isResetPasswordAllowed());
@@ -418,6 +427,23 @@ public class ModelToRepresentation {
         rep.setOtpPolicyType(otpPolicy.getType());
         rep.setOtpPolicyLookAheadWindow(otpPolicy.getLookAheadWindow());
         rep.setOtpSupportedApplications(otpPolicy.getSupportedApplications());
+
+        OTPPolicy smsOtpPolicy = realm.getSmsOTPPolicy();
+        rep.setSmsOtpPolicyAlgorithm(smsOtpPolicy.getAlgorithm());
+        rep.setSmsOtpPolicyPeriod(smsOtpPolicy.getPeriod());
+        rep.setSmsOtpPolicyDigits(smsOtpPolicy.getDigits());
+        rep.setSmsOtpPolicyInitialCounter(smsOtpPolicy.getInitialCounter());
+        rep.setSmsOtpPolicyType(smsOtpPolicy.getType());
+        rep.setSmsOtpPolicyLookAheadWindow(smsOtpPolicy.getLookAheadWindow());
+        rep.setSmsOtpSupportedApplications(smsOtpPolicy.getSupportedApplications());
+
+        // EmailPolicy emailPolicy = realm.getEmailPolicy();
+        // rep.setEnableEmailPolicies(emailPolicy.getEnabled());                
+        // rep.setEmailDomainsAllowed(emailPolicy.getAllowedDomains());            
+        // rep.setEmailDomainsBlocked(emailPolicy.getBlockedDomains());            
+        // rep.setTopLevelDomainsAllowed(emailPolicy.getAllowedTopLevelDomains());            
+        // rep.setTopLevelDomainsBlocked(emailPolicy.getBlockedTopLevelDomains());            
+        // rep.setEmailPolicyDisableUsers(emailPolicy.getDisableUsers());  
 
         WebAuthnPolicy webAuthnPolicy = realm.getWebAuthnPolicy();
         rep.setWebAuthnPolicyRpEntityName(webAuthnPolicy.getRpEntityName());

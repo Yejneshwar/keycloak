@@ -479,6 +479,14 @@ public class RealmAdminResource {
         return users;
     }
 
+    @Path("user-bulk-update")
+    public UserBulkUpdateResource bulkUsers() {
+        UserBulkUpdateResource users = new UserBulkUpdateResource(realm, auth, adminEvent);
+        ResteasyProviderFactory.getInstance().injectProperties(users);
+        //resourceContext.initResource(users);
+        return users;
+    }
+
     @NoCache
     @GET
     @Produces(MediaType.APPLICATION_JSON)

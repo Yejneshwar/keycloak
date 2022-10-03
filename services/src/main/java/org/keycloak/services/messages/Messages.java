@@ -36,6 +36,8 @@ public class Messages {
 
     public static final String INVALID_EMAIL = "invalidEmailMessage";
 
+    public static final String INVALID_PHONE_NUMBER = "invalidPhoneNumberMessage";
+
     public static final String ACCOUNT_DISABLED = "accountDisabledMessage";
 
     public static final String ACCOUNT_TEMPORARILY_DISABLED = "accountTemporarilyDisabledMessage";
@@ -54,6 +56,10 @@ public class Messages {
 
     public static final String MISSING_EMAIL = "missingEmailMessage";
 
+    public static final String MISSING_PHONE_NUMBER = "missingPhoneNumberMessage";
+
+    public static final String MISSING_PHONE_NUMBER_LOCALE = "missingPhoneNumberLocaleMessage";
+
     public static final String MISSING_USERNAME = "missingUsernameMessage";
 
     public static final String UPDATE_READ_ONLY_ATTRIBUTES_REJECTED = "updateReadOnlyAttributesRejectedMessage";
@@ -63,6 +69,10 @@ public class Messages {
     public static final String MISSING_TOTP = "missingTotpMessage";
 
     public static final String MISSING_TOTP_DEVICE_NAME = "missingTotpDeviceNameMessage";
+
+    public static final String MISSING_SOTP = "missingTotpMessage";
+
+    public static final String MISSING_EOTP = "missingTotpMessage";
 
     public static final String COOKIE_NOT_FOUND = "cookieNotFoundMessage";
 
@@ -74,11 +84,17 @@ public class Messages {
 
     public static final String INVALID_TOTP = "invalidTotpMessage";
 
+    public static final String INVALID_SOTP = "invalidTotpMessage";
+
+    public static final String INVALID_EOTP = "invalidTotpMessage";
+
     public static final String USERNAME_EXISTS = "usernameExistsMessage";
     public static final String RECAPTCHA_FAILED = "recaptchaFailed";
     public static final String RECAPTCHA_NOT_CONFIGURED = "recaptchaNotConfigured";
 
     public static final String EMAIL_EXISTS = "emailExistsMessage";
+
+    public static final String PHONE_NUMBER_EXISTS = "phoneNumberExistsMessage";
 
     public static final String FEDERATED_IDENTITY_EXISTS = "federatedIdentityExistsMessage";
 
@@ -92,9 +108,15 @@ public class Messages {
 
     public static final String CONFIGURE_TOTP = "configureTotpMessage";
 
+    public static final String CONFIGURE_SOTP = "configureTotpMessage";
+
+    public static final String CONFIGURE_EOTP = "configureTotpMessage";
+
     public static final String CONFIGURE_BACKUP_CODES = "configureBackupCodesMessage";
 
     public static final String UPDATE_PROFILE = "updateProfileMessage";
+
+    public static final String UPDATE_PHONE_NUMBER = "updatePhoneNumberMessage";
 
     public static final String RESET_PASSWORD = "resetPasswordMessage";
 
@@ -102,11 +124,15 @@ public class Messages {
 
     public static final String VERIFY_EMAIL = "verifyEmailMessage";
 
+    public static final String VERIFY_PHONE_NUMBER = "verifyPhoneNumberMessage";
+
     public static final String UPDATE_EMAIL = "updateEmailMessage";
 
     public static final String LINK_IDP = "linkIdpMessage";
 
     public static final String EMAIL_VERIFIED = "emailVerifiedMessage";
+
+    public static final String PHONE_NUMBER_VERIFIED = "phoneNumberVerifiedMessage";
 
     public static final String EMAIL_SENT = "emailSentMessage";
 
@@ -177,6 +203,8 @@ public class Messages {
 
     public static final String STALE_VERIFY_EMAIL_LINK = "staleEmailVerificationLink";
 
+    public static final String STALE_VERIFY_PHONE_NUMBER_LINK = "staleSmsVerificationLink";
+
     public static final String IDENTITY_PROVIDER_UNEXPECTED_ERROR = "identityProviderUnexpectedErrorMessage";
 
     public static final String IDENTITY_PROVIDER_MISSING_STATE_ERROR = "identityProviderMissingStateMessage";
@@ -188,6 +216,8 @@ public class Messages {
     public static final String CONFIRM_ACCOUNT_LINKING = "confirmAccountLinking";
 
     public static final String CONFIRM_EMAIL_ADDRESS_VERIFICATION = "confirmEmailAddressVerification";
+
+    public static final String CONFIRM_PHONE_NUMBER_VERIFICATION = "confirmPhoneNumberVerification";
 
     public static final String CONFIRM_EXECUTION_OF_ACTIONS = "confirmExecutionOfActions";
 

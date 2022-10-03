@@ -36,6 +36,7 @@ import org.keycloak.models.credential.OTPCredentialModel;
 import org.keycloak.representations.idm.CredentialRepresentation;
 
 import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * used to set an execution a state based on type.
@@ -103,16 +104,30 @@ public class CredentialHelper {
         boolean userStorageCreated = user.credentialManager().updateCredential(otpUserCredential);
 
         String credentialId = null;
+        String credentialSubType = null;
         if (userStorageCreated) {
             logger.debugf("Created OTP credential for user '%s' in the user storage", user.getUsername());
         } else {
+            credentialSubType = credentialModel.getOTPCredentialData().getSubType(); // in the context of this function credentialType is one of HOTP,TOTP,SOTP,EOTP.  
+            //There can be only one SOTP credential
+            if(credentialSubType.equals(OTPCredentialModel.SOTP)){
+                Stream<CredentialModel> toDelete = session.userCredentialManager().getStoredCredentialsByTypeStream(realm, user, OTPCredentialModel.TYPE).filter(storedCredential -> OTPCredentialModel.createFromCredentialModel(storedCredential).getOTPCredentialData().getSubType().equals(OTPCredentialModel.SOTP));
+                //For loop below will make sure to delete rogue SOTP credentials
+                toDelete.forEach(model -> deleteOTPCredential(session,realm,user,model.getId()));   
+            }
+
             CredentialModel createdCredential = otpCredentialProvider.createCredential(realm, user, credentialModel);
             credentialId = createdCredential.getId();
         }
 
         //If the type is HOTP, call verify once to consume the OTP used for registration and increase the counter.
-        UserCredentialModel credential = new UserCredentialModel(credentialId, otpCredentialProvider.getType(), totpCode);
-        return user.credentialManager().isValid(credential);
+        System.out.println("to check " + credentialSubType);
+        if(credentialSubType.equals(OTPCredentialModel.HOTP)){
+            UserCredentialModel credential = new UserCredentialModel(credentialId, otpCredentialProvider.getType(), totpCode);
+            return user.credentialManager().isValid(credential);
+        }
+        else if (credentialId == null) return false;
+        return false;
     }
 
     public static void deleteOTPCredential(KeycloakSession session, RealmModel realm, UserModel user, String credentialId) {

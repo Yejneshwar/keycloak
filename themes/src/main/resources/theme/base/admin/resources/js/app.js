@@ -2244,6 +2244,18 @@ module.config([ '$routeProvider', function($routeProvider) {
             },
             controller : 'RealmOtpPolicyCtrl'
         })
+        .when('/realms/:realm/authentication/email-policy', {
+            templateUrl : resourceUrl + '/partials/email-policy.html',
+            resolve : {
+                realm : function(RealmLoader) {
+                    return RealmLoader();
+                },
+                serverInfo : function(ServerInfoLoader) {
+                    return ServerInfoLoader();
+                }
+            },
+            controller : 'RealmEmailPolicyCtrl'
+        })
         .when('/realms/:realm/authentication/webauthn-policy', {
             templateUrl : resourceUrl + '/partials/webauthn-policy.html',
             resolve : {
