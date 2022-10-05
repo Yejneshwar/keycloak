@@ -196,7 +196,7 @@ public class HotRodRealmEntity extends AbstractHotRodEntity {
     @ProtoField(number = 39)
     public HotRodOTPPolicyEntity oTPPolicy;
     @ProtoField(number = 40)
-    public HotRodSmsOTPPolicyEntity sOTPPolicy;
+    public HotRodSmsOTPPolicyEntity smsOTPPolicy;
     @ProtoField(number = 41)
     public HotRodWebAuthnPolicyEntity webAuthnPolicy;
     @ProtoField(number = 42)

@@ -63,18 +63,6 @@ public class DefaultRequiredActions {
             realm.addRequiredActionProvider(updateProfile);
         }
 
-        if (realm.getRequiredActionProviderByAlias(UserModel.RequiredAction.UPDATE_PHONE_NUMBER.name()) == null) {
-            RequiredActionProviderModel updatePhoneNumber = new RequiredActionProviderModel();
-            updatePhoneNumber.setEnabled(true);
-            updatePhoneNumber.setAlias(UserModel.RequiredAction.UPDATE_PHONE_NUMBER.name());
-            updatePhoneNumber.setName("Update Phone Number");
-            updatePhoneNumber.setProviderId(UserModel.RequiredAction.UPDATE_PHONE_NUMBER.name());
-            updatePhoneNumber.setDefaultAction(false);
-            updatePhoneNumber.setPriority(41);
-            realm.addRequiredActionProvider(updatePhoneNumber);
-        }
-
-
         if (realm.getRequiredActionProviderByAlias(UserModel.RequiredAction.CONFIGURE_TOTP.name()) == null) {
             RequiredActionProviderModel totp = new RequiredActionProviderModel();
             totp.setEnabled(true);
@@ -122,9 +110,24 @@ public class DefaultRequiredActions {
 
         addUpdateLocaleAction(realm);
         addDeleteAccountAction(realm);
+        addUpdatePhoneNumberAction(realm);
         addUpdateEmailAction(realm);
         addWebAuthnRegisterAction(realm);
         addWebAuthnPasswordlessRegisterAction(realm);
+    }
+
+    public static void addUpdatePhoneNumberAction(RealmModel realm){
+        if (realm.getRequiredActionProviderByAlias(UserModel.RequiredAction.UPDATE_PHONE_NUMBER.name()) == null
+        && Profile.isFeatureEnabled(Profile.Feature.UPDATE_PHONE_NUMBER)) {
+            RequiredActionProviderModel updatePhoneNumber = new RequiredActionProviderModel();
+            updatePhoneNumber.setEnabled(true);
+            updatePhoneNumber.setAlias(UserModel.RequiredAction.UPDATE_PHONE_NUMBER.name());
+            updatePhoneNumber.setName("Update Phone Number");
+            updatePhoneNumber.setProviderId(UserModel.RequiredAction.UPDATE_PHONE_NUMBER.name());
+            updatePhoneNumber.setDefaultAction(false);
+            updatePhoneNumber.setPriority(90);
+            realm.addRequiredActionProvider(updatePhoneNumber);
+        }
     }
 
     public static void addDeleteAccountAction(RealmModel realm) {

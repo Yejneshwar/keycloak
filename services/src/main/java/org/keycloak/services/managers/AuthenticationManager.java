@@ -1389,9 +1389,12 @@ public class AuthenticationManager {
     private static RequiredActionFactory toRequiredActionFactory(KeycloakSession session, RequiredActionProviderModel model) {
         RequiredActionFactory factory = (RequiredActionFactory) session.getKeycloakSessionFactory()
                 .getProviderFactory(RequiredActionProvider.class, model.getProviderId());
+        System.out.println(RequiredActionProvider.class);
+        System.out.println(model.getProviderId());
+        System.out.println(factory);
         if (factory == null) {
             throw new RuntimeException("Unable to find factory for Required Action: "
-                    + model.getProviderId() + " did you forget to declare it in a META-INF/services file?");
+                    + model.getProviderId() + " did you forget to declare it in a META-INF/services file? toRequiredActionFactory");
         }
         return factory;
     }

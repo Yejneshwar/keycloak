@@ -196,6 +196,8 @@ public class UpdatePhoneNumber implements RequiredActionProvider, RequiredAction
 
     @Override
     public boolean isSupported() {
-        return Profile.isFeatureEnabled(Profile.Feature.UPDATE_PHONE_NUMBER);
+        //TODO: CHECK THIS STUFF
+        // return Profile.isFeatureEnabled(Profile.Feature.UPDATE_PHONE_NUMBER);
+        return true;
     }
 }

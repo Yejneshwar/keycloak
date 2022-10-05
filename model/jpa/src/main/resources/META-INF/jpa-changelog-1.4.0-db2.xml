@@ -123,6 +123,14 @@
             <column name="CURRENT_ACTION" value="LOGGED_OUT"/>
             <where>ACTION = 9</where>
         </update>
+        <update tableName="CLIENT_SESSION">
+            <column name="CURRENT_ACTION" value="VERIFY_PHONE_NUMBER"/>
+            <where>ACTION = 10</where>
+        </update>
+        <update tableName="CLIENT_SESSION">
+            <column name="CURRENT_ACTION" value="UPDATE_PHONE_NUMBER"/>
+            <where>ACTION = 11</where>
+        </update>
 
         <createTable tableName="CLIENT_USER_SESSION_NOTE">
             <column name="NAME" type="VARCHAR(255)">

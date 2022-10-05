@@ -173,6 +173,14 @@
             <column name="REQUIRED_ACTION" value="UPDATE_PASSWORD"/>
             <where>ACTION = 3</where>
         </update>
+        <update tableName="USER_REQUIRED_ACTION">
+            <column name="REQUIRED_ACTION" value="UPDATE_PHONE_NUMBER"/>
+            <where>ACTION = 4</where>
+        </update>
+        <update tableName="USER_REQUIRED_ACTION">
+            <column name="REQUIRED_ACTION" value="VERIFY_PHONE_NUMBER"/>
+            <where>ACTION = 5</where>
+        </update>
         <addPrimaryKey columnNames="ID" constraintName="CONSTRAINT_AUTH_PK" tableName="AUTHENTICATOR"/>
         <addPrimaryKey columnNames="ID" constraintName="CONSTRAINT_AUTH_FLOW_PK" tableName="AUTHENTICATION_FLOW"/>
         <addPrimaryKey columnNames="ID" constraintName="CONSTRAINT_AUTH_EXEC_PK" tableName="AUTHENTICATION_EXECUTION"/>
