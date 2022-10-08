@@ -145,6 +145,8 @@ public class DeclarativeUserProfileProvider extends AbstractUserProfileProvider<
                 decoratedMetadata.addAttribute(UserModel.FIRST_NAME, 1, new AttributeValidatorMetadata(BlankAttributeValidator.ID, BlankAttributeValidator.createConfig(
                         Messages.MISSING_FIRST_NAME, metadata.getContext() == UserProfileContext.IDP_REVIEW))).setAttributeDisplayName("${firstName}");
                 decoratedMetadata.addAttribute(UserModel.LAST_NAME, 2, new AttributeValidatorMetadata(BlankAttributeValidator.ID, BlankAttributeValidator.createConfig(Messages.MISSING_LAST_NAME, metadata.getContext() == UserProfileContext.IDP_REVIEW))).setAttributeDisplayName("${lastName}");
+                decoratedMetadata.addAttribute(UserModel.PHONE_NUMBER_LOCALE, 3, new AttributeValidatorMetadata(BlankAttributeValidator.ID, BlankAttributeValidator.createConfig(Messages.MISSING_PHONE_NUMBER_LOCALE, metadata.getContext() == UserProfileContext.IDP_REVIEW))).setAttributeDisplayName("${phoneNumberLocale}");
+                decoratedMetadata.addAttribute(UserModel.PHONE_NUMBER, 4, new AttributeValidatorMetadata(BlankAttributeValidator.ID, BlankAttributeValidator.createConfig(Messages.MISSING_PHONE_NUMBER, metadata.getContext() == UserProfileContext.IDP_REVIEW))).setAttributeDisplayName("${phoneNumber}");
             }
             return decoratedMetadata;
         }

@@ -33,6 +33,7 @@ import org.keycloak.validate.validators.NotEmptyValidator;
 import org.keycloak.validate.validators.OptionsValidator;
 import org.keycloak.validate.validators.DoubleValidator;
 import org.keycloak.validate.validators.PatternValidator;
+import org.keycloak.validate.validators.PhoneNumberValidator;
 import org.keycloak.validate.validators.UriValidator;
 import org.keycloak.validate.validators.ValidatorConfigValidator;
 
@@ -52,6 +53,7 @@ public class Validators {
                 NotEmptyValidator.INSTANCE,
                 UriValidator.INSTANCE,
                 EmailValidator.INSTANCE,
+                PhoneNumberValidator.INSTANCE,
                 NotBlankValidator.INSTANCE,
                 PatternValidator.INSTANCE,
                 DoubleValidator.INSTANCE,
@@ -143,6 +145,10 @@ public class Validators {
 
     public static EmailValidator emailValidator() {
         return EmailValidator.INSTANCE;
+    }
+
+    public static PhoneNumberValidator phoneNumberValidator() {
+        return PhoneNumberValidator.INSTANCE;
     }
 
     public static PatternValidator patternValidator() {

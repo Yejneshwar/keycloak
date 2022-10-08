@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 public class RegionToFlagMapper {
     private static RegionToFlagMapper instance = null;
     private static final String DATA_DIRECTORY =
-        "/org/keycloak/regionmapper/data/countrycodes.csv";
+        "/org/keycloak/util/regionmapper/data/countrycodes.csv";
     private static DataLoaderHelper dataLoader = null;
 
     RegionToFlagMapper(String dataDirectory) {

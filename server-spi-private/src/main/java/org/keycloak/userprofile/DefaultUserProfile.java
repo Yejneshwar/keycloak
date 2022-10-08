@@ -106,8 +106,10 @@ public final class DefaultUserProfile implements UserProfile {
         try {
             for (Map.Entry<String, List<String>> attribute : attributes.attributeSet()) {
                 String name = attribute.getKey();
+                System.out.println("Attribute NAME : "+name);
 
                 if (attributes.isReadOnly(name)) {
+                    System.out.println("IS READ ONLY - "+name);
                     continue;
                 }
 

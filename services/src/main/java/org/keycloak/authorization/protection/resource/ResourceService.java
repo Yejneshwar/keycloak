@@ -96,6 +96,8 @@ public class ResourceService {
     @Consumes("application/json")
     @Produces("application/json")
     public Response update(@PathParam("id") String id, ResourceRepresentation resource) {
+        System.out.println("This one rs");
+
         return this.resourceManager.update(id, resource);
     }
 

@@ -219,6 +219,7 @@ public class AccountRestService {
     @Produces(MediaType.APPLICATION_JSON)
     @NoCache
     public Response updateAccount(UserRepresentation rep) {
+        System.out.println("RUNNING THIS!!! updateAccount");
         auth.require(AccountRoles.MANAGE_ACCOUNT);
 
         event.event(EventType.UPDATE_PROFILE).detail(Details.CONTEXT, UserProfileContext.ACCOUNT.name());

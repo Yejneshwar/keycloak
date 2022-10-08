@@ -37,7 +37,7 @@ public class DataMap {
     }
 
     public String getFlag(){
-        InputStream reader = DataLoaderHelper.class.getResourceAsStream("/org/keycloak/regionmapper/data/flags/"+this.ISOName.toLowerCase()+".png");
+        InputStream reader = DataLoaderHelper.class.getResourceAsStream("/org/keycloak/util/regionmapper/data/flags/"+this.ISOName.toLowerCase()+".png");
         byte[] fileContent = null;
         try {
             fileContent = IOUtils.toByteArray(reader);

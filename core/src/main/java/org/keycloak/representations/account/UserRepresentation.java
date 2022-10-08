@@ -157,6 +157,12 @@ public class UserRepresentation {
         if (getFirstName() != null)
             attrs.put("firstName", Collections.singletonList(getFirstName()));
 
+        if (getPhoneNumberLocale() != null)
+            attrs.put("phoneNumberLocale", Collections.singletonList(getPhoneNumberLocale()));
+
+        if (getPhoneNumber() != null)
+            attrs.put("phoneNumber", Collections.singletonList(getPhoneNumber()));
+
 
         return attrs;
     }

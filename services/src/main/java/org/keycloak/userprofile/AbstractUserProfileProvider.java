@@ -194,6 +194,7 @@ public abstract class AbstractUserProfileProvider<U extends UserProfileProvider>
         if (Profile.isFeatureEnabled(Profile.Feature.UPDATE_EMAIL)) {
             addContextualProfileMetadata(configureUserProfile(createDefaultProfile(UPDATE_EMAIL, readOnlyValidator)));
         }
+        addContextualProfileMetadata(configureUserProfile(createDefaultProfile(UPDATE_PHONE_NUMBER, readOnlyValidator)));
         addContextualProfileMetadata(configureUserProfile(createRegistrationUserCreationProfile()));
         addContextualProfileMetadata(configureUserProfile(createUserResourceValidation(config)));
     }

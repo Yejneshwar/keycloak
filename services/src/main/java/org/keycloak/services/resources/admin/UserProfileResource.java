@@ -57,6 +57,7 @@ public class UserProfileResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(String text) {
+        System.out.println("THIS ONE 1 : update");
         auth.realm().requireManageRealm();
         UserProfileProvider t = session.getProvider(UserProfileProvider.class);
 

@@ -86,6 +86,8 @@ public class UpdatePhoneNumber implements RequiredActionProvider, RequiredAction
         String newPhoneNumber = formData.getFirst(UserModel.PHONE_NUMBER);
         String newPhoneNumberLocale = formData.getFirst(UserModel.PHONE_NUMBER_LOCALE);
 
+        System.out.println("Numbers from form " + newPhoneNumber + " - " + newPhoneNumberLocale);
+
         RealmModel realm = context.getRealm();
         UserModel user = context.getUser();
         UserProfile phoneNumberUpdateValidationResult;
@@ -155,6 +157,7 @@ public class UpdatePhoneNumber implements RequiredActionProvider, RequiredAction
     public static UserProfile validatePhoneNumberUpdate(KeycloakSession session, UserModel user, String newPhoneNumber, String newPhoneNumberLocale) {
         MultivaluedMap<String, String> formData = new MultivaluedHashMap<>();
         formData.putSingle(UserModel.PHONE_NUMBER, newPhoneNumber);
+        formData.putSingle(UserModel.PHONE_NUMBER_LOCALE, newPhoneNumberLocale);
         UserProfileProvider profileProvider = session.getProvider(UserProfileProvider.class);
         UserProfile profile = profileProvider.create(UserProfileContext.UPDATE_PHONE_NUMBER, formData, user);
         profile.validate();
@@ -164,8 +167,13 @@ public class UpdatePhoneNumber implements RequiredActionProvider, RequiredAction
     public static void updatePhoneNumberNow(EventBuilder event, UserModel user, UserProfile phoneNumberUpdateValidationResult) {
 
         String oldPhoneNumber = user.getPhoneNumber();
+        String oldPhoneNumberLocale = user.getPhoneNumberLocale();
         String newPhoneNumber = phoneNumberUpdateValidationResult.getAttributes().getFirstValue(UserModel.PHONE_NUMBER);
-        event.event(EventType.UPDATE_PHONE_NUMBER).detail(Details.PREVIOUS_PHONE_NUMBER, oldPhoneNumber).detail(Details.UPDATED_PHONE_NUMBER, newPhoneNumber);
+        String newPhoneNumberLocale = phoneNumberUpdateValidationResult.getAttributes().getFirstValue(UserModel.PHONE_NUMBER_LOCALE);
+        System.out.println("Old and new phone number : OLD - "+oldPhoneNumber+" : New - "+newPhoneNumber);
+        System.out.println("Old and new phone number : OLD - "+oldPhoneNumberLocale+" : New - "+newPhoneNumberLocale);
+        event.event(EventType.UPDATE_PHONE_NUMBER).detail(Details.PREVIOUS_PHONE_NUMBER, oldPhoneNumber).detail(Details.UPDATED_PHONE_NUMBER, newPhoneNumber)
+        .detail(Details.PREVIOUS_PHONE_NUMBER_LOCALE, oldPhoneNumberLocale).detail(Details.UPDATED_PHONE_NUMBER_LOCALE, newPhoneNumberLocale);
         phoneNumberUpdateValidationResult.update(false, new EventAuditingAttributeChangeListener(phoneNumberUpdateValidationResult, event));
     }
 

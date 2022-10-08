@@ -33,5 +33,20 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <resources>
+          <resource>
+            <directory>src/main/java/org/keycloak/util/regionmapper/data</directory>
+            <targetPath>org/keycloak/util/regionmapper/data</targetPath>
+            <filtering>false</filtering>
+          </resource>
+          <resource>
+            <directory>src/main/java/org/keycloak/util/regionmapper/data/flags</directory>
+            <targetPath>org/keycloak/util/regionmapper/data/flags</targetPath>
+            <filtering>false</filtering>
+          </resource>
+        </resources>
+    </build>
 
 </project>

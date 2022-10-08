@@ -160,7 +160,7 @@ public class UserResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUser(final UserRepresentation rep) {
-
+        System.out.println("UPDATING USER!!!");
         auth.users().requireManage(user);
         try {
 
@@ -179,6 +179,7 @@ public class UserResource {
                 // include existing attributes in case no attributes are set so that validation takes into account the existing
                 // attributes associated with the user
                 for (Map.Entry<String, List<String>> entry : user.getAttributes().entrySet()) {
+                    System.out.println("KEY : " + entry.getKey() + " " + "VALUE : " + entry.getValue());
                     attributes.putIfAbsent(entry.getKey(), entry.getValue());
                 }
             }

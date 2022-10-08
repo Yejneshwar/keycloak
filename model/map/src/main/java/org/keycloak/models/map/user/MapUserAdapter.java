@@ -95,6 +95,10 @@ public abstract class MapUserAdapter extends AbstractUserModel<MapUserEntity> {
             return Optional.ofNullable(entity.getEmail());
         } else if (UserModel.USERNAME.equals(name)) {
             return Optional.ofNullable(entity.getUsername());
+        } else if (UserModel.PHONE_NUMBER_LOCALE.equals(name)) {
+            return Optional.ofNullable(entity.getPhoneNumberLocale());
+        } else if (UserModel.PHONE_NUMBER.equals(name)) {
+            return Optional.ofNullable(entity.getPhoneNumber());
         }
 
         return Optional.empty();
@@ -112,6 +116,12 @@ public abstract class MapUserAdapter extends AbstractUserModel<MapUserEntity> {
             return true;
         } else if (UserModel.USERNAME.equals(name)) {
             setUsername(value);
+            return true;
+        } else if (UserModel.PHONE_NUMBER_LOCALE.equals(name)) {
+            setPhoneNumberLocale(value);
+            return true;
+        } else if (UserModel.PHONE_NUMBER.equals(name)) {
+            setPhoneNumber(value);
             return true;
         }
 
@@ -167,6 +177,8 @@ public abstract class MapUserAdapter extends AbstractUserModel<MapUserEntity> {
         result.add(UserModel.LAST_NAME, entity.getLastName());
         result.add(UserModel.EMAIL, entity.getEmail());
         result.add(UserModel.USERNAME, entity.getUsername());
+        result.add(UserModel.PHONE_NUMBER_LOCALE, entity.getPhoneNumberLocale());
+        result.add(UserModel.PHONE_NUMBER, entity.getPhoneNumber());
 
         return result;
     }

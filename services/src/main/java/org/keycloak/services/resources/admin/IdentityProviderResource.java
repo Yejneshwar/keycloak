@@ -144,6 +144,7 @@ public class IdentityProviderResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @NoCache
     public Response update(IdentityProviderRepresentation providerRep) {
+        System.out.println("This one idpr");
         this.auth.realm().requireManageIdentityProviders();
 
         if (identityProviderModel == null) {

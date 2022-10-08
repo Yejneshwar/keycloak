@@ -1,4 +1,4 @@
-/*
+ /*
  *
  *  * Copyright 2021  Red Hat, Inc. and/or its affiliates
  *  * and other contributors as indicated by the @author tags.
@@ -110,6 +110,7 @@ public class DefaultAttributes extends HashMap<String, List<String>> implements 
 
     @Override
     public boolean validate(String name, Consumer<ValidationError>... listeners) {
+        System.out.println("TO VALIDATE : "+ name);
         Entry<String, List<String>> attribute = createAttribute(name);
         List<AttributeMetadata> metadatas = new ArrayList<>();
 
@@ -215,6 +216,7 @@ public class DefaultAttributes extends HashMap<String, List<String>> implements 
 
         for (AttributeMetadata metadata : attributes) {
             // checks whether the attribute is selected for the current profile
+            System.out.println("METADATA name : "+metadata.getName()+" | METADATA TOstring() : "+metadata.toString());
             if (metadata.isSelected(createAttributeContext(metadata))) {
                 metadatas.put(metadata.getName(), metadata);
             }
