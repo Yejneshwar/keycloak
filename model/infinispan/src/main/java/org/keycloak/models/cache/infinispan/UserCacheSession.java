@@ -600,14 +600,10 @@ public class UserCacheSession implements UserCache.Streams, OnCreateComponent, O
     }
 
     @Override
-    public Stream<UserModel> getUsersStream(RealmModel realm, boolean includeServiceAccounts) {
-        return getDelegate().getUsersStream(realm, includeServiceAccounts);
-    }
-
-    @Override
     public CredentialValidationOutput getUserByCredential(RealmModel realm, CredentialInput input) {
         return getDelegate().getUserByCredential(realm, input);
     }
+
     @Override
     public int getUsersCount(RealmModel realm, boolean includeServiceAccount) {
         return getDelegate().getUsersCount(realm, includeServiceAccount);
@@ -636,21 +632,6 @@ public class UserCacheSession implements UserCache.Streams, OnCreateComponent, O
     @Override
     public int getUsersCount(RealmModel realm, Map<String, String> params, Set<String> groupIds) {
         return getDelegate().getUsersCount(realm, params, groupIds);
-    }
-
-    @Override
-    public Stream<UserModel> getUsersStream(RealmModel realm, Integer firstResult, Integer maxResults, boolean includeServiceAccounts) {
-        return getDelegate().getUsersStream(realm, firstResult, maxResults, includeServiceAccounts);
-    }
-
-    @Override
-    public Stream<UserModel> getUsersStream(RealmModel realm) {
-        return getUsersStream(realm, false);
-    }
-
-    @Override
-    public Stream<UserModel> getUsersStream(RealmModel realm, Integer firstResult, Integer maxResults) {
-         return getUsersStream(realm, firstResult, maxResults, false);
     }
 
     @Override

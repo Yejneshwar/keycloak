@@ -37,5 +37,21 @@ cd keycloak-999-SNAPSHOT/bin
 ./kc.sh start-dev
 ```
 
-NOTE: Right now, server should start, and I am able to create admin user on `http://localhost:8080`, but I am not able to finish
-login to the admin console. However the Keycloak uses bouncycastle-fips libraries and the `CryptoIntegration` uses `FIPS1402Provider`. More fixes are required to have Keycloak server working...
+NOTE: Right now, server should start, and you should be able to use `http://localhost:8080` and login to admin console etc.
+Keycloak will now use bouncycastle-fips libraries and the `CryptoIntegration` will use `FIPS1402Provider`.
+
+Run the tests in the FIPS environment
+-------------------------------------
+This instruction is about running automated tests on the FIPS enabled RHEL 8.6 system with the FIPS enabled OpenJDK 11.
+
+So far only the unit tests inside the `crypto` module are supported. More effort is needed to have whole testsuite passing.
+
+First it is needed to build the project (See above). Then run the tests in the `crypto` module.
+```
+mvn clean install -f crypto
+```
+
+The tests should work also with the BouncyCastle approved mode, which is more strict in the used crypto algorithms
+```
+mvn clean install -f crypto -Dorg.bouncycastle.fips.approved_only=true
+```

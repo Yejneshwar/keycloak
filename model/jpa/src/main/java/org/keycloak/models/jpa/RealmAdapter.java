@@ -907,6 +907,7 @@ public class RealmAdapter implements LegacyRealmModel, JpaModel<RealmEntity> {
             otpPolicy.setLookAheadWindow(realm.getOtpPolicyLookAheadWindow());
             otpPolicy.setType(realm.getOtpPolicyType());
             otpPolicy.setPeriod(realm.getOtpPolicyPeriod());
+            otpPolicy.setCodeReusable(getAttribute(OTPPolicy.REALM_REUSABLE_CODE_ATTRIBUTE, OTPPolicy.DEFAULT_IS_REUSABLE));
         }
         return otpPolicy;
     }
@@ -919,6 +920,7 @@ public class RealmAdapter implements LegacyRealmModel, JpaModel<RealmEntity> {
         realm.setOtpPolicyLookAheadWindow(policy.getLookAheadWindow());
         realm.setOtpPolicyType(policy.getType());
         realm.setOtpPolicyPeriod(policy.getPeriod());
+        setAttribute(OTPPolicy.REALM_REUSABLE_CODE_ATTRIBUTE, policy.isCodeReusable());
         em.flush();
     }
 
@@ -1999,8 +2001,9 @@ public class RealmAdapter implements LegacyRealmModel, JpaModel<RealmEntity> {
     }
 
     @Override
+    @Deprecated
     public Stream<GroupModel> searchForGroupByNameStream(String search, Integer first, Integer max) {
-        return session.groups().searchForGroupByNameStream(this, search, first, max);
+        return session.groups().searchForGroupByNameStream(this, search, false, first, max);
     }
 
     @Override

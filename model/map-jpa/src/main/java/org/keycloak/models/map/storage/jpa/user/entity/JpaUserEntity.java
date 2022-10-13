@@ -45,6 +45,7 @@ import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 import org.keycloak.models.map.common.DeepCloner;
 import org.keycloak.models.map.common.UuidValidator;
+import org.keycloak.models.map.storage.jpa.Constants;
 import org.keycloak.models.map.storage.jpa.JpaRootVersionedEntity;
 import org.keycloak.models.map.storage.jpa.hibernate.jsonb.JsonbType;
 import org.keycloak.models.map.user.MapUserConsentEntity;
@@ -52,7 +53,6 @@ import org.keycloak.models.map.user.MapUserCredentialEntity;
 import org.keycloak.models.map.user.MapUserEntity;
 import org.keycloak.models.map.user.MapUserFederatedIdentityEntity;
 
-import static org.keycloak.models.map.storage.jpa.Constants.CURRENT_SCHEMA_VERSION_USER;
 import static org.keycloak.models.map.storage.jpa.JpaMapStorageProviderFactory.CLONER;
 
 /**
@@ -95,6 +95,10 @@ public class JpaUserEntity extends MapUserEntity.AbstractUserEntity implements J
     @Column(insertable = false, updatable = false)
     @Basic(fetch = FetchType.LAZY)
     private String username;
+
+    @Column(insertable = false, updatable = false)
+    @Basic(fetch = FetchType.LAZY)
+    private String usernameLowerCase;
 
     @Column(insertable = false, updatable = false)
     @Basic(fetch = FetchType.LAZY)
@@ -214,7 +218,7 @@ public class JpaUserEntity extends MapUserEntity.AbstractUserEntity implements J
 
     @Override
     public Integer getCurrentSchemaVersion() {
-        return CURRENT_SCHEMA_VERSION_USER;
+        return Constants.CURRENT_SCHEMA_VERSION_USER;
     }
 
     @Override
@@ -253,6 +257,7 @@ public class JpaUserEntity extends MapUserEntity.AbstractUserEntity implements J
     @Override
     public void setUsername(String username) {
         this.metadata.setUsername(username);
+        this.metadata.setUsernameLowerCase(username);
     }
 
     @Override
@@ -519,7 +524,7 @@ public class JpaUserEntity extends MapUserEntity.AbstractUserEntity implements J
     public void addUserConsent(MapUserConsentEntity userConsentEntity) {
         JpaUserConsentEntity entity = (JpaUserConsentEntity) CLONER.from(userConsentEntity);
         entity.setParent(this);
-        entity.setEntityVersion(this.getEntityVersion());
+        entity.setEntityVersion(Constants.CURRENT_SCHEMA_VERSION_USER_CONSENT);
         this.consents.add(entity);
     }
 
@@ -572,7 +577,7 @@ public class JpaUserEntity extends MapUserEntity.AbstractUserEntity implements J
     public void addFederatedIdentity(MapUserFederatedIdentityEntity federatedIdentity) {
         JpaUserFederatedIdentityEntity entity = (JpaUserFederatedIdentityEntity) CLONER.from(federatedIdentity);
         entity.setParent(this);
-        entity.setEntityVersion(this.getEntityVersion());
+        entity.setEntityVersion(Constants.CURRENT_SCHEMA_VERSION_USER_FEDERATED_IDENTITY);
         this.federatedIdentities.add(entity);
     }
 

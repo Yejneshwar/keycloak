@@ -1514,8 +1514,9 @@ public class RealmAdapter implements CachedRealmModel {
     }
 
     @Override
+    @Deprecated
     public Stream<GroupModel> searchForGroupByNameStream(String search, Integer first, Integer max) {
-        return cacheSession.searchForGroupByNameStream(this, search, first, max);
+        return cacheSession.searchForGroupByNameStream( this, search, false, first, max);
     }
 
     @Override

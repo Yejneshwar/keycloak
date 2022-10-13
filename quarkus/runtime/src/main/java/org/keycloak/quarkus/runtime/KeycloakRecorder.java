@@ -38,6 +38,9 @@ import io.vertx.ext.web.RoutingContext;
 
 import org.keycloak.Config;
 import org.keycloak.common.Profile;
+import org.keycloak.common.crypto.CryptoIntegration;
+import org.keycloak.common.crypto.CryptoProvider;
+import org.keycloak.config.SecurityOptions;
 import org.keycloak.quarkus.runtime.configuration.Configuration;
 import org.keycloak.quarkus.runtime.configuration.MicroProfileConfigProvider;
 import org.keycloak.quarkus.runtime.integration.QuarkusKeycloakSessionFactory;
@@ -47,6 +50,7 @@ import org.keycloak.provider.Provider;
 import org.keycloak.provider.ProviderFactory;
 import org.keycloak.provider.Spi;
 import org.keycloak.quarkus.runtime.storage.legacy.infinispan.CacheManagerFactory;
+import org.keycloak.theme.ClasspathThemeProviderFactory;
 
 import io.quarkus.runtime.RuntimeValue;
 import io.quarkus.runtime.ShutdownContext;
@@ -69,10 +73,10 @@ public class KeycloakRecorder {
             Map<Spi, Map<Class<? extends Provider>, Map<String, Class<? extends ProviderFactory>>>> factories,
             Map<Class<? extends Provider>, String> defaultProviders,
             Map<String, ProviderFactory> preConfiguredProviders,
-            Boolean reaugmented) {
+            List<ClasspathThemeProviderFactory.ThemesRepresentation> themes, boolean reaugmented) {
         Config.init(new MicroProfileConfigProvider());
         Profile.setInstance(new QuarkusProfile());
-        QuarkusKeycloakSessionFactory.setInstance(new QuarkusKeycloakSessionFactory(factories, defaultProviders, preConfiguredProviders, reaugmented));
+        QuarkusKeycloakSessionFactory.setInstance(new QuarkusKeycloakSessionFactory(factories, defaultProviders, preConfiguredProviders, themes, reaugmented));
     }
 
     public RuntimeValue<CacheManagerFactory> createCacheInitializer(String config, ShutdownContext shutdownContext) {
@@ -160,5 +164,21 @@ public class KeycloakRecorder {
                 return false;
             }
         };
+    }
+
+    public void setCryptoProvider(SecurityOptions.FipsMode fipsMode) {
+        String cryptoProvider = fipsMode.getProviderClassName();
+
+        try {
+            CryptoIntegration.setProvider(
+                    (CryptoProvider) Thread.currentThread().getContextClassLoader().loadClass(cryptoProvider).getDeclaredConstructor().newInstance());
+        } catch (ClassNotFoundException | NoClassDefFoundError cause) {
+            if (fipsMode.isFipsEnabled()) {
+                throw new RuntimeException("Failed to configure FIPS. Make sure you have added the Bouncy Castle FIPS dependencies to the 'providers' directory.");
+            }
+            throw new RuntimeException("Unexpected error when configuring the crypto provider: " + cryptoProvider, cause);
+        } catch (Exception cause) {
+            throw new RuntimeException("Unexpected error when configuring the crypto provider: " + cryptoProvider, cause);
+        }
     }
 }
