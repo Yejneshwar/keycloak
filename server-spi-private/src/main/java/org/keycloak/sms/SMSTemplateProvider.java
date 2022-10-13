@@ -61,20 +61,6 @@ public interface SMSTemplateProvider extends Provider {
      */
     void sendTestSms(Map<String, String> config, UserModel user) throws SMSException;
 
-    /**
-     * Send to confirm that user wants to link his account with identity broker link
-     */
-    void sendConfirmIdentityBrokerLink(String link, long expirationInMinutes) throws SMSException;
-
-    /**
-     * Change password SMS requested by admin
-     *
-     * @param link
-     * @param expirationInMinutes
-     * @throws SMSException
-     */
-    void sendExecuteActions(String link, long expirationInMinutes) throws SMSException;
-
     void sendVerifyPhoneNumber(String link, long expirationInMinutes) throws SMSException;
 
     void sendPhoneNumberUpdateConfirmation(String link, long expirationInMinutes, String address) throws SMSException;

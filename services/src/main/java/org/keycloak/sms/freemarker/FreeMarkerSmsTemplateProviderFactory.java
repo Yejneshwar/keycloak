@@ -22,23 +22,19 @@ import org.keycloak.sms.SMSTemplateProvider;
 import org.keycloak.sms.SMSTemplateProviderFactory;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
-import org.keycloak.theme.FreeMarkerUtil;
 
 /**
  * @author <a href="mailto:sthorger@redhat.com">Stian Thorgersen</a>
  */
 public class FreeMarkerSmsTemplateProviderFactory implements SMSTemplateProviderFactory {
 
-    private FreeMarkerUtil freeMarker;
-
     @Override
     public SMSTemplateProvider create(KeycloakSession session) {
-        return new FreeMarkerSmsTemplateProvider(session, freeMarker);
+        return new FreeMarkerSmsTemplateProvider(session);
     }
 
     @Override
     public void init(Config.Scope config) {
-        freeMarker = new FreeMarkerUtil();
     }
 
     @Override
@@ -47,7 +43,6 @@ public class FreeMarkerSmsTemplateProviderFactory implements SMSTemplateProvider
 
     @Override
     public void close() {
-        freeMarker = null;
     }
 
     @Override

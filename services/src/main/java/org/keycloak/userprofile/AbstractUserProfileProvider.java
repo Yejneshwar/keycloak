@@ -328,7 +328,7 @@ public abstract class AbstractUserProfileProvider<U extends UserProfileProvider>
                 new AttributeValidatorMetadata(BlankAttributeValidator.ID, BlankAttributeValidator.createConfig(Messages.MISSING_EMAIL, false)),
         		new AttributeValidatorMetadata(DuplicateEmailValidator.ID),
         		new AttributeValidatorMetadata(EmailExistsAsUsernameValidator.ID),
-                new AttributeValidatorMetadata(EmailValidator.ID, ValidatorConfig.builder().config(EmailValidator.IGNORE_EMPTY_VALUE, true).build())
+                new AttributeValidatorMetadata(EmailValidator.ID, ValidatorConfig.builder().config(EmailValidator.IGNORE_EMPTY_VALUE, true).build()))
             .setAttributeDisplayName("${email}");
 
         List<AttributeValidatorMetadata> readonlyValidators = new ArrayList<>();

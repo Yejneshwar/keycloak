@@ -18,7 +18,6 @@
 package org.keycloak.sms.freemarker;
 
 import java.io.IOException;
-import java.net.URI;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
@@ -44,7 +43,7 @@ import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.sessions.AuthenticationSessionModel;
 import org.keycloak.theme.FreeMarkerException;
-import org.keycloak.theme.FreeMarkerUtil;
+import org.keycloak.theme.freemarker.FreeMarkerProvider;
 import org.keycloak.theme.Theme;
 import org.keycloak.theme.beans.LinkExpirationFormatterMethod;
 import org.keycloak.theme.beans.MessageFormatterMethod;
@@ -61,14 +60,14 @@ public class FreeMarkerSmsTemplateProvider implements SMSTemplateProvider {
      * etc.)!
      */
     protected AuthenticationSessionModel authenticationSession;
-    protected FreeMarkerUtil freeMarker;
+    protected FreeMarkerProvider freeMarker;
     protected RealmModel realm;
     protected UserModel user;
     protected final Map<String, Object> attributes = new HashMap<>();
 
-    public FreeMarkerSmsTemplateProvider(KeycloakSession session, FreeMarkerUtil freeMarker) {
+    public FreeMarkerSmsTemplateProvider(KeycloakSession session) {
         this.session = session;
-        this.freeMarker = freeMarker;
+        this.freeMarker = session.getProvider(FreeMarkerProvider.class);
     }
 
     @Override
@@ -137,41 +136,6 @@ public class FreeMarkerSmsTemplateProvider implements SMSTemplateProvider {
     }
 
     @Override
-    public void sendConfirmIdentityBrokerLink(String link, long expirationInMinutes) throws SMSException {
-        Map<String, Object> attributes = new HashMap<>(this.attributes);
-        attributes.put("user", new ProfileBean(user));
-        addLinkInfoIntoAttributes(link, expirationInMinutes, attributes);
-
-        attributes.put("realmName", getRealmName());
-
-        BrokeredIdentityContext brokerContext = (BrokeredIdentityContext) this.attributes.get(IDENTITY_PROVIDER_BROKER_CONTEXT);
-        String idpAlias = brokerContext.getIdpConfig().getAlias();
-        String idpDisplayName = brokerContext.getIdpConfig().getDisplayName();
-        idpAlias = ObjectUtil.capitalize(idpAlias);
-
-        if (idpDisplayName != null) {
-            idpAlias = ObjectUtil.capitalize(idpDisplayName);
-        }
-
-        attributes.put("identityProviderContext", brokerContext);
-        attributes.put("identityProviderAlias", idpAlias);
-
-        List<Object> subjectAttrs = Arrays.asList(idpAlias);
-        send("identityProviderLinkSubject", subjectAttrs, "identity-provider-link.ftl", attributes);
-    }
-
-    @Override
-    public void sendExecuteActions(String link, long expirationInMinutes) throws SMSException {
-        Map<String, Object> attributes = new HashMap<>(this.attributes);
-        attributes.put("user", new ProfileBean(user));
-        addLinkInfoIntoAttributes(link, expirationInMinutes, attributes);
-
-        attributes.put("realmName", getRealmName());
-
-        send("executeActionsSubject", "executeActions.ftl", attributes);
-    }
-
-    @Override
     public void sendVerifyPhoneNumber(String link, long expirationInMinutes) throws SMSException {
         Map<String, Object> attributes = new HashMap<>(this.attributes);
         attributes.put("user", new ProfileBean(user));
@@ -209,11 +173,10 @@ public class FreeMarkerSmsTemplateProvider implements SMSTemplateProvider {
         attributes.put("link", link);
         attributes.put("linkExpiration", expirationInMinutes);
         KeycloakUriInfo uriInfo = session.getContext().getUri();
-        URI baseUri = uriInfo.getBaseUri();
         try {
             Locale locale = session.getContext().resolveLocale(user);
             attributes.put("linkExpirationFormatter", new LinkExpirationFormatterMethod(getTheme().getMessages(locale), locale));
-            attributes.put("url", new UrlBean(realm, getTheme(), baseUri, null));
+            attributes.put("url", new UrlBean(realm, getTheme(), uriInfo.getBaseUri(), null));
         } catch (IOException e) {
             throw new SMSException("Failed to template sms", e);
         }

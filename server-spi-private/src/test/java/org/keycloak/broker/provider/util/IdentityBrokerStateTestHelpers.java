@@ -779,6 +779,16 @@ public class IdentityBrokerStateTestHelpers {
         }
 
         @Override
+        public boolean isVerifyPhoneNumber() {
+            return false;
+        }
+
+        @Override
+        public void setVerifyPhoneNumber(boolean verifyPhoneNumber) {
+
+        }
+
+        @Override
         public boolean isLoginWithEmailAllowed() {
             return false;
         }
@@ -1075,6 +1085,16 @@ public class IdentityBrokerStateTestHelpers {
 
         @Override
         public void setOTPPolicy(OTPPolicy policy) {
+
+        }
+
+        @Override
+        public OTPPolicy getSmsOTPPolicy() {
+            return null;
+        }
+
+        @Override
+        public void setSmsOTPPolicy(OTPPolicy policy) {
 
         }
 
