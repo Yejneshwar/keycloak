@@ -155,7 +155,7 @@ public class PassThroughFederatedUserStorageProvider implements
     }
 
     @Override
-    public UserModel getUserByPhoneNumber(String phoneNumber, RealmModel realm) {
+    public UserModel getUserByPhoneNumber(RealmModel realm, String phoneNumber) {
         return null;
     }
 

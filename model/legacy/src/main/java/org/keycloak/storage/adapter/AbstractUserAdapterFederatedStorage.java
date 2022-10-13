@@ -55,6 +55,7 @@ public abstract class AbstractUserAdapterFederatedStorage extends UserModelDefau
     public static String LAST_NAME_ATTRIBUTE = "LAST_NAME";
     public static String EMAIL_ATTRIBUTE = "EMAIL";
     public static String EMAIL_VERIFIED_ATTRIBUTE = "EMAIL_VERIFIED";
+    public static String PHONE_NUMBER_VERIFIED_ATTRIBUTE = "PHONE_NUMBER_VERIFIED";
     public static String CREATED_TIMESTAMP_ATTRIBUTE = "CREATED_TIMESTAMP";
     public static String ENABLED_ATTRIBUTE = "ENABLED";
 
@@ -400,6 +401,25 @@ public abstract class AbstractUserAdapterFederatedStorage extends UserModelDefau
     @Override
     public void setEmailVerified(boolean verified) {
         setSingleAttribute(EMAIL_VERIFIED_ATTRIBUTE, Boolean.toString(verified));
+
+    }
+
+    @Override
+    public boolean isPhoneNumberVerified() {
+        String val = getFirstAttribute(PHONE_NUMBER_VERIFIED_ATTRIBUTE);
+        if (val == null) return false;
+        else return Boolean.valueOf(val);
+    }
+
+    /**
+     * Stores as attribute in federated storage.
+     * PHONE_NUMBER_VERIFIED_ATTRIBUTE
+     *
+     * @param verified
+     */
+    @Override
+    public void setPhoneNumberVerified(boolean verified) {
+        setSingleAttribute(PHONE_NUMBER_VERIFIED_ATTRIBUTE, Boolean.toString(verified));
 
     }
 

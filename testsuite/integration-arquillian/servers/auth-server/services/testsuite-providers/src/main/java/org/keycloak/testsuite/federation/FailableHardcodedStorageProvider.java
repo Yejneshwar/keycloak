@@ -208,7 +208,7 @@ public class FailableHardcodedStorageProvider implements UserStorageProvider, Us
     }
 
     @Override
-    public UserModel getUserByPhoneNumber(String phoneNumber, RealmModel realm) {
+    public UserModel getUserByPhoneNumber(RealmModel realm, String phoneNumber) {
         checkForceFail();
         return null;
     }
