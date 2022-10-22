@@ -110,10 +110,8 @@ public class DefaultAttributes extends HashMap<String, List<String>> implements 
 
     @Override
     public boolean validate(String name, Consumer<ValidationError>... listeners) {
-        System.out.println("TO VALIDATE : "+ name);
         Entry<String, List<String>> attribute = createAttribute(name);
         List<AttributeMetadata> metadatas = new ArrayList<>();
-
         metadatas.addAll(Optional.ofNullable(this.metadataByAttribute.get(attribute.getKey()))
                 .map(Collections::singletonList).orElse(Collections.emptyList()));
         metadatas.addAll(Optional.ofNullable(this.metadataByAttribute.get(READ_ONLY_ATTRIBUTE_KEY))
@@ -302,7 +300,6 @@ public class DefaultAttributes extends HashMap<String, List<String>> implements 
         }
 
         List<String> email = newAttributes.get(UserModel.EMAIL);
-        
         if (email != null && realm.isRegistrationEmailAsUsername()) {
             final List<String> lowerCaseEmailList = email.stream()
                     .filter(Objects::nonNull)
@@ -312,6 +309,15 @@ public class DefaultAttributes extends HashMap<String, List<String>> implements 
             newAttributes.put(UserModel.USERNAME, lowerCaseEmailList);
         }
 
+        List<String> phoneNumberLocale = newAttributes.get(UserModel.PHONE_NUMBER_LOCALE);
+        if (phoneNumberLocale != null) {
+            final List<String> upperCaseLocaleList = phoneNumberLocale.stream()
+                    .filter(Objects::nonNull)
+                    .map(String::toUpperCase)
+                    .collect(Collectors.toList());
+
+            newAttributes.put(UserModel.PHONE_NUMBER_LOCALE, upperCaseLocaleList);
+        }
         return newAttributes;
     }
 

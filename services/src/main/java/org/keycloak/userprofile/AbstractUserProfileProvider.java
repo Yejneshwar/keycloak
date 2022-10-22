@@ -61,7 +61,7 @@ import org.keycloak.userprofile.validator.UsernameIDNHomographValidator;
 import org.keycloak.userprofile.validator.UsernameMutationValidator;
 import org.keycloak.validate.ValidatorConfig;
 import org.keycloak.validate.validators.EmailValidator;
-// import org.keycloak.validate.validators.PhoneNumberValidator;
+import org.keycloak.validate.validators.PhoneNumberValidator;
 
 /**
  * <p>A base class for {@link UserProfileProvider} implementations providing the main hooks for customizations.
@@ -114,6 +114,14 @@ public abstract class AbstractUserProfileProvider<U extends UserProfileProvider>
 
     private static boolean readEmailCondition(AttributeContext c) {
         return !Profile.isFeatureEnabled(Profile.Feature.UPDATE_EMAIL) || c.getContext() != UPDATE_PROFILE;
+    }
+
+    private static boolean editPhoneNumberCondition(AttributeContext c) {
+        return !Profile.isFeatureEnabled(Profile.Feature.UPDATE_PHONE_NUMBER) || (c.getContext() != UPDATE_PROFILE && c.getContext() != ACCOUNT);
+    }
+
+    private static boolean readPhoneNumberCondition(AttributeContext c) {
+        return !Profile.isFeatureEnabled(Profile.Feature.UPDATE_PHONE_NUMBER) || c.getContext() != UPDATE_PROFILE;
     }
 
     public static Pattern getRegexPatternString(String[] builtinReadOnlyAttributes) {
@@ -314,7 +322,7 @@ public abstract class AbstractUserProfileProvider<U extends UserProfileProvider>
     private UserProfileMetadata createDefaultProfile(UserProfileContext context, AttributeValidatorMetadata readOnlyValidator) {
         UserProfileMetadata metadata = new UserProfileMetadata(context);
 
-        metadata.addAttribute(UserModel.USERNAME, -2, 
+        metadata.addAttribute(UserModel.USERNAME, -3, 
                 AbstractUserProfileProvider::editUsernameCondition,
                 AbstractUserProfileProvider::readUsernameCondition,
                 new AttributeValidatorMetadata(UsernameHasValueValidator.ID),
@@ -322,7 +330,7 @@ public abstract class AbstractUserProfileProvider<U extends UserProfileProvider>
                 new AttributeValidatorMetadata(DuplicateUsernameValidator.ID),
                 new AttributeValidatorMetadata(UsernameMutationValidator.ID)).setAttributeDisplayName("${username}");
 
-        metadata.addAttribute(UserModel.EMAIL, -1,
+        metadata.addAttribute(UserModel.EMAIL, -2,
                 AbstractUserProfileProvider::editEmailCondition,
                 AbstractUserProfileProvider::readEmailCondition,
                 new AttributeValidatorMetadata(BlankAttributeValidator.ID, BlankAttributeValidator.createConfig(Messages.MISSING_EMAIL, false)),
@@ -330,6 +338,13 @@ public abstract class AbstractUserProfileProvider<U extends UserProfileProvider>
         		new AttributeValidatorMetadata(EmailExistsAsUsernameValidator.ID),
                 new AttributeValidatorMetadata(EmailValidator.ID, ValidatorConfig.builder().config(EmailValidator.IGNORE_EMPTY_VALUE, true).build()))
             .setAttributeDisplayName("${email}");
+
+        metadata.addAttribute(UserModel.PHONE_NUMBER, -1,
+            AbstractUserProfileProvider::editPhoneNumberCondition,
+            AbstractUserProfileProvider::readPhoneNumberCondition,
+            new AttributeValidatorMetadata(BlankAttributeValidator.ID, BlankAttributeValidator.createConfig(Messages.MISSING_PHONE_NUMBER, false)),
+            new AttributeValidatorMetadata(PhoneNumberValidator.ID, ValidatorConfig.builder().config(PhoneNumberValidator.IGNORE_EMPTY_VALUE, true).build()))
+        .setAttributeDisplayName("${phoneNumber}");
 
         List<AttributeValidatorMetadata> readonlyValidators = new ArrayList<>();
 
