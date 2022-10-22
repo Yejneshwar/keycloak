@@ -1157,6 +1157,17 @@ public class RealmAdapter implements LegacyRealmModel, JpaModel<RealmEntity> {
     }
 
     @Override
+    public String getSmsTheme() {
+        return realm.getSmsTheme();
+    }
+
+    @Override
+    public void setSmsTheme(String name) {
+        realm.setSmsTheme(name);
+        em.flush();
+    }
+
+    @Override
     public boolean isEventsEnabled() {
         return realm.isEventsEnabled();
     }

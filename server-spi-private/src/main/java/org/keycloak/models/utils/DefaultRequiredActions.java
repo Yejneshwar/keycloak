@@ -198,8 +198,8 @@ public class DefaultRequiredActions {
     }
 
     public static void addUpdatePhoneNumberAction(RealmModel realm){
-        if (realm.getRequiredActionProviderByAlias(UserModel.RequiredAction.UPDATE_PHONE_NUMBER.name()) == null
-        && Profile.isFeatureEnabled(Profile.Feature.UPDATE_PHONE_NUMBER)) {
+        if (realm.getRequiredActionProviderByAlias(UserModel.RequiredAction.UPDATE_PHONE_NUMBER.name()) == null){
+        // && Profile.isFeatureEnabled(Profile.Feature.UPDATE_PHONE_NUMBER)) {
             RequiredActionProviderModel updatePhoneNumber = new RequiredActionProviderModel();
             updatePhoneNumber.setEnabled(true);
             updatePhoneNumber.setAlias(UserModel.RequiredAction.UPDATE_PHONE_NUMBER.name());

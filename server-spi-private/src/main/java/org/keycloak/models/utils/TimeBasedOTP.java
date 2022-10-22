@@ -89,7 +89,8 @@ public class TimeBasedOTP extends HmacOTP {
             }
 
             String candidate = generateOTP(new String(secret), steps, this.numberDigits, this.algorithm);
-
+            System.out.println("Candidate : "+candidate);
+            System.out.println("Token : "+token);
             if (candidate.equals(token)) {
                 return true;
             }

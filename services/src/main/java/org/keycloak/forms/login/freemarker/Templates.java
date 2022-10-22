@@ -32,6 +32,8 @@ public class Templates {
                 return "login-username.ftl";
             case LOGIN_PASSWORD:
                 return "login-password.ftl";
+            case LOGIN_SOTP:
+                return "login-sotp.ftl";
             case LOGIN_TOTP:
                 return "login-otp.ftl";
             case LOGIN_CONFIG_SOTP:

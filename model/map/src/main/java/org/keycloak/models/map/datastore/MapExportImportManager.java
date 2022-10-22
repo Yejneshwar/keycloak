@@ -243,6 +243,7 @@ public class MapExportImportManager implements ExportImportManager {
         if (rep.getAccountTheme() != null) newRealm.setAccountTheme(rep.getAccountTheme());
         if (rep.getAdminTheme() != null) newRealm.setAdminTheme(rep.getAdminTheme());
         if (rep.getEmailTheme() != null) newRealm.setEmailTheme(rep.getEmailTheme());
+        if (rep.getSmsTheme() != null) newRealm.setSmsTheme(rep.getSmsTheme());
 
         // todo remove this stuff as its all deprecated
         if (rep.getRequiredCredentials() != null) {
@@ -759,6 +760,7 @@ public class MapExportImportManager implements ExportImportManager {
         if (rep.getAccountTheme() != null) realm.setAccountTheme(rep.getAccountTheme());
         if (rep.getAdminTheme() != null) realm.setAdminTheme(rep.getAdminTheme());
         if (rep.getEmailTheme() != null) realm.setEmailTheme(rep.getEmailTheme());
+        if (rep.getSmsTheme() != null) realm.setSmsTheme(rep.getSmsTheme());
 
         if (rep.isEventsEnabled() != null) realm.setEventsEnabled(rep.isEventsEnabled());
         if (rep.getEventsExpiration() != null) realm.setEventsExpiration(rep.getEventsExpiration());

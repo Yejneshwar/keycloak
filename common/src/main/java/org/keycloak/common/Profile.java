@@ -57,6 +57,11 @@ public class Profile {
             Boolean enabled = config.getConfig(f);
             Type type = product.equals(ProductValue.RHSSO) ? f.getTypeProduct() : f.getTypeProject();
 
+            //TODO: REMOVE THIS AND REMOVE AS PREVIEW FEATURE
+            System.out.println("Feature name : " + f.name().toLowerCase());
+            System.out.println("Feature type : " + type);
+            if(f.name().toLowerCase() == "update_phone_number") continue;
+
             switch (type) {
                 case DEFAULT:
                     if (enabled != null && !enabled) {
@@ -263,6 +268,7 @@ public class Profile {
                 String jbossServerConfigDir = System.getProperty("jboss.server.config.dir");
                 if (jbossServerConfigDir != null) {
                     File file = new File(jbossServerConfigDir, "profile.properties");
+                    System.out.println("CONFIG FILE PATH : " + file.getAbsolutePath());
                     if (file.isFile()) {
                         try (FileInputStream is = new FileInputStream(file)) {
                             properties.load(is);
@@ -289,12 +295,13 @@ public class Profile {
         }
 
         public Boolean getConfig(Feature feature) {
+            System.out.println("Get Config for  : " + feature.name().toLowerCase());
             String config = getProperty("keycloak.profile.feature." + feature.name().toLowerCase());
-
+            System.out.println("Config is NULL?  : " + (config == null));
             if (config == null) {
                 config = properties.getProperty("feature." + feature.name().toLowerCase());
             }
-
+            System.out.println("Config is NULL? again?  : " + (config == null));
             if (config == null) {
                 return null;
             } else if (config.equals("enabled")) {

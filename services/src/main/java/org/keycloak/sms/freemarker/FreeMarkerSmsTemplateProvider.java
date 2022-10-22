@@ -111,16 +111,6 @@ public class FreeMarkerSmsTemplateProvider implements SMSTemplateProvider {
         send(toCamelCase(event.getType()) + "Subject", "event-" + event.getType().toString().toLowerCase() + ".ftl", attributes);
     }
 
-    @Override
-    public void sendPasswordReset(String link, long expirationInMinutes) throws SMSException {
-        Map<String, Object> attributes = new HashMap<>(this.attributes);
-        attributes.put("user", new ProfileBean(user));
-        addLinkInfoIntoAttributes(link, expirationInMinutes, attributes);
-
-        attributes.put("realmName", getRealmName());
-
-        send("passwordResetSubject", "password-reset.ftl", attributes);
-    }
 
     @Override
     public void sendTestSms(Map<String, String> config, UserModel user) throws SMSException {
@@ -132,7 +122,7 @@ public class FreeMarkerSmsTemplateProvider implements SMSTemplateProvider {
         attributes.put("realmName", realm.getName());
 
         SMSTemplate sms = processTemplate("smsTestSubject", Collections.emptyList(), "sms-test.ftl", attributes);
-        send(config, sms.getSubject(), sms.getTextBody(), sms.getHtmlBody());
+        send(config, sms.getSubject(), sms.getTextBody());
     }
 
     @Override
@@ -149,8 +139,9 @@ public class FreeMarkerSmsTemplateProvider implements SMSTemplateProvider {
     @Override
     public void sendPhoneNumberUpdateConfirmation(String link, long expirationInMinutes, String newPhoneNumber) throws SMSException {
         if (newPhoneNumber == null) {
-            throw new IllegalArgumentException("The new sms is mandatory");
+            throw new IllegalArgumentException("The new phone number is mandatory");
         }
+        System.out.println("Sending SMS");
 
         Map<String, Object> attributes = new HashMap<>(this.attributes);
         attributes.put("user", new ProfileBean(user));
@@ -209,15 +200,8 @@ public class FreeMarkerSmsTemplateProvider implements SMSTemplateProvider {
             } catch (final FreeMarkerException e) {
                 throw new SMSException("Failed to template plain text sms.", e);
             }
-            String htmlTemplate = String.format("html/%s", template);
-            String htmlBody;
-            try {
-                htmlBody = freeMarker.processTemplate(attributes, htmlTemplate, theme);
-            } catch (final FreeMarkerException e) {
-                throw new SMSException("Failed to template html sms.", e);
-            }
 
-            return new SMSTemplate(subject, textBody, htmlBody);
+            return new SMSTemplate(subject, textBody);
         } catch (Exception e) {
             throw new SMSException("Failed to template sms", e);
         }
@@ -235,7 +219,7 @@ public class FreeMarkerSmsTemplateProvider implements SMSTemplateProvider {
     protected void send(String subjectFormatKey, List<Object> subjectAttributes, String bodyTemplate, Map<String, Object> bodyAttributes, String address) throws SMSException {
         try {
             SMSTemplate sms = processTemplate(subjectFormatKey, subjectAttributes, bodyTemplate, bodyAttributes);
-            send(sms.getSubject(), sms.getTextBody(), sms.getHtmlBody(), address);
+            send(sms.getSubject(), sms.getTextBody(), address);
         } catch (SMSException e) {
             throw e;
         } catch (Exception e) {
@@ -243,20 +227,20 @@ public class FreeMarkerSmsTemplateProvider implements SMSTemplateProvider {
         }
     }
 
-    protected void send(String subject, String textBody, String htmlBody, String address) throws SMSException {
-        send(realm.getSmtpConfig(), subject, textBody, htmlBody, address);
+    protected void send(String subject, String textBody, String address) throws SMSException {
+        send(realm.getSmtpConfig(), subject, textBody, address);
     }
 
-    protected void send(Map<String, String> config, String subject, String textBody, String htmlBody) throws SMSException {
-        send(config, subject, textBody, htmlBody, null);
+    protected void send(Map<String, String> config, String subject, String textBody) throws SMSException {
+        send(config, subject, textBody, null);
     }
 
-    protected void send(Map<String, String> config, String subject, String textBody, String htmlBody, String address) throws SMSException {
+    protected void send(Map<String, String> config, String subject, String textBody, String address) throws SMSException {
         SMSSenderProvider smsSender = session.getProvider(SMSSenderProvider.class);
         if (address == null) {
-            smsSender.send(config, user, subject, textBody, htmlBody);
+            smsSender.send(config, user, subject, textBody);
         } else {
-            smsSender.send(config, address, subject, textBody, htmlBody);
+            smsSender.send(config, address, subject, textBody);
         }
     }
 
@@ -276,12 +260,10 @@ public class FreeMarkerSmsTemplateProvider implements SMSTemplateProvider {
 
         private String subject;
         private String textBody;
-        private String htmlBody;
 
-        public SMSTemplate(String subject, String textBody, String htmlBody) {
+        public SMSTemplate(String subject, String textBody) {
             this.subject = subject;
             this.textBody = textBody;
-            this.htmlBody = htmlBody;
         }
 
         public String getSubject() {
@@ -290,10 +272,6 @@ public class FreeMarkerSmsTemplateProvider implements SMSTemplateProvider {
 
         public String getTextBody() {
             return textBody;
-        }
-
-        public String getHtmlBody() {
-            return htmlBody;
         }
     }
 

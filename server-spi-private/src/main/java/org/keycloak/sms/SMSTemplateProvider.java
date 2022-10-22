@@ -43,14 +43,6 @@ public interface SMSTemplateProvider extends Provider {
 
     void sendEvent(Event event) throws SMSException;
 
-    /**
-     * Reset password sent from forgot password link on login
-     *
-     * @param link
-     * @param expirationInMinutes
-     * @throws SMSException
-     */
-    void sendPasswordReset(String link, long expirationInMinutes) throws SMSException;
 
     /**
      * Test SMTP connection with current logged in user

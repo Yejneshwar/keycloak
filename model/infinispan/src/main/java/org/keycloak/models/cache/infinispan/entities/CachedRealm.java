@@ -121,6 +121,7 @@ public class CachedRealm extends AbstractExtendableRevisioned {
     protected String accountTheme;
     protected String adminTheme;
     protected String emailTheme;
+    protected String smsTheme;
     protected String masterAdminClient;
 
     protected List<RequiredCredentialModel> requiredCredentials;
@@ -244,6 +245,7 @@ public class CachedRealm extends AbstractExtendableRevisioned {
         accountTheme = model.getAccountTheme();
         adminTheme = model.getAdminTheme();
         emailTheme = model.getEmailTheme();
+        smsTheme = model.getSmsTheme();
 
         requiredCredentials = model.getRequiredCredentialsStream().collect(Collectors.toList());
         userActionTokenLifespans = Collections.unmodifiableMap(new HashMap<>(model.getUserActionTokenLifespans()));
@@ -576,6 +578,10 @@ public class CachedRealm extends AbstractExtendableRevisioned {
 
     public String getEmailTheme() {
         return emailTheme;
+    }
+
+    public String getSmsTheme() {
+        return smsTheme;
     }
 
     public int getNotBefore() {

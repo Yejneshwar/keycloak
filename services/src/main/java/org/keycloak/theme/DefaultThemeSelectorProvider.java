@@ -41,6 +41,9 @@ public class DefaultThemeSelectorProvider implements ThemeSelectorProvider {
             case EMAIL:
                 name = session.getContext().getRealm().getEmailTheme();
                 break;
+            case SMS:
+                name = session.getContext().getRealm().getSmsTheme();
+                break;
             case ADMIN:
                 name = session.getContext().getRealm().getAdminTheme();
                 break;

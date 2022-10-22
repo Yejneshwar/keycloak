@@ -1,10 +1,10 @@
 {
     "themes": [{
         "name" : "base",
-        "types": [ "admin", "account", "login", "email" ]
+        "types": [ "admin", "account", "login", "email", "sms" ]
     }, {
         "name" : "keycloak",
-        "types": [ "admin", "account", "login", "common", "email", "welcome" ]
+        "types": [ "admin", "account", "login", "common", "email","sms", "welcome" ]
     }, {
         "name" : "keycloak.v2",
         "types": [ "account", "admin" ]

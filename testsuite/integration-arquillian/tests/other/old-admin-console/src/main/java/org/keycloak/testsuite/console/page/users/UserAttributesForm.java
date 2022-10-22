@@ -156,6 +156,7 @@ public class UserAttributesForm extends Form {
         setLastName(user.getLastName());
         if (user.isEnabled() != null) setEnabled(user.isEnabled());
         if (user.isEmailVerified() != null) setEmailVerified(user.isEmailVerified());
+        if (user.isPhoneNumberVerified() != null) setPhoneNumberVerified(user.isPhoneNumberVerified());
         if (user.getGroups() != null && user.getGroups().size() > 0) setGroups(new HashSet<String>(user.getGroups()));
         if (user.getRequiredActions() != null) setRequiredActions(new HashSet<>(user.getRequiredActions()));
     }

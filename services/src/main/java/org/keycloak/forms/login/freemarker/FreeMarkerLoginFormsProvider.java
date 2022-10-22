@@ -39,6 +39,7 @@ import org.keycloak.OAuth2Constants;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.authenticators.browser.AbstractUsernameFormAuthenticator;
 import org.keycloak.authentication.authenticators.browser.OTPFormAuthenticator;
+import org.keycloak.authentication.authenticators.browser.SOTPFormAuthenticator;
 import org.keycloak.authentication.requiredactions.util.UpdateProfileContext;
 import org.keycloak.authentication.requiredactions.util.UserUpdateProfileContext;
 import org.keycloak.broker.provider.BrokeredIdentityContext;
@@ -63,7 +64,9 @@ import org.keycloak.forms.login.freemarker.model.RegisterBean;
 import org.keycloak.forms.login.freemarker.model.RequiredActionUrlFormatterMethod;
 import org.keycloak.forms.login.freemarker.model.SAMLPostFormBean;
 import org.keycloak.forms.login.freemarker.model.TotpBean;
+import org.keycloak.forms.login.freemarker.model.SotpBean;
 import org.keycloak.forms.login.freemarker.model.TotpLoginBean;
+import org.keycloak.forms.login.freemarker.model.SotpLoginBean;
 import org.keycloak.forms.login.freemarker.model.UrlBean;
 import org.keycloak.forms.login.freemarker.model.VerifyProfileBean;
 import org.keycloak.forms.login.freemarker.model.X509ConfirmBean;
@@ -179,7 +182,6 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
             case UPDATE_PHONE_NUMBER:
                 UpdateProfileContext userBasedContextForPhoneNumber = new UserUpdateProfileContext(realm, user);
                 this.attributes.put(UPDATE_PROFILE_CONTEXT_ATTR, userBasedContextForPhoneNumber);
-
                 actionMessage = Messages.UPDATE_PHONE_NUMBER;
                 page = LoginFormsPages.LOGIN_UPDATE_PHONE_NUMBER;
                 break;
@@ -200,7 +202,7 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
                 break;
             case VERIFY_PHONE_NUMBER:
                 actionMessage = Messages.VERIFY_PHONE_NUMBER;
-                page = LoginFormsPages.LOGIN_TOTP;
+                page = LoginFormsPages.LOGIN_SOTP;
                 break;
             case VERIFY_PROFILE:
                 UpdateProfileContext verifyProfile = new UserUpdateProfileContext(realm, user);
@@ -250,7 +252,7 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
                 attributes.put("totp", new TotpBean(session, realm, user, uriInfo.getRequestUriBuilder()));
                 break;
             case LOGIN_CONFIG_SOTP:
-                System.out.println("CONFIG SOTP");
+                attributes.put("sotp", new SotpBean(session, realm, user, uriInfo.getRequestUriBuilder()));
                 break;
             case LOGIN_CONFIG_EOTP:
                 System.out.println("CONFIG EOTP");
@@ -290,6 +292,7 @@ public class FreeMarkerLoginFormsProvider implements LoginFormsProvider {
                 attributes.put("otpLogin", new TotpLoginBean(session, realm, user, (String) this.attributes.get(OTPFormAuthenticator.SELECTED_OTP_CREDENTIAL_ID)));
                 break;
             case LOGIN_SOTP:
+                attributes.put("otpLogin", new SotpLoginBean(session, realm, user, (String) this.attributes.get(OTPFormAuthenticator.SELECTED_OTP_CREDENTIAL_ID)));
                 System.out.println("LOGIN SOTP");
                 break;
             case LOGIN_EOTP:

@@ -37,7 +37,7 @@ public class PhoneNumberValidator extends AbstractStringValidator implements Con
 
     public static final PhoneNumberValidator INSTANCE = new PhoneNumberValidator();
 
-    public static final String MESSAGE_INVALID_EMAIL = "error-invalid-phone-number";
+    public static final String MESSAGE_INVALID_PHONE_NUMBER = "error-invalid-phone-number";
 
 
     @Override

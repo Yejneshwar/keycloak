@@ -60,12 +60,12 @@ public class DefaultSmsSenderProvider implements SMSSenderProvider {
     }
 
     @Override
-    public void send(Map<String, String> config, UserModel user, String subject, String textBody, String htmlBody) throws SMSException {
-        send(config, retrievePhoneNumber(user), subject, textBody, htmlBody);
+    public void send(Map<String, String> config, UserModel user, String subject, String textBody) throws SMSException {
+        send(config, retrievePhoneNumber(user), subject, textBody);
     }
 
     @Override
-    public void send(Map<String, String> config, String address, String subject, String textBody, String htmlBody) throws SMSException {
+    public void send(Map<String, String> config, String address, String subject, String textBody) throws SMSException {
         Transport transport = null;
         try {
 
@@ -120,22 +120,11 @@ public class DefaultSmsSenderProvider implements SMSSenderProvider {
                 multipart.addBodyPart(textPart);
             }
 
-            if (htmlBody != null) {
-                MimeBodyPart htmlPart = new MimeBodyPart();
-                htmlPart.setContent(htmlBody, "text/html; charset=UTF-8");
-                multipart.addBodyPart(htmlPart);
-            }
-
             SMTPMessage msg = new SMTPMessage(session);
-            msg.setFrom(toInternetAddress(from, fromDisplayName));
 
-            msg.setReplyTo(new Address[]{toInternetAddress(from, fromDisplayName)});
-            if (replyTo != null && !replyTo.isEmpty()) {
-                msg.setReplyTo(new Address[]{toInternetAddress(replyTo, replyToDisplayName)});
-            }
-            if (envelopeFrom != null && !envelopeFrom.isEmpty()) {
-                msg.setEnvelopeFrom(envelopeFrom);
-            }
+            System.out.println("SEND TO : " + address);
+            System.out.println("Subject : " + subject);
+            System.out.println("Content : " + textBody);
 
             msg.setHeader("To", address);
             msg.setSubject(subject, "utf-8");
@@ -143,15 +132,6 @@ public class DefaultSmsSenderProvider implements SMSSenderProvider {
             msg.saveChanges();
             msg.setSentDate(new Date());
 
-            transport = session.getTransport("smtp");
-            if (auth) {
-                try (VaultStringSecret vaultStringSecret = this.session.vault().getStringSecret(config.get("password"))) {
-                    transport.connect(config.get("user"), vaultStringSecret.get().orElse(config.get("password")));
-                }
-            } else {
-                transport.connect();
-            }
-            transport.sendMessage(msg, new InternetAddress[]{new InternetAddress(address)});
         } catch (Exception e) {
             ServicesLogger.LOGGER.failedToSendSms(e);
             throw new SMSException(e);

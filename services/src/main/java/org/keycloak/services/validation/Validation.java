@@ -31,6 +31,7 @@ public class Validation {
     public static final String FIELD_PASSWORD = "password";
     public static final String FIELD_USERNAME = "username";
     public static final String FIELD_OTP_CODE = "totp";
+    public static final String FIELD_SOTP_CODE = "sotp";
     public static final String FIELD_OTP_LABEL = "userLabel";
     public static final String FIELD_PHONE_NUMBER_LOCALE = "phoneNumberLocale";
     public static final String FIELD_PHONE_NUMBER = "phoneNumber";

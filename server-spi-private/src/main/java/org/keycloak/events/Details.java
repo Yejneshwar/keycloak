@@ -93,4 +93,10 @@ public interface Details {
     String CREDENTIAL_TYPE = "credential_type";
     String SELECTED_CREDENTIAL_ID = "selected_credential_id";
     String AUTHENTICATION_ERROR_DETAIL = "authentication_error_detail";
+    String OVERRIDE_VERIFICATION = "override_verification";
+    String ATTEMPTS_REMAINING = "attempts_remaining";
+    String OTP_SINCE = "otp_since";
+    String OTP_EXPIRY = "otp_expiry";
+    String LAST_OTP_SEND = "last_otp_send";
+    String AUTH_OTP = "auth_otp";
 }

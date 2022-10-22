@@ -3,6 +3,9 @@ package org.keycloak.models.utils;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
+import org.keycloak.sessions.AuthenticationSessionModel;
+import org.keycloak.events.Details;
+import org.keycloak.common.util.Time;
 
 /**
  * 
@@ -12,13 +15,13 @@ import java.util.TimeZone;
  *
  */
 
-public class SmsBasedOTP extends HmacOTP{
+public class SmsOTP extends HmacOTP{
     public static final int DEFAULT_INTERVAL_SECONDS = 30;
     public static final int DEFAULT_DELAY_WINDOW = 1;
 
     private Clock clock;
 
-    public SmsBasedOTP() {
+    public SmsOTP() {
         this(DEFAULT_ALGORITHM, DEFAULT_NUMBER_DIGITS, DEFAULT_INTERVAL_SECONDS, DEFAULT_DELAY_WINDOW);
     }
 
@@ -28,7 +31,7 @@ public class SmsBasedOTP extends HmacOTP{
      * @param timeIntervalInSeconds the number of seconds a token is valid
      * @param lookAheadWindow the number of previous intervals that should be used to validate tokens.
      */
-    public SmsBasedOTP(String algorithm, int numberDigits, int timeIntervalInSeconds, int lookAheadWindow) {
+    public SmsOTP(String algorithm, int numberDigits, int timeIntervalInSeconds, int lookAheadWindow) {
         super(numberDigits, algorithm, lookAheadWindow);
         this.clock = new Clock(timeIntervalInSeconds);
     }
@@ -50,6 +53,18 @@ public class SmsBasedOTP extends HmacOTP{
         return generateOTP(secretKey, steps, this.numberDigits, this.algorithm);
     }
 
+    public boolean isPresentOTPValid(AuthenticationSessionModel authSession){
+        System.out.println("isPresentOTPValid?");
+        String expiry = authSession.getAuthNote(Details.OTP_EXPIRY);
+        String presentOTP = authSession.getAuthNote(Details.AUTH_OTP);
+        if (presentOTP == null || expiry == null) return false;
+        if (presentOTP.length() != this.numberDigits) return false;
+        //accounting for request times and such
+        if ((Long.parseLong(expiry) - Time.currentTimeMillis()) <= 1) return false;
+        return true;
+
+    }
+
     /**
      * <p>Validates a token using a secret key.</p>
      *
@@ -57,12 +72,12 @@ public class SmsBasedOTP extends HmacOTP{
      * @param secret Shared secret
      * @return
      */
-    public boolean validateSOTP(String token, byte[] secret) {
+    public boolean validateSOTP(String token, AuthenticationSessionModel authSession) {
         System.out.println("VALIDATE SOTP");
-        System.out.println(token);
-        String s = new String(secret);
-        System.out.println(s);
-        return true;
+        System.out.println("OTP Entered : " + token);
+        System.out.println("OTP to be : " + authSession.getAuthNote(Details.AUTH_OTP));
+        System.out.println("OTP expiry : " + authSession.getAuthNote(Details.OTP_EXPIRY));
+        return false;
     }
 
     public void setCalendar(Calendar calendar) {

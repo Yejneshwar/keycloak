@@ -19,13 +19,32 @@ package org.keycloak.models.utils;
 
 import org.keycloak.models.credential.OTPCredentialModel;
 
+import org.keycloak.sessions.AuthenticationSessionModel;
+
 /**
  * @author <a href="mailto:bill@burkecentral.com">Bill Burke</a>
  * @version $Revision: 1 $
  */
 public class CredentialValidation {
 
+    public static boolean isPresentOTPValid(OTPCredentialModel credentialModel, AuthenticationSessionModel authSession){
+        if(!credentialModel.getOTPCredentialData().getSubType().equals(OTPCredentialModel.SOTP)) return false;
+        SmsOTP validator = new SmsOTP(credentialModel.getOTPCredentialData().getAlgorithm(),
+            credentialModel.getOTPCredentialData().getDigits(), credentialModel.getOTPCredentialData().getPeriod(),
+            0);
+            return validator.isPresentOTPValid(authSession);
+    }
+
+    public static boolean validOTP(String token, OTPCredentialModel credentialModel, int lookAheadWindow, AuthenticationSessionModel authSession){
+        if(!credentialModel.getOTPCredentialData().getSubType().equals(OTPCredentialModel.SOTP)) return false;
+        SmsOTP validator = new SmsOTP(credentialModel.getOTPCredentialData().getAlgorithm(),
+            credentialModel.getOTPCredentialData().getDigits(), credentialModel.getOTPCredentialData().getPeriod(),
+            lookAheadWindow);
+            return validator.validateSOTP(token,authSession); 
+    }
+
     public static boolean validOTP(String token, OTPCredentialModel credentialModel, int lookAheadWindow) {
+        System.out.println("VALIDATION OF OTP : " + credentialModel.getOTPCredentialData().getSubType().toString());
         if (credentialModel.getOTPCredentialData().getSubType().equals(OTPCredentialModel.TOTP)) {
             TimeBasedOTP validator = new TimeBasedOTP(credentialModel.getOTPCredentialData().getAlgorithm(),
                     credentialModel.getOTPCredentialData().getDigits(), credentialModel.getOTPCredentialData().getPeriod(),
@@ -37,9 +56,6 @@ public class CredentialValidation {
             int c = validator.validateHOTP(token, credentialModel.getOTPSecretData().getValue(),
                     credentialModel.getOTPCredentialData().getCounter());
             return c > -1;
-        } else if(credentialModel.getOTPCredentialData().getSubType().equals(OTPCredentialModel.SOTP)) {
-            System.out.println("VALIDATE SOTP AT CREDENTIAL VALIDATION");
-            return true; 
         } else if(credentialModel.getOTPCredentialData().getSubType().equals(OTPCredentialModel.EOTP)) {
             System.out.println("EOTP");
             return false; 

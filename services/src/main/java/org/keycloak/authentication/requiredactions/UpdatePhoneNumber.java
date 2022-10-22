@@ -29,6 +29,8 @@ import org.keycloak.authentication.InitiatedActionSupport;
 import org.keycloak.authentication.RequiredActionContext;
 import org.keycloak.authentication.RequiredActionFactory;
 import org.keycloak.authentication.RequiredActionProvider;
+import org.keycloak.authentication.AuthenticationFlowContext;
+import org.keycloak.authentication.AuthenticationFlowError;
 import org.keycloak.authentication.actiontoken.updatephonenumber.UpdatePhoneNumberActionToken;
 import org.keycloak.common.Profile;
 import org.keycloak.common.util.Time;
@@ -55,10 +57,24 @@ import org.keycloak.userprofile.UserProfile;
 import org.keycloak.userprofile.UserProfileContext;
 import org.keycloak.userprofile.UserProfileProvider;
 import org.keycloak.userprofile.ValidationException;
+import org.keycloak.services.managers.AuthenticationManager;
+
+import org.keycloak.common.util.SecretGenerator;
+import org.keycloak.models.OTPPolicy;
+import org.keycloak.models.credential.OTPCredentialModel;
+import org.keycloak.models.utils.CredentialValidation;
+
+import javax.ws.rs.core.Response;
+import org.keycloak.services.messages.Messages;
+import java.util.Optional;
 
 public class UpdatePhoneNumber implements RequiredActionProvider, RequiredActionFactory, EnvironmentDependentProviderFactory {
 
     private static final Logger logger = Logger.getLogger(UpdatePhoneNumber.class);
+
+    private String OTPSecret = null; 
+    private String newPhoneNumber = null;
+    private String newPhoneNumberLocale = null; 
 
     @Override
     public InitiatedActionSupport initiatedActionSupport() {
@@ -83,14 +99,89 @@ public class UpdatePhoneNumber implements RequiredActionProvider, RequiredAction
     @Override
     public void processAction(RequiredActionContext context) {
         MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
-        String newPhoneNumber = formData.getFirst(UserModel.PHONE_NUMBER);
-        String newPhoneNumberLocale = formData.getFirst(UserModel.PHONE_NUMBER_LOCALE);
+        String formPhoneNumber = formData.getFirst(UserModel.PHONE_NUMBER);
+        String formPhoneNumberLocale = formData.getFirst(UserModel.PHONE_NUMBER_LOCALE);
+        RealmModel realm = context.getRealm();
+
+        OTPCredentialModel credentialModel = OTPCredentialModel.createFromSOTPPolicy(realm, OTPSecret, "SMS");
+        if(formPhoneNumber != null){
+            newPhoneNumber = formPhoneNumber;
+        }
+        if(formPhoneNumberLocale != null){
+            newPhoneNumberLocale = formPhoneNumberLocale;
+        }
+        String challangeResponse = formData.getFirst("sotp");
+        String resendOTP = formData.getFirst("resendOTP");
+        System.out.println("Resend OTP? : " + resendOTP);
+        AuthenticationSessionModel authSession = context.getAuthenticationSession();
+
+        if(resendOTP != null){
+            sendPhoneNumberUpdateConfirmation(context,credentialModel);
+            return;
+        }
+
+        System.out.println("OTP entered is : " +  challangeResponse);
+
+        if((challangeResponse == null || Validation.isBlank(challangeResponse)) && (formPhoneNumber == null || formPhoneNumberLocale == null)){
+            Response challenge = context.form()
+                .addError(new FormMessage(Validation.FIELD_SOTP_CODE, Messages.INVALID_TOTP))
+                .createResponse(UserModel.RequiredAction.CONFIGURE_SOTP);
+            context.challenge(challenge);
+            return;
+        }
+
+        if(!Validation.isBlank(challangeResponse)){
+            System.out.println("OTPSecret is : " + OTPSecret);
+            
+            OTPPolicy policy = realm.getSmsOTPPolicy();
+            boolean isOTPvalid = validateOTPCredential(context,challangeResponse,credentialModel,policy,authSession);
+            System.out.println("IS OTP VALID? : " + isOTPvalid);
+            if(!isOTPvalid){
+                String attemptsRemaining = authSession.getAuthNote(Details.ATTEMPTS_REMAINING);
+                if (attemptsRemaining == null || Validation.isBlank(attemptsRemaining)){
+                    authSession.setAuthNote(Details.ATTEMPTS_REMAINING, "3");
+                }
+                else if(Integer.parseInt(attemptsRemaining) == 1){    
+                    context.getEvent().error(Errors.ACCESS_DENIED);
+                    context.failure();
+                    Response challenge = context.form()
+                         .setError("Your code could not be verified, please try again.")
+                         .createErrorPage(Response.Status.UNAUTHORIZED);
+                    context.challenge(challenge);
+                    return;
+                }
+                else{
+                    String setAttempts = Integer.toString(Integer.parseInt(attemptsRemaining)-1);
+                    authSession.setAuthNote(Details.ATTEMPTS_REMAINING, setAttempts);
+                }
+                Response challenge = context.form()
+                    .addError(new FormMessage(Validation.FIELD_SOTP_CODE, Messages.INVALID_TOTP))
+                    .createResponse(UserModel.RequiredAction.CONFIGURE_SOTP);
+                context.challenge(challenge);
+                return;
+            }
+            // if (!CredentialHelper.createSOTPCredential(context.getSession(), context.getRealm(), context.getUser(), challengeResponse, credentialModel)) {
+            //     Response challenge = context.form()
+            //             .addError(new FormMessage(Validation.FIELD_SOTP_CODE, Messages.INVALID_TOTP))
+            //             .createResponse(UserModel.RequiredAction.CONFIGURE_SOTP);
+            //     context.challenge(challenge);
+            //     return;
+            // }
+            context.success();
+            return;
+
+        }
+        
+
+        UserModel user = context.getUser();
+        boolean verifyPhoneNumber = realm.isVerifyPhoneNumber();
+        boolean isOverrideNull = (authSession.getAuthNote(Details.OVERRIDE_VERIFICATION) == null);
+        System.out.println("Override Verify Phone Number : " + !isOverrideNull);
 
         System.out.println("Numbers from form " + newPhoneNumber + " - " + newPhoneNumberLocale);
 
-        RealmModel realm = context.getRealm();
-        UserModel user = context.getUser();
         UserProfile phoneNumberUpdateValidationResult;
+
         try {
             phoneNumberUpdateValidationResult = validatePhoneNumberUpdate(context.getSession(), user, newPhoneNumber, newPhoneNumberLocale);
         } catch (ValidationException pve) {
@@ -100,20 +191,25 @@ public class UpdatePhoneNumber implements RequiredActionProvider, RequiredAction
             return;
         }
 
-        if (!realm.isVerifyPhoneNumber() || Validation.isBlank(newPhoneNumber) || Validation.isBlank(newPhoneNumberLocale)
-                || Objects.equals(user.getPhoneNumber(), newPhoneNumber) && user.isPhoneNumberVerified()) {
-            System.out.println("!!!!!!!IMPORTANT!!!!!! CHECK THIS");        
+        if ((!realm.isVerifyPhoneNumber() && isOverrideNull) || 
+            Objects.equals(user.getPhoneNumber(), newPhoneNumber) && user.isPhoneNumberVerified()) {
+            System.out.println("!!!!!!!IMPORTANT!!!!!! CHECK THIS");
+            System.out.println("Is Phone Number Verified? : "+ (user.isPhoneNumberVerified()));        
             updatePhoneNumberWithoutConfirmation(context, phoneNumberUpdateValidationResult);
             return;
         }
 
-        sendPhoneNumberUpdateConfirmation(context);
+        sendPhoneNumberUpdateConfirmation(context,credentialModel);
     }
 
-    private void sendPhoneNumberUpdateConfirmation(RequiredActionContext context) {
+    protected boolean validateOTPCredential(RequiredActionContext context, String token, OTPCredentialModel credentialModel, OTPPolicy policy, AuthenticationSessionModel authSession) {
+        return CredentialValidation.validOTP(token, credentialModel, policy.getLookAheadWindow(), authSession);
+    }
+
+    private void sendPhoneNumberUpdateConfirmation(RequiredActionContext context, OTPCredentialModel credentialModel) {
         UserModel user = context.getUser();
         String oldPhoneNumber = user.getPhoneNumber();
-        String newPhoneNumber = context.getHttpRequest().getDecodedFormParameters().getFirst(UserModel.PHONE_NUMBER);
+        // String newPhoneNumber = context.getHttpRequest().getDecodedFormParameters().getFirst(UserModel.PHONE_NUMBER);
 
         RealmModel realm = context.getRealm();
         int validityInSecs = realm.getActionTokenGeneratedByUserLifespan(UpdatePhoneNumberActionToken.TOKEN_TYPE);
@@ -125,26 +221,50 @@ public class UpdatePhoneNumber implements RequiredActionProvider, RequiredAction
         UpdatePhoneNumberActionToken actionToken = new UpdatePhoneNumberActionToken(user.getId(), Time.currentTime() + validityInSecs,
                 oldPhoneNumber, newPhoneNumber);
 
-        String link = Urls
-                .actionTokenBuilder(uriInfo.getBaseUri(), actionToken.serialize(session, realm, uriInfo),
-                        authenticationSession.getClient().getClientId(), authenticationSession.getTabId())
-
-                .build(realm.getName()).toString();
+        int numberOfDigits = realm.getSmsOTPPolicy().getDigits();        
+        String otp;
 
         context.getEvent().event(EventType.SEND_VERIFY_PHONE_NUMBER).detail(Details.PHONE_NUMBER, newPhoneNumber);
         try {
-            session.getProvider(SMSTemplateProvider.class).setAuthenticationSession(authenticationSession).setRealm(realm)
-                    .setUser(user).sendPhoneNumberUpdateConfirmation(link, TimeUnit.SECONDS.toMinutes(validityInSecs), newPhoneNumber);
+            if(session.getProvider(SMSTemplateProvider.class) == null) System.out.println("!Provider is null");
+            if(authenticationSession == null) System.out.println("!Auth session is null");
+            System.out.println("Realm : " + realm);
+            System.out.println("User : " + user.getUsername());
+            
+            if(CredentialValidation.isPresentOTPValid(credentialModel, authenticationSession)){
+                otp = authenticationSession.getAuthNote(Details.AUTH_OTP);
+                long expiry = Long.parseLong(authenticationSession.getAuthNote(Details.OTP_EXPIRY));
+                int secondsRemaining = (int)((expiry - Time.currentTimeMillis())/1000);
+                long expirationInMinutes = TimeUnit.SECONDS.toMinutes(secondsRemaining);
+                session.getProvider(SMSTemplateProvider.class).setAuthenticationSession(authenticationSession).setRealm(realm)
+                    .setUser(user).sendPhoneNumberUpdateConfirmation(otp, expirationInMinutes, newPhoneNumber);
+            }
+            else{
+                otp = SecretGenerator.getInstance().randomString(numberOfDigits);
+                long absoluteExpiration = Time.currentTimeMillis() + (validityInSecs * 1000);
+                authenticationSession.setAuthNote(Details.AUTH_OTP, otp);
+                authenticationSession.setAuthNote(Details.OTP_EXPIRY,String.valueOf(absoluteExpiration));
+                session.getProvider(SMSTemplateProvider.class).setAuthenticationSession(authenticationSession).setRealm(realm)
+                    .setUser(user).sendPhoneNumberUpdateConfirmation(otp, TimeUnit.SECONDS.toMinutes(validityInSecs), newPhoneNumber);
+            }
+            
+            System.out.println("Details : " + otp + "\n" + "Validity Seconds : " + TimeUnit.SECONDS.toMinutes(validityInSecs) + "\nPhone Number : " + newPhoneNumber);
+            authenticationSession.setAuthNote(Details.LAST_OTP_SEND,String.valueOf(Time.currentTimeMillis()));
         } catch (SMSException e) {
             logger.error("Failed to send SMS for phone number update", e);
             context.getEvent().error(Errors.SMS_SEND_FAILED);
             return;
         }
-        context.getEvent().success();
+        context.getEvent().event(EventType.SEND_VERIFY_PHONE_NUMBER).success();
+        // if(messageOnly) return;
 
+        // LoginFormsProvider forms = context.form();
+        // context.challenge(forms.setAttribute("messageHeader", forms.getMessage("phoneNumberUpdateConfirmationSentTitle"))
+        //         .setInfo("phoneNumberUpdateConfirmationSent", newPhoneNumber).createForm(Templates.getTemplate(LoginFormsPages.LOGIN_CONFIG_SOTP)));
         LoginFormsProvider forms = context.form();
         context.challenge(forms.setAttribute("messageHeader", forms.getMessage("phoneNumberUpdateConfirmationSentTitle"))
-                .setInfo("phoneNumberUpdateConfirmationSent", newPhoneNumber).createForm(Templates.getTemplate(LoginFormsPages.INFO)));
+                .setInfo("phoneNumberUpdateConfirmationSent", newPhoneNumber).createResponse(UserModel.RequiredAction.CONFIGURE_SOTP));
+        return;
     }
 
     private void updatePhoneNumberWithoutConfirmation(RequiredActionContext context,
@@ -165,7 +285,6 @@ public class UpdatePhoneNumber implements RequiredActionProvider, RequiredAction
     }
 
     public static void updatePhoneNumberNow(EventBuilder event, UserModel user, UserProfile phoneNumberUpdateValidationResult) {
-
         String oldPhoneNumber = user.getPhoneNumber();
         String oldPhoneNumberLocale = user.getPhoneNumberLocale();
         String newPhoneNumber = phoneNumberUpdateValidationResult.getAttributes().getFirstValue(UserModel.PHONE_NUMBER);
@@ -176,6 +295,11 @@ public class UpdatePhoneNumber implements RequiredActionProvider, RequiredAction
         .detail(Details.PREVIOUS_PHONE_NUMBER_LOCALE, oldPhoneNumberLocale).detail(Details.UPDATED_PHONE_NUMBER_LOCALE, newPhoneNumberLocale);
         phoneNumberUpdateValidationResult.update(false, new EventAuditingAttributeChangeListener(phoneNumberUpdateValidationResult, event));
     }
+
+    private void setStatus(RequiredActionContext context, RequiredActionContext.KcActionStatus status) {
+        //TODO: SHOULD I DO THIS?
+        AuthenticationManager.setKcActionStatus("UPDATE_PHONE_NUMBER", status, context.getAuthenticationSession());
+      }
 
     @Override
     public RequiredActionProvider create(KeycloakSession session) {

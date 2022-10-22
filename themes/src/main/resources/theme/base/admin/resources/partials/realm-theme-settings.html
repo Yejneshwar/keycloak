@@ -56,6 +56,19 @@
                 <kc-tooltip>{{:: 'select-theme-email' | translate}}</kc-tooltip>
             </div>
             <div class="form-group">
+                <label class="col-md-2 control-label" for="smsTheme">{{:: 'sms-theme' | translate}}</label>
+                <div class="col-md-3">
+                    <div>
+                        <select class="form-control" id="smsTheme"
+                                ng-model="realm.smsTheme"
+                                ng-options="o.name as o.name for o in serverInfo.themes.sms">
+                            <option value="" disabled selected>{{:: 'select-one.placeholder' | translate}}</option>
+                        </select>
+                    </div>
+                </div>
+                <kc-tooltip>{{:: 'select-theme-sms' | translate}}</kc-tooltip>
+            </div>
+            <div class="form-group">
                 <label class="col-md-2 control-label" for="internationalizationEnabled">{{:: 'i18n-enabled' | translate}}</label>
                 <div class="col-md-3">
                     <input ng-model="realm.internationalizationEnabled" name="internationalizationEnabled" id="internationalizationEnabled" onoffswitch on-text="{{:: 'onText' | translate}}" off-text="{{:: 'offText' | translate}}"/>

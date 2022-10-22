@@ -218,10 +218,12 @@ public class KeycloakServer {
             }
 
             if (!System.getProperties().containsKey("keycloak.theme.dir")) {
-                System.setProperty("keycloak.theme.dir", file(dir.getAbsolutePath(), "themes", "src", "main", "resources", "theme").getAbsolutePath());
+                String foo = file(dir.getAbsolutePath(), "themes", "src", "main", "resources", "theme").getAbsolutePath();
+                System.out.println("Theme dir : "+ foo);
+                System.setProperty("keycloak.theme.dir", foo);
             } else {
                 String foo = System.getProperty("keycloak.theme.dir");
-                System.out.println(foo);
+                System.out.println("Theme dir : "+ foo);
             }
 
             if (!System.getProperties().containsKey("keycloak.theme.cacheTemplates")) {

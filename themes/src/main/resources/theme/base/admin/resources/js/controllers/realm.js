@@ -654,11 +654,12 @@ module.controller('RealmThemeCtrl', function($scope, Current, Realm, realm, serv
             var accountLocales = localeForTheme('account', $scope.realm.accountTheme);
             var loginLocales = localeForTheme('login', $scope.realm.loginTheme);
             var emailLocales = localeForTheme('email', $scope.realm.emailTheme);
+            var smsLocales = localeForTheme('sms', $scope.realm.smsTheme);
 
             var supportedLocales = [];
             for (var i = 0; i < accountLocales.length; i++) {
                 var l = accountLocales[i];
-                if (loginLocales.indexOf(l) >= 0 && emailLocales.indexOf(l) >= 0) {
+                if (loginLocales.indexOf(l) >= 0 && emailLocales.indexOf(l) >= 0, smsLocales.indexOf(l) >= 0) {
                     supportedLocales.push(l);
                 }
             }
@@ -684,6 +685,7 @@ module.controller('RealmThemeCtrl', function($scope, Current, Realm, realm, serv
     $scope.$watch('realm.loginTheme', updateSupported);
     $scope.$watch('realm.accountTheme', updateSupported);
     $scope.$watch('realm.emailTheme', updateSupported);
+    $scope.$watch('realm.smsTheme', updateSupported);
     $scope.$watch('realm.internationalizationEnabled', updateSupported);
 });
 

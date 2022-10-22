@@ -1544,6 +1544,16 @@ public class IdentityBrokerStateTestHelpers {
         }
 
         @Override
+        public String getSmsTheme() {
+            return null;
+        }
+
+        @Override
+        public void setSmsTheme(String name) {
+
+        }
+
+        @Override
         public int getNotBefore() {
             return 0;
         }

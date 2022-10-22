@@ -991,6 +991,18 @@ public class RealmAdapter implements CachedRealmModel {
     }
 
     @Override
+    public String getSmsTheme() {
+        if (isUpdated()) return updated.getSmsTheme();
+        return cached.getSmsTheme();
+    }
+
+    @Override
+    public void setSmsTheme(String name) {
+        getDelegateForUpdate();
+        updated.setSmsTheme(name);
+    }
+
+    @Override
     public int getNotBefore() {
         if (isUpdated()) return updated.getNotBefore();
         return cached.getNotBefore();

@@ -180,6 +180,8 @@ public class RealmEntity {
     protected String adminTheme;
     @Column(name="EMAIL_THEME")
     protected String emailTheme;
+    @Column(name="SMS_THEME")
+    protected String smsTheme;
 
     @OneToMany(cascade ={CascadeType.REMOVE}, orphanRemoval = true, mappedBy = "realm", fetch = FetchType.EAGER)
     Collection<RealmAttributeEntity> attributes;
@@ -555,6 +557,14 @@ public class RealmEntity {
 
     public void setEmailTheme(String emailTheme) {
         this.emailTheme = emailTheme;
+    }
+
+    public String getSmsTheme() {
+        return smsTheme;
+    }
+
+    public void setSmsTheme(String smsTheme) {
+        this.smsTheme = smsTheme;
     }
 
     public int getNotBefore() {

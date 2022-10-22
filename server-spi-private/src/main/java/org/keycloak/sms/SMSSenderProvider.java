@@ -27,9 +27,9 @@ import java.util.Map;
  */
 public interface SMSSenderProvider extends Provider {
 
-    default void send(Map<String, String> config, UserModel user, String subject, String textBody, String htmlBody) throws SMSException {
-        send(config, user.getPhoneNumber(), subject, textBody, htmlBody);
+    default void send(Map<String, String> config, UserModel user, String subject, String textBody) throws SMSException {
+        send(config, user.getPhoneNumber(), subject, textBody);
     }
 
-    void send(Map<String, String> config, String address, String subject, String textBody, String htmlBody) throws SMSException;
+    void send(Map<String, String> config, String address, String subject, String textBody) throws SMSException;
 }

@@ -280,6 +280,8 @@ public class HotRodRealmEntity extends AbstractHotRodEntity {
     public Set<String> supportedLocales;
     @ProtoField(number = 79)
     public Boolean verifyPhoneNumber;
+    @ProtoField(number = 80)
+    public String smsTheme;
 
 
 

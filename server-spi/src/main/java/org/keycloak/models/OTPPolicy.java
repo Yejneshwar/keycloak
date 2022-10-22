@@ -78,7 +78,7 @@ public class OTPPolicy implements Serializable {
 
     // Realm attributes
     public static final String REALM_REUSABLE_CODE_ATTRIBUTE = "realmReusableOtpCode";
-    public static OTPPolicy DEFAULT_SOTP_POLICY = new OTPPolicy(OTPCredentialModel.SOTP, HmacOTP.HMAC_SHA1, 0, 6, 1, 30);
+    public static OTPPolicy DEFAULT_SOTP_POLICY = new OTPPolicy(OTPCredentialModel.SOTP, HmacOTP.HMAC_SHA1, 0, 6, 1, 60);
 
 
     public String getAlgorithmKey() {

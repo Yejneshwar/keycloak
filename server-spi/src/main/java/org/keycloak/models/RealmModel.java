@@ -690,6 +690,10 @@ public interface RealmModel extends RoleContainerModel {
 
     void setEmailTheme(String name);
 
+    String getSmsTheme();
+
+    void setSmsTheme(String name);
+
 
     /**
      * Time in seconds since epoc

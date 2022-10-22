@@ -172,7 +172,7 @@ public class UserRepresentation {
         return phoneNumberVerified;
     }
 
-    public void setPhoneNumberVerified(boolean phoneNumberVerified) {
+    public void setPhoneNumberVerified(Boolean phoneNumberVerified) {
         this.phoneNumberVerified = phoneNumberVerified;
     }
 

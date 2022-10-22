@@ -640,6 +640,16 @@ public class JpaRealmEntity extends MapRealmEntity.AbstractRealmEntity implement
     }
 
     @Override
+    public String getSmsTheme() {
+        return this.metadata.getSmsTheme();
+    }
+
+    @Override
+    public void setSmsTheme(String smsTheme) {
+        this.metadata.setSmsTheme(smsTheme);
+    }
+
+    @Override
     public String getMasterAdminClient() {
         return this.metadata.getMasterAdminClient();
     }

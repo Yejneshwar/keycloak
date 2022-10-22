@@ -385,6 +385,9 @@ public interface MapRealmEntity extends UpdatableEntity, AbstractEntity, EntityW
     String getEmailTheme();
     void setEmailTheme(String emailTheme);
 
+    String getSmsTheme();
+    void setSmsTheme(String smsTheme);
+
     String getMasterAdminClient();
     void setMasterAdminClient(String masterAdminClient);
 
