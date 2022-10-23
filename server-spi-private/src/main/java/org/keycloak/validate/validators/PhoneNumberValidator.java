@@ -26,6 +26,9 @@ import org.keycloak.validate.AbstractStringValidator;
 import org.keycloak.validate.ValidationContext;
 import org.keycloak.validate.ValidationError;
 import org.keycloak.validate.ValidatorConfig;
+import org.keycloak.util.PhoneNumber;
+
+import java.util.Map;
 
 /**
  * Email format validation - accepts plain string and collection of strings, for basic behavior like null/blank values
@@ -48,6 +51,14 @@ public class PhoneNumberValidator extends AbstractStringValidator implements Con
     @Override
     protected void doValidate(String value, String inputHint, ValidationContext context, ValidatorConfig config) {
         System.out.println("VALIDATE PHONE NUMBER");
+        Map<String,Object> attr = context.getAttributes();
+
+        attr.forEach( (k,v) -> System.out.println("Key: " + k + ": Value: " + v));
+        System.out.println(attr.get("org.keycloak.models.UserModel").getSession());
+
+        if (!PhoneNumber.validatePhoneNumber("","AD")) {
+            context.addError(new ValidationError(ID, inputHint, MESSAGE_INVALID_PHONE_NUMBER, value));
+        }
     }
     
     @Override

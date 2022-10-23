@@ -205,7 +205,7 @@ public class DefaultRequiredActions {
             updatePhoneNumber.setAlias(UserModel.RequiredAction.UPDATE_PHONE_NUMBER.name());
             updatePhoneNumber.setName("Update Phone Number");
             updatePhoneNumber.setProviderId(UserModel.RequiredAction.UPDATE_PHONE_NUMBER.name());
-            updatePhoneNumber.setDefaultAction(false);
+            updatePhoneNumber.setDefaultAction(true);
             updatePhoneNumber.setPriority(90);
             realm.addRequiredActionProvider(updatePhoneNumber);
         }

@@ -322,7 +322,7 @@ public abstract class AbstractUserProfileProvider<U extends UserProfileProvider>
     private UserProfileMetadata createDefaultProfile(UserProfileContext context, AttributeValidatorMetadata readOnlyValidator) {
         UserProfileMetadata metadata = new UserProfileMetadata(context);
 
-        metadata.addAttribute(UserModel.USERNAME, -3, 
+        metadata.addAttribute(UserModel.USERNAME, -4, 
                 AbstractUserProfileProvider::editUsernameCondition,
                 AbstractUserProfileProvider::readUsernameCondition,
                 new AttributeValidatorMetadata(UsernameHasValueValidator.ID),
@@ -330,7 +330,7 @@ public abstract class AbstractUserProfileProvider<U extends UserProfileProvider>
                 new AttributeValidatorMetadata(DuplicateUsernameValidator.ID),
                 new AttributeValidatorMetadata(UsernameMutationValidator.ID)).setAttributeDisplayName("${username}");
 
-        metadata.addAttribute(UserModel.EMAIL, -2,
+        metadata.addAttribute(UserModel.EMAIL, -3,
                 AbstractUserProfileProvider::editEmailCondition,
                 AbstractUserProfileProvider::readEmailCondition,
                 new AttributeValidatorMetadata(BlankAttributeValidator.ID, BlankAttributeValidator.createConfig(Messages.MISSING_EMAIL, false)),
@@ -338,6 +338,12 @@ public abstract class AbstractUserProfileProvider<U extends UserProfileProvider>
         		new AttributeValidatorMetadata(EmailExistsAsUsernameValidator.ID),
                 new AttributeValidatorMetadata(EmailValidator.ID, ValidatorConfig.builder().config(EmailValidator.IGNORE_EMPTY_VALUE, true).build()))
             .setAttributeDisplayName("${email}");
+
+        metadata.addAttribute(UserModel.PHONE_NUMBER_LOCALE, -2,
+            AbstractUserProfileProvider::editPhoneNumberCondition,
+            AbstractUserProfileProvider::readPhoneNumberCondition,
+            new AttributeValidatorMetadata(BlankAttributeValidator.ID, BlankAttributeValidator.createConfig(Messages.MISSING_PHONE_NUMBER_LOCALE, false)))
+        .setAttributeDisplayName("${phoneNumberLocale}");
 
         metadata.addAttribute(UserModel.PHONE_NUMBER, -1,
             AbstractUserProfileProvider::editPhoneNumberCondition,

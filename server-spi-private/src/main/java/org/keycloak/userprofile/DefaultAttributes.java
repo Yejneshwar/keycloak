@@ -311,6 +311,7 @@ public class DefaultAttributes extends HashMap<String, List<String>> implements 
 
         List<String> phoneNumberLocale = newAttributes.get(UserModel.PHONE_NUMBER_LOCALE);
         if (phoneNumberLocale != null) {
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!UPPERCASING LOCALE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             final List<String> upperCaseLocaleList = phoneNumberLocale.stream()
                     .filter(Objects::nonNull)
                     .map(String::toUpperCase)
