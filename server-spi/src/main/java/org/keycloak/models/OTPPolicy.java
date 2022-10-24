@@ -26,8 +26,6 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,8 +45,6 @@ public class OTPPolicy implements Serializable {
     protected boolean isCodeReusable;
 
     private static final Map<String, String> algToKeyUriAlg = new HashMap<>();
-
-    private static final OtpApp[] allApplications = new OtpApp[] { new FreeOTP(), new GoogleAuthenticator() };
 
     static {
         algToKeyUriAlg.put(HmacOTP.HMAC_SHA1, "SHA1");

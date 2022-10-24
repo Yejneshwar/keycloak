@@ -87,6 +87,10 @@ public class RealmManager {
         return getRealmByName(Config.getAdminRealm());
     }
 
+    public static boolean isAdministrationRealm(RealmModel realm) {
+        return realm.getName().equals(Config.getAdminRealm());
+    }
+
     public RealmModel getRealm(String id) {
         return model.getRealm(id);
     }
@@ -777,4 +781,5 @@ public class RealmManager {
             }
         }
     }
+
 }
