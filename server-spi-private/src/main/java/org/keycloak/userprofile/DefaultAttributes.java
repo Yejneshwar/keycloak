@@ -29,6 +29,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.keycloak.models.Constants;
 import org.keycloak.models.KeycloakSession;
@@ -319,6 +320,17 @@ public class DefaultAttributes extends HashMap<String, List<String>> implements 
 
             newAttributes.put(UserModel.PHONE_NUMBER_LOCALE, upperCaseLocaleList);
         }
+
+        List<String> phoneNumber = newAttributes.get(UserModel.PHONE_NUMBER);
+        phoneNumberLocale = newAttributes.get(UserModel.PHONE_NUMBER_LOCALE);
+        if(phoneNumber != null && phoneNumberLocale != null) {
+            Stream<String> phoneNumberStream = phoneNumber.stream();
+            Stream<String> localeStream = phoneNumberLocale.stream();
+            final List<String> phoneNumberConcat = Stream.concat(phoneNumberStream,localeStream).filter(Objects::nonNull).collect(Collectors.toList());
+
+            newAttributes.put(UserModel.PHONE_NUMBER, phoneNumberConcat);
+        }
+
         return newAttributes;
     }
 

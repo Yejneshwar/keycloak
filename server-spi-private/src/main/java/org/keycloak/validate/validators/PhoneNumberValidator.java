@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 
 import org.keycloak.provider.ConfiguredProvider;
 import org.keycloak.provider.ProviderConfigProperty;
-import org.keycloak.validate.AbstractStringValidator;
+import org.keycloak.validate.AbstractSimpleValidator;
 import org.keycloak.validate.ValidationContext;
 import org.keycloak.validate.ValidationError;
 import org.keycloak.validate.ValidatorConfig;
@@ -30,11 +30,13 @@ import org.keycloak.util.PhoneNumber;
 
 import java.util.Map;
 
+import java.util.Collection;
+
 /**
  * Email format validation - accepts plain string and collection of strings, for basic behavior like null/blank values
  * handling and collections support see {@link AbstractStringValidator}.
  */
-public class PhoneNumberValidator extends AbstractStringValidator implements ConfiguredProvider {
+public class PhoneNumberValidator extends AbstractSimpleValidator implements ConfiguredProvider {
 
     public static final String ID = "phoneNumber";
 
@@ -49,16 +51,42 @@ public class PhoneNumberValidator extends AbstractStringValidator implements Con
     }
 
     @Override
-    protected void doValidate(String value, String inputHint, ValidationContext context, ValidatorConfig config) {
+    protected void doValidate(Object value, String inputHint, ValidationContext context, ValidatorConfig config) {
         System.out.println("VALIDATE PHONE NUMBER");
         Map<String,Object> attr = context.getAttributes();
 
-        attr.forEach( (k,v) -> System.out.println("Key: " + k + ": Value: " + v));
-        System.out.println(attr.get("org.keycloak.models.UserModel").getSession());
+        @SuppressWarnings("unchecked")
+        Collection<Object> values = (Collection<Object>) value;
 
-        if (!PhoneNumber.validatePhoneNumber("","AD")) {
+        attr.forEach( (k,v) -> System.out.println("Key: " + k + ": Value: " + v));
+        System.out.println(attr.get("org.keycloak.models.UserModel"));
+        if(values.size() != 2){
+            context.addError(new ValidationError(ID, inputHint, MESSAGE_INVALID_PHONE_NUMBER, value));
+            return;
+        }
+        String locale = null;
+        String phoneNumber = null;
+        System.out.println("To validate : ");
+        for (Object val : values) {
+            System.out.println("val : " + val.toString());
+            if(val.toString().length() == 2){
+                locale = val.toString();
+            }
+            else{
+                phoneNumber = val.toString();
+            }
+        }
+        if (!PhoneNumber.validatePhoneNumber(phoneNumber,locale)) {
             context.addError(new ValidationError(ID, inputHint, MESSAGE_INVALID_PHONE_NUMBER, value));
         }
+    }
+
+    @Override
+    protected boolean skipValidation(Object value, ValidatorConfig config) {
+        if (isIgnoreEmptyValuesConfigured(config) && (value == null || value instanceof String)) {
+            return  value == null || "".equals(value.toString());
+        }
+        return false;
     }
     
     @Override

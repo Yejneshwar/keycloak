@@ -18,6 +18,8 @@ package org.keycloak.validate;
 
 import java.util.Collection;
 
+import org.keycloak.models.UserModel;
+
 /**
  * Base class for arbitrary value type validators. Functionality covered in this base class:
  * <ul>
@@ -41,7 +43,7 @@ public abstract class AbstractSimpleValidator implements SimpleValidator {
 
     @Override
     public ValidationContext validate(Object input, String inputHint, ValidationContext context, ValidatorConfig config) {
-        if (input instanceof Collection) {
+        if (input instanceof Collection && !inputHint.equals(UserModel.PHONE_NUMBER)) {
             @SuppressWarnings("unchecked")
             Collection<Object> values = (Collection<Object>) input;
 
