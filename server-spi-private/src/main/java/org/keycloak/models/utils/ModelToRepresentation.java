@@ -478,7 +478,6 @@ public class ModelToRepresentation {
         rep.setSmsOtpPolicyInitialCounter(smsOtpPolicy.getInitialCounter());
         rep.setSmsOtpPolicyType(smsOtpPolicy.getType());
         rep.setSmsOtpPolicyLookAheadWindow(smsOtpPolicy.getLookAheadWindow());
-        rep.setSmsOtpSupportedApplications(smsOtpPolicy.getSupportedApplications());
 
         // EmailPolicy emailPolicy = realm.getEmailPolicy();
         // rep.setEnableEmailPolicies(emailPolicy.getEnabled());                
